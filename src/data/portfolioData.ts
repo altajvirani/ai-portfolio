@@ -89,7 +89,7 @@ export const WORK_EXPERIENCE: WorkProject[] = [
   },
   {
     id: 'graduate-engineer-trainee',
-    projectName: 'Graduate Engineer Trainee (Orchard Program)',
+    projectName: 'Graduate Engineer Trainee (Orchard Training Program)',
     businessUnit: 'Microsoft Business Unit (MSBU)',
     role: 'Graduate Engineer Trainee',
     period: 'June 2024 – September 2024',
