@@ -32,6 +32,7 @@ export interface PersonalProject {
   description: string;
   highlights: string[];
   technologies: string[];
+  skillIds: string[];
   slides: ProjectSlide[];
   publicationOrCopyright?: string;
   documentUrl?: string;
@@ -71,6 +72,8 @@ export interface EducationItem {
   institution: string;
   duration: string;
   grade: string;
+  percentageValue?: number;
+  highlights?: string[];
   documentUrl?: string;
 }
 
@@ -78,6 +81,7 @@ export interface CertificationItem {
   name: string;
   issuer: string;
   url: string;
+  focus?: string;
 }
 
 export interface ChatMessage {

@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Briefcase, Building2, Calendar, ArrowUpRight } from "lucide-react";
+import { Briefcase, Building2, Calendar } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { WORK_EXPERIENCE } from "../data/portfolioData.ts";
-import { TECH_NODES, getDomainStyle } from "../data/skillsData.tsx";
+import { TECH_NODES } from "../data/skillsData.tsx";
+import { SkillChip } from "./SkillChip.tsx";
 
 interface ExperienceProps {
   onSelectSkill: (skillId: string) => void;
@@ -119,10 +120,14 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                 {WORK_EXPERIENCE.map((item) => {
                   const isActive = item.id === activeId;
                   return (
-                    <button
+                    <motion.button
                       key={item.id}
+                      type="button"
+                      whileHover={{ x: 2 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.14 }}
                       onClick={() => scrollToMilestone(item.id)}
-                      className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer relative ${
+                      className={`w-full text-left p-3 rounded-xl border transition-colors cursor-pointer relative ${
                         isActive
                           ? "bg-slate-800/90 border-cyan-400/50 text-white shadow-[0_0_16px_rgba(56,189,248,0.12)]"
                           : "bg-slate-950/50 border-slate-800/70 text-slate-400 hover:text-slate-200 hover:border-slate-700"
@@ -151,7 +156,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                         {item.role}
                         {item.businessUnit ? ` · ${item.businessUnit}` : ""}
                       </div>
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
@@ -276,7 +281,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
 
                   {/* Shared Skills Chips — Exact Style from Skills Section, Linked to Activate & Scroll */}
                   <div className="pt-4 border-t border-slate-800 space-y-2.5">
-                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400">
                       <span>Technologies & Concepts</span>
                       <span className="text-slate-400">
                         Click any skill to inspect in Skills map
@@ -284,22 +289,13 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                      {linkedNodes.map((node) => {
-                        const style = getDomainStyle(node.category);
-                        return (
-                          <button
-                            key={node.id}
-                            type="button"
-                            onClick={() => onSelectSkill(node.id)}
-                            title={`Inspect ${node.name} in Skills section`}
-                            className={`px-3 py-2 rounded-xl text-xs font-mono text-left transition-all flex items-center gap-2 cursor-pointer border group ${style.pillBg}`}
-                          >
-                            <span className="shrink-0">{node.logo}</span>
-                            <span className="font-semibold">{node.name}</span>
-                            <ArrowUpRight className="w-3 h-3 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                          </button>
-                        );
-                      })}
+                      {linkedNodes.map((node) => (
+                        <SkillChip
+                          key={node.id}
+                          node={node}
+                          onSelect={onSelectSkill}
+                        />
+                      ))}
                     </div>
                   </div>
                 </motion.article>

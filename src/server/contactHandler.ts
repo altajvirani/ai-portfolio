@@ -235,7 +235,7 @@ export async function dispatchContactSubmission(
       channel,
       message: delivered
         ? `Your message has been sent directly to ${recipient}.`
-        : `Your inquiry has been logged (${submissionId}). Use Send via Gmail or Open Mail App below to send directly to ${recipient} as well.`,
+        : `Your message has been prepared for ${recipient}. Use Send via Gmail or Open Mail App below to deliver it directly.`,
       mailtoUrl,
       gmailUrl,
     },

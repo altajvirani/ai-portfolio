@@ -7,8 +7,8 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="border-t border-slate-800/80 bg-[#0d131f] py-10">
-      <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer className="border-t border-slate-800/80 bg-[#0d131f] pt-10 pb-24 sm:py-10">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         <div>
           <span className="text-sm font-extrabold font-display text-white tracking-tight">
             ALTAJ VIRANI

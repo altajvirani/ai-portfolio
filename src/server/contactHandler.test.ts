@@ -48,3 +48,22 @@ test("buildMailtoUrl and buildGmailComposeUrl encode recipient, subject, and bod
   assert.ok(gmail.includes("to=altajatwork%40gmail.com"));
   assert.ok(gmail.includes("su=Hello%20%26%20Sync"));
 });
+
+test("dispatchContactSubmission validates and formats prepared response without log ids", async () => {
+  const { dispatchContactSubmission } = await import("./contactHandler.ts");
+  const bad = await dispatchContactSubmission({ name: "A", email: "bad", message: "hi" });
+  assert.equal(bad.status, 400);
+  assert.equal(bad.body.ok, false);
+
+  const ok = await dispatchContactSubmission({
+    name: "Alex Rivera",
+    email: "alex@example.com",
+    subject: "Sync",
+    message: "Hello Altaj, would love to connect about AI platforms.",
+  });
+  assert.equal(ok.status, 200);
+  assert.equal(ok.body.ok, true);
+  assert.ok(!ok.body.message.toLowerCase().includes("logged"));
+  assert.ok(!ok.body.message.includes("msg_"));
+  assert.ok(ok.body.message.toLowerCase().includes("prepared"));
+});

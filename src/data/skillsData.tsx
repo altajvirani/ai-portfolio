@@ -1,5 +1,5 @@
 import React from "react";
-import { ShieldCheck, Cloud, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Cloud, CheckCircle2, BrainCircuit, Puzzle, Smartphone, Flame } from "lucide-react";
 import {
   PythonLogo,
   CSharpLogo,
@@ -155,6 +155,18 @@ export const TECH_NODES: TechNode[] = [
     logo: <BotFrameworkLogo className="w-4 h-4" />,
     level: "Production",
   },
+  {
+    id: "nlp-transformers",
+    name: "NLP & Transformers (T5, BERT, TF-IDF)",
+    category: "agentic",
+    categoryLabel: "Agentic AI & LLMs",
+    role: "Question synthesis, cosine ranking & semantic NLP",
+    projectContext:
+      "Powered IEEE-published AutoQAGen (Google T5, Sense2Vec, BERT scoring) and copyright-approved AutoQA AI offline TF-IDF retrieval.",
+    connections: ["python", "rag", "vector-db"],
+    logo: <BrainCircuit className="w-4 h-4 text-cyan-400" />,
+    level: "Architecture",
+  },
 
   // Azure Cloud & Distributed Systems (Sky)
   {
@@ -229,6 +241,18 @@ export const TECH_NODES: TechNode[] = [
     logo: <PowerShellLogo className="w-4 h-4" />,
     level: "Production",
   },
+  {
+    id: "firebase-rest",
+    name: "Firebase & REST APIs",
+    category: "cloud",
+    categoryLabel: "Cloud & Infrastructure",
+    role: "Real-time cloud sync & mobile backend integration",
+    projectContext:
+      "Backed the Nivesh startup crowdfunding Android app with real-time portfolio sync and milestone feeds.",
+    connections: ["android-mobile", "sql-server"],
+    logo: <Flame className="w-4 h-4 text-sky-400" />,
+    level: "Core",
+  },
 
   // Languages & Backend Systems (Emerald)
   {
@@ -302,6 +326,30 @@ export const TECH_NODES: TechNode[] = [
     connections: ["container-apps", "csharp"],
     logo: <DockerLogo className="w-4 h-4" />,
     level: "Production",
+  },
+  {
+    id: "vscode-ast",
+    name: "VS Code Extensions & AST",
+    category: "backend",
+    categoryLabel: "Languages & Backend Core",
+    role: "Developer tooling & TypeScript AST scaffolding",
+    projectContext:
+      "Built and published the SnapWright VS Code Marketplace extension automating POM generation and singleton PageFactory patterns.",
+    connections: ["typescript", "playwright"],
+    logo: <Puzzle className="w-4 h-4 text-emerald-400" />,
+    level: "Production",
+  },
+  {
+    id: "android-mobile",
+    name: "Android Java & Material UI",
+    category: "backend",
+    categoryLabel: "Languages & Backend Core",
+    role: "Native mobile interfaces & fintech workflows",
+    projectContext:
+      "Engineered the open-source Nivesh startup crowdfunding Android application with live pitch and equity tracking.",
+    connections: ["firebase-rest", "sql-server"],
+    logo: <Smartphone className="w-4 h-4 text-emerald-400" />,
+    level: "Core",
   },
 
   // Security & Governance (Purple)

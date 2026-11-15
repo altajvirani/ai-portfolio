@@ -11,7 +11,9 @@ import {
   Loader2,
   ExternalLink,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { SOCIAL_LINKS } from "../data/portfolioData.ts";
+import { HoverPopup } from "./HoverPopup.tsx";
 
 const XIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -92,7 +94,7 @@ export const ContactSection: React.FC = () => {
 
   return (
     <section id="contact" className="scroll-mt-16 py-20 relative bg-[#0d131f]">
-      <div className="max-w-6xl mx-auto px-6 space-y-10">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 space-y-10">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -165,60 +167,87 @@ export const ContactSection: React.FC = () => {
                 Socials & Code
               </span>
               <div className="grid grid-cols-2 gap-2.5">
-                <a
+                <motion.a
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
                   href={SOCIAL_LINKS.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-cyan-300 flex items-center gap-2 transition-all cursor-pointer"
+                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-cyan-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-cyan-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
                 >
                   <Linkedin className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span>LinkedIn</span>
-                </a>
-                <a
+                  <span className="truncate">LinkedIn</span>
+                </motion.a>
+                <motion.a
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
                   href={SOCIAL_LINKS.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-all cursor-pointer"
+                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-colors cursor-pointer min-w-0"
                 >
                   <Github className="w-4 h-4 text-slate-400 shrink-0" />
-                  <span>GitHub</span>
-                </a>
-                <a
+                  <span className="truncate">GitHub</span>
+                </motion.a>
+                <motion.a
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
                   href={SOCIAL_LINKS.stackoverflow}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-orange-400/50 text-xs font-mono text-slate-300 hover:text-orange-300 flex items-center gap-2 transition-all cursor-pointer"
+                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-orange-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-orange-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
                 >
                   <StackOverflowIcon className="w-4 h-4 text-orange-400 shrink-0" />
                   <span className="truncate">Stack Overflow</span>
-                </a>
-                <a
+                </motion.a>
+                <motion.a
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
                   href={SOCIAL_LINKS.x}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-all cursor-pointer"
+                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-colors cursor-pointer min-w-0"
                 >
                   <XIcon className="w-4 h-4 text-slate-300 shrink-0" />
-                  <span>X (Twitter)</span>
-                </a>
-                <a
+                  <span className="truncate">X (Twitter)</span>
+                </motion.a>
+                <motion.a
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
                   href={SOCIAL_LINKS.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-pink-400/50 text-xs font-mono text-slate-300 hover:text-pink-300 flex items-center gap-2 transition-all cursor-pointer"
+                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-pink-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-pink-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
                 >
                   <Instagram className="w-4 h-4 text-pink-400 shrink-0" />
-                  <span>Instagram</span>
-                </a>
-                <a
-                  href={SOCIAL_LINKS.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 text-xs font-mono text-slate-300 hover:text-emerald-300 flex items-center gap-2 transition-all cursor-pointer"
+                  <span className="truncate">Instagram</span>
+                </motion.a>
+                <HoverPopup
+                  align="right"
+                  className="w-full"
+                  content={
+                    <div className="space-y-1 text-xs font-mono">
+                      <div className="font-semibold text-emerald-300">
+                        Direct WhatsApp Chat
+                      </div>
+                      <p className="text-[11px] text-slate-300 font-sans">
+                        Opens +91 73039 34303 in WhatsApp.
+                      </p>
+                    </div>
+                  }
                 >
-                  <WhatsAppIcon className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>WhatsApp</span>
-                </a>
+                  <motion.a
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                    href={SOCIAL_LINKS.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-emerald-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
+                  >
+                    <WhatsAppIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span className="truncate">WhatsApp</span>
+                  </motion.a>
+                </HoverPopup>
               </div>
             </div>
           </div>
@@ -233,7 +262,7 @@ export const ContactSection: React.FC = () => {
                 <h3 className="text-xl font-bold font-display text-white">
                   {submissionResult.delivered
                     ? "Email Sent Successfully"
-                    : "Message Received"}
+                    : "Message Prepared"}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
                   {submissionResult.message}

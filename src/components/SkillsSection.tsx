@@ -3,6 +3,7 @@ import {
   Cpu,
   Network,
   ArrowRight,
+  ArrowDown,
   ShieldCheck,
   Cloud,
   Bot,
@@ -11,6 +12,7 @@ import {
   Link2,
   Check,
 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   TECH_NODES,
   SKILL_LAYERS,
@@ -21,6 +23,7 @@ import {
   filterSkillNodes,
   resolveActiveNodeForFilter,
 } from "../utils/portfolioHelpers.ts";
+import { HoverPopup } from "./HoverPopup.tsx";
 
 interface SkillsSectionProps {
   selectedNodeId: string;
@@ -70,6 +73,12 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
     onSelectNodeId(connId);
   };
 
+  const scrollToInspector = () => {
+    document
+      .getElementById("skill-inspector")
+      ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
+
   const getLayerIcon = (id: SkillDomainId) => {
     switch (id) {
       case "agentic":
@@ -88,8 +97,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
       id="skills"
       className="scroll-mt-16 py-20 sm:py-24 border-b border-slate-800/80 relative bg-[#0d131f]"
     >
-      <div className="max-w-6xl mx-auto px-6 space-y-8">
-        {/* Section Header (No view switcher, generalized framing) */}
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 space-y-8">
+        {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <div className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-semibold mb-2 flex items-center gap-1.5">
@@ -133,12 +142,14 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
           ].map((cat) => {
             const isActive = filterCategory === cat.id;
             return (
-              <button
+              <motion.button
                 key={cat.id}
                 type="button"
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.97 }}
                 aria-pressed={isActive}
                 onClick={() => handleFilterClick(cat.id)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-mono transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 border ${
+                className={`px-3 sm:px-3.5 py-2 rounded-lg text-xs font-mono transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 border ${
                   isActive
                     ? "bg-white text-slate-950 border-white font-bold shadow-[0_0_16px_rgba(255,255,255,0.2)]"
                     : "bg-slate-900/70 border-slate-800 text-slate-300 hover:text-white hover:border-slate-600"
@@ -150,15 +161,40 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                   />
                 )}
                 <span>{cat.label}</span>
-              </button>
+              </motion.button>
             );
           })}
+        </div>
+
+        {/* Mobile Quick Selection Banner (Immediate feedback without scrolling past all nodes) */}
+        <div className="lg:hidden p-3.5 rounded-xl bg-slate-900/90 border border-cyan-500/40 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="p-2 rounded-lg bg-slate-800 border border-slate-700 shrink-0">
+              {selectedNode.logo}
+            </div>
+            <div className="min-w-0">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-cyan-300 font-semibold">
+                Active Skill · {selectedNode.connections.length} Linked
+              </div>
+              <div className="text-xs font-bold text-white truncate">
+                {selectedNode.name}
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={scrollToInspector}
+            className="px-2.5 py-1.5 rounded-lg bg-cyan-500/15 border border-cyan-400/40 text-[11px] font-mono text-cyan-200 inline-flex items-center gap-1 shrink-0 cursor-pointer"
+          >
+            <span>Details</span>
+            <ArrowDown className="w-3 h-3" />
+          </button>
         </div>
 
         {/* Interactive Node Canvas + Node Inspector */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Interactive Systems Node Map (8 cols) */}
-          <div className="lg:col-span-8 p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800 shadow-[0_4px_30px_rgba(0,0,0,0.5)] space-y-6">
+          <div className="lg:col-span-8 p-4 sm:p-7 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800 shadow-[0_4px_30px_rgba(0,0,0,0.5)] space-y-6">
             {/* Map Header with Clear Visual Legend */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
               <div className="flex items-center gap-2">
@@ -193,12 +229,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                 );
 
                 return (
-                  <div
+                  <motion.div
                     key={layer.id}
+                    layout
                     data-skill-layer={layer.id}
-                    className={`p-4 sm:p-5 rounded-xl border space-y-3.5 transition-all ${layerStyle.layerPanel}`}
+                    className={`p-4 sm:p-5 rounded-xl border space-y-3.5 transition-colors ${layerStyle.layerPanel}`}
                   >
-                    <div className="flex items-center justify-between gap-2 text-xs font-mono">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
                       <span
                         className={`${layerStyle.layerTitle} font-bold flex items-center gap-2`}
                       >
@@ -222,56 +259,89 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                           selectedNode.connections.includes(node.id);
                         const style = getDomainStyle(node.category);
 
+                        const nodePopup = (
+                          <div className="space-y-1.5">
+                            <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1">
+                              <span className="text-[11px] font-mono font-bold text-white truncate">
+                                {node.shortName || node.name}
+                              </span>
+                              <span className="text-[10px] font-mono text-cyan-300 shrink-0">
+                                {node.level}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-slate-300 leading-snug font-sans">
+                              {node.role}
+                            </p>
+                            <div className="text-[10px] font-mono text-amber-300 flex items-center justify-between">
+                              <span>
+                                {node.connections.length} linked dependencies
+                              </span>
+                              <span>Click to focus</span>
+                            </div>
+                          </div>
+                        );
+
                         return (
-                          <button
+                          <HoverPopup
                             key={node.id}
-                            type="button"
-                            data-skill-id={node.id}
-                            data-state={
-                              isSelected
-                                ? "selected"
-                                : isConnected
-                                  ? "linked"
-                                  : "idle"
-                            }
-                            aria-pressed={isSelected}
-                            onClick={() => onSelectNodeId(node.id)}
-                            className={`px-3 py-2 rounded-xl text-xs font-mono text-left transition-all duration-200 flex items-center gap-2 cursor-pointer ${
-                              isSelected
-                                ? style.selectedBg
-                                : isConnected
-                                  ? style.linkedBg
-                                  : `${style.pillBg} opacity-60 hover:opacity-100`
-                            }`}
+                            content={nodePopup}
+                            align="left"
                           >
-                            <span className="shrink-0">{node.logo}</span>
-                            <span className="font-semibold">{node.name}</span>
+                            <motion.button
+                              type="button"
+                              whileHover={{ y: -2 }}
+                              whileTap={{ scale: 0.97 }}
+                              transition={{ duration: 0.14 }}
+                              data-skill-id={node.id}
+                              data-state={
+                                isSelected
+                                  ? "selected"
+                                  : isConnected
+                                    ? "linked"
+                                    : "idle"
+                              }
+                              aria-pressed={isSelected}
+                              onClick={() => onSelectNodeId(node.id)}
+                              className={`px-3 py-2 rounded-xl text-xs font-mono text-left transition-colors duration-200 flex items-center gap-2 cursor-pointer ${
+                                isSelected
+                                  ? style.selectedBg
+                                  : isConnected
+                                    ? style.linkedBg
+                                    : `${style.pillBg} opacity-65 hover:opacity-100`
+                              }`}
+                            >
+                              <span className="shrink-0">{node.logo}</span>
+                              <span className="font-semibold">{node.name}</span>
 
-                            {isSelected && (
-                              <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white text-slate-950 text-[9px] font-bold uppercase tracking-wider">
-                                <Check className="w-2.5 h-2.5 stroke-[3]" />
-                                Active
-                              </span>
-                            )}
+                              {isSelected && (
+                                <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white text-slate-950 text-[9px] font-bold uppercase tracking-wider shrink-0">
+                                  <Check className="w-2.5 h-2.5 stroke-[3]" />
+                                  Active
+                                </span>
+                              )}
 
-                            {isConnected && (
-                              <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/50 text-amber-200 text-[9px] font-semibold uppercase tracking-wider">
-                                <Link2 className="w-2.5 h-2.5" />
-                                Linked
-                              </span>
-                            )}
-                          </button>
+                              {isConnected && (
+                                <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/50 text-amber-200 text-[9px] font-semibold uppercase tracking-wider shrink-0">
+                                  <Link2 className="w-2.5 h-2.5" />
+                                  Linked
+                                </span>
+                              )}
+                            </motion.button>
+                          </HoverPopup>
                         );
                       })}
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
           </div>
 
           {/* Right Column: Concise Node Inspector (4 cols) */}
-          <div className="lg:col-span-4 p-6 rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 space-y-5 shadow-xl lg:sticky lg:top-24">
+          <aside
+            id="skill-inspector"
+            className="lg:col-span-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 space-y-5 shadow-xl lg:sticky lg:top-24"
+          >
             <div className="flex items-center justify-between border-b border-slate-800 pb-3.5">
               <span className="text-xs font-mono text-cyan-400 font-semibold flex items-center gap-1.5">
                 <Info className="w-3.5 h-3.5" />
@@ -282,39 +352,48 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
               </span>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-slate-800 border border-slate-700 shadow-sm shrink-0">
-                  {selectedNode.logo}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedNode.id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-slate-800 border border-slate-700 shadow-sm shrink-0">
+                    {selectedNode.logo}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold font-display text-white leading-snug">
+                      {selectedNode.name}
+                    </h3>
+                    <p className="text-xs font-mono text-slate-400">
+                      {selectedNode.categoryLabel}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold font-display text-white leading-snug">
-                    {selectedNode.name}
-                  </h3>
-                  <p className="text-xs font-mono text-slate-400">
-                    {selectedNode.categoryLabel}
+
+                <div className="space-y-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 block font-semibold">
+                    Role
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                    {selectedNode.role}
                   </p>
                 </div>
-              </div>
 
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 block font-semibold">
-                  Role
-                </span>
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
-                  {selectedNode.role}
-                </p>
-              </div>
-
-              <div className="pt-3 border-t border-slate-800/80 space-y-1">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
-                  Applied Impact
-                </span>
-                <p className="text-xs text-slate-300 leading-relaxed font-sans">
-                  {selectedNode.projectContext}
-                </p>
-              </div>
-            </div>
+                <div className="pt-3 border-t border-slate-800/80 space-y-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
+                    Applied Impact
+                  </span>
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    {selectedNode.projectContext}
+                  </p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
 
             {/* Linked Dependencies */}
             <div className="pt-3 space-y-2.5 border-t border-slate-800">
@@ -327,23 +406,25 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                   const connNode = TECH_NODES.find((n) => n.id === connId);
                   if (!connNode) return null;
                   return (
-                    <button
+                    <motion.button
                       key={connId}
                       type="button"
+                      whileHover={{ x: 3 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => handleInspectConnection(connId)}
-                      className="w-full p-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-dashed border-amber-400/50 hover:border-amber-300 text-left transition-all flex items-center justify-between text-xs font-mono text-amber-100 hover:text-white cursor-pointer group"
+                      className="w-full p-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-dashed border-amber-400/50 hover:border-amber-300 text-left transition-colors flex items-center justify-between text-xs font-mono text-amber-100 hover:text-white cursor-pointer group"
                     >
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center gap-2 min-w-0">
                         <span className="shrink-0">{connNode.logo}</span>
-                        <span>{connNode.name}</span>
+                        <span className="truncate">{connNode.name}</span>
                       </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-amber-300 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
+                      <ArrowRight className="w-3.5 h-3.5 text-amber-300 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                    </motion.button>
                   );
                 })}
               </div>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>

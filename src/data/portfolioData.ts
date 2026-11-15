@@ -152,6 +152,7 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
       "Scalable Flask REST API paired with a component-driven React UI",
     ],
     technologies: ["Python", "Google T5", "BERT", "Sense2Vec", "NLTK", "Flask", "React"],
+    skillIds: ["python", "nlp-transformers", "vector-db", "typescript"],
     slides: [
       {
         badge: "Architecture",
@@ -186,6 +187,7 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
       "Desktop UI built in KivyMD with Pyttsx3 text-to-speech accessibility",
     ],
     technologies: ["Python", "Scikit-learn (TF-IDF)", "NLTK", "KivyMD", "Pyttsx3"],
+    skillIds: ["python", "nlp-transformers", "vector-db"],
     slides: [
       {
         badge: "Intellectual Property",
@@ -220,6 +222,7 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
       "Smart AST class-name and path resolution accelerating QA migration workflows",
     ],
     technologies: ["TypeScript", "VS Code API", "Node.js", "AST Parsing", "Playwright"],
+    skillIds: ["typescript", "vscode-ast", "playwright"],
     slides: [
       {
         badge: "Marketplace",
@@ -254,6 +257,7 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
       "Native Android Java architecture backed by REST APIs and Firebase",
     ],
     technologies: ["Android Java", "Material Design", "REST APIs", "Firebase"],
+    skillIds: ["android-mobile", "firebase-rest", "sql-server"],
     slides: [
       {
         badge: "Mobile Fintech",
@@ -337,6 +341,11 @@ export const EDUCATION_ITEMS: EducationItem[] = [
     institution: "Vidyavardhini's College of Engineering & Technology (Mumbai University)",
     duration: "2021 – 2023",
     grade: "9.00 CGPA",
+    percentageValue: 90,
+    highlights: [
+      "Published IEEE ICSCSS 2023 NLP research (AutoQAGen) during undergraduate engineering.",
+      "Core focus across Machine Learning, Distributed Computing, Software Architecture, and Cloud Databases.",
+    ],
     documentUrl:
       "https://drive.google.com/file/d/13Ar1FiG4B4QjiCjCQi0kefs5FlJq7o77/view",
   },
@@ -345,6 +354,11 @@ export const EDUCATION_ITEMS: EducationItem[] = [
     institution: "Vidyavardhini's Bhausaheb Vartak Polytechnic (MSBTE)",
     duration: "2017 – 2020",
     grade: "94.00%",
+    percentageValue: 94,
+    highlights: [
+      "Graduated with top academic distinction (94.00% aggregate).",
+      "Strong systems foundations in Data Structures, Operating Systems, Java, and Web Engineering.",
+    ],
     documentUrl:
       "https://drive.google.com/file/d/1cwvFmlKVv0WVhkpgj0W2K37e0_sl4H8q/view",
   },
@@ -353,6 +367,10 @@ export const EDUCATION_ITEMS: EducationItem[] = [
     institution: "Holy Paradise High School (MSBSHSE)",
     duration: "2016 – 2017",
     grade: "80.60%",
+    percentageValue: 80.6,
+    highlights: [
+      "First-class distinction across Mathematics and Science foundations.",
+    ],
     documentUrl:
       "https://drive.google.com/file/d/1A6t9XAIur-sXbHWvXvRx1l8eb17VYs_l/view",
   },
@@ -362,16 +380,19 @@ export const CERTIFICATION_ITEMS: CertificationItem[] = [
   {
     name: "Microsoft Certified: Azure AI Fundamentals (AI-900)",
     issuer: "Microsoft",
+    focus: "Core Azure AI workloads, ML, NLP, and Responsible AI governance",
     url: "https://learn.microsoft.com/api/credentials/share/en-in/altajvirani/C0872E8742B2D90?sharingId=48999C5125E08B64",
   },
   {
     name: "Azure AI Studio (AI Foundry)",
     issuer: "Udemy",
+    focus: "Prompt flows, agent evaluation, groundedness scoring, and model deployment",
     url: "https://ude.my/UC-e65a23d5-0f7f-4f02-816e-aaf2e53c4401",
   },
   {
     name: "Azure Functions Masterclass",
     issuer: "Udemy",
+    focus: "Event-driven serverless compute, triggers, bindings, and scalable APIs",
     url: "https://ude.my/UC-ed09d39d-725e-474e-8f85-4b0a3b33615c/",
   },
 ];
