@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Menu, X, FileDown } from 'lucide-react';
+import React, { useState } from "react";
+import { Menu, X, Link } from "lucide-react";
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -8,16 +8,16 @@ export const Header: React.FC = () => {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const navLinks = [
-    { label: 'Experience', id: 'experience' },
-    { label: 'Projects & Research', id: 'projects' },
-    { label: 'Skills', id: 'skills' },
-    { label: 'Honors & Education', id: 'honors' },
-    { label: 'Contact', id: 'contact' },
+    { label: "Experience", id: "experience" },
+    { label: "Projects & Research", id: "projects" },
+    { label: "Skills", id: "skills" },
+    { label: "Honors & Education", id: "honors" },
+    { label: "Contact", id: "contact" },
   ];
 
   return (
@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Brand */}
         <button
-          onClick={() => scrollTo('hero')}
+          onClick={() => scrollTo("hero")}
           className="text-left group cursor-pointer focus:outline-none"
         >
           <span className="text-base font-extrabold font-display tracking-tight text-white group-hover:text-cyan-400 transition-colors">
@@ -52,12 +52,12 @@ export const Header: React.FC = () => {
         {/* Action: Resume in Navbar */}
         <div className="hidden md:flex items-center gap-3">
           <a
-            href="/assets/aistudio/altaj-virani_ltm-resume_ae17ced8.pdf"
+            href="https://flowcv.com/resume/gg0rtbkh7jul"
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-1.5 text-xs font-mono font-medium text-slate-200 hover:text-white bg-slate-900/80 hover:bg-slate-850 border border-slate-700/80 hover:border-cyan-400/50 rounded-lg transition-all flex items-center gap-1.5"
           >
-            <FileDown className="w-3.5 h-3.5 text-cyan-400" />
+            <Link className="w-3.5 h-3.5 text-cyan-400" />
             <span>Resume PDF</span>
           </a>
         </div>
@@ -65,20 +65,24 @@ export const Header: React.FC = () => {
         {/* Mobile Hamburger Button */}
         <div className="flex md:hidden items-center gap-2">
           <a
-            href="/assets/aistudio/altaj-virani_ltm-resume_ae17ced8.pdf"
+            href="https://flowcv.com/resume/gg0rtbkh7jul"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Download Resume PDF"
+            aria-label="Resume PDF"
             className="p-2 text-slate-300 hover:text-white bg-slate-900/80 border border-slate-700/80 rounded-lg"
           >
-            <FileDown className="w-4 h-4 text-cyan-400" />
+            <Link className="w-4 h-4 text-cyan-400" />
           </a>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
             className="p-2 text-slate-300 hover:text-white bg-slate-900/80 border border-slate-700/80 rounded-lg cursor-pointer"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>
@@ -97,13 +101,13 @@ export const Header: React.FC = () => {
           ))}
           <div className="pt-2">
             <a
-              href="/assets/aistudio/altaj-virani_ltm-resume_ae17ced8.pdf"
+              href="https://flowcv.com/resume/gg0rtbkh7jul"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-2.5 text-xs font-mono font-medium text-center text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg flex items-center justify-center gap-2"
             >
-              <FileDown className="w-4 h-4 text-cyan-400" />
-              <span>Download Resume PDF</span>
+              <Link className="w-4 h-4 text-cyan-400" />
+              <span>Resume PDF</span>
             </a>
           </div>
         </div>

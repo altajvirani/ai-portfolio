@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-import { Briefcase, Calendar, Building } from 'lucide-react';
-import { WORK_EXPERIENCE } from '../data/portfolioData.ts';
+import React, { useState } from "react";
+import { Briefcase, Calendar, Building } from "lucide-react";
+import { WORK_EXPERIENCE } from "../data/portfolioData.ts";
 
 export const Experience: React.FC = () => {
-  const [selectedProjectId, setSelectedProjectId] = useState<string>(WORK_EXPERIENCE[0].id);
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(
+    WORK_EXPERIENCE[0].id,
+  );
 
-  const selectedProject = WORK_EXPERIENCE.find((p) => p.id === selectedProjectId) || WORK_EXPERIENCE[0];
+  const selectedProject =
+    WORK_EXPERIENCE.find((p) => p.id === selectedProjectId) ||
+    WORK_EXPERIENCE[0];
 
   return (
-    <section id="experience" className="py-20 border-b border-slate-800/80 relative bg-[#0d131f]">
+    <section
+      id="experience"
+      className="py-20 border-b border-slate-800/80 relative bg-[#0d131f]"
+    >
       <div className="max-w-6xl mx-auto px-6 space-y-10">
-        
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -23,12 +29,13 @@ export const Experience: React.FC = () => {
             </h2>
           </div>
           <p className="text-sm text-slate-300 max-w-sm">
-            Three distinct engineering tracks delivered across Microsoft Business Unit engagements.
+            A record of professional engineering experience and technical
+            contributions.
           </p>
         </div>
 
         {/* Project Selector Tabs */}
-        <div className="flex items-center gap-2 p-1.5 bg-slate-900/80 border border-slate-700/80 rounded-xl overflow-x-auto shadow-inner">
+        <div className="flex items-center gap-2 p-1.5 bg-slate-900/80 border border-slate-700/80 rounded-xl overflow-x-auto shadow-inner scrollbar-none">
           {WORK_EXPERIENCE.map((project) => {
             const isSelected = project.id === selectedProjectId;
             return (
@@ -37,12 +44,14 @@ export const Experience: React.FC = () => {
                 onClick={() => setSelectedProjectId(project.id)}
                 className={`px-4 py-2.5 rounded-lg text-xs font-mono transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
                   isSelected
-                    ? 'bg-cyan-500/20 border border-cyan-400/60 text-white font-bold shadow-[0_0_15px_rgba(56,189,248,0.2)]'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent'
+                    ? "bg-cyan-500/20 border border-cyan-400/60 text-white font-bold shadow-[0_0_15px_rgba(56,189,248,0.2)]"
+                    : "text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent"
                 }`}
               >
                 <span>{project.projectName}</span>
-                <span className="text-[10px] text-slate-400">({project.period.split(' – ')[0]})</span>
+                <span className="text-[10px] text-slate-400">
+                  ({project.period.split(" – ")[0]})
+                </span>
               </button>
             );
           })}
@@ -50,7 +59,6 @@ export const Experience: React.FC = () => {
 
         {/* Project Card */}
         <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800 hover:border-cyan-500/30 transition-all space-y-6 shadow-xl">
-          
           {/* Card Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
             <div>
@@ -79,14 +87,22 @@ export const Experience: React.FC = () => {
           {/* Key Contributions: Concise & Sharp */}
           <div className="space-y-4 pt-1">
             {selectedProject.keyContributions.map((contrib, i) => (
-              <div key={i} className="p-4 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-2.5">
+              <div
+                key={i}
+                className="p-4 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-2.5"
+              >
                 <h4 className="text-xs font-mono text-cyan-300 uppercase tracking-wider font-semibold">
                   {contrib.area}
                 </h4>
                 <ul className="space-y-2">
                   {contrib.points.map((pt, j) => (
-                    <li key={j} className="text-xs sm:text-sm text-slate-300 flex items-start gap-2.5 leading-relaxed font-sans">
-                      <span className="text-cyan-400 font-mono mt-0.5 shrink-0">▸</span>
+                    <li
+                      key={j}
+                      className="text-xs sm:text-sm text-slate-300 flex items-start gap-2.5 leading-relaxed font-sans"
+                    >
+                      <span className="text-cyan-400 font-mono mt-0.5 shrink-0">
+                        ▸
+                      </span>
                       <span>{pt}</span>
                     </li>
                   ))}
@@ -97,7 +113,9 @@ export const Experience: React.FC = () => {
 
           {/* Tech Stack */}
           <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-mono text-slate-400 mr-2">Technologies:</span>
+            <span className="text-xs font-mono text-slate-400 mr-2">
+              Technologies:
+            </span>
             {selectedProject.technologies.map((t, idx) => (
               <span
                 key={idx}
@@ -107,9 +125,7 @@ export const Experience: React.FC = () => {
               </span>
             ))}
           </div>
-
         </div>
-
       </div>
     </section>
   );

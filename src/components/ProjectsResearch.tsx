@@ -1,53 +1,73 @@
-import React from 'react';
-import { BookOpen, ShieldCheck, ExternalLink, Github, FileText, Layers, Smartphone, Sparkles, Store } from 'lucide-react';
-import { PERSONAL_PROJECTS } from '../data/portfolioData.ts';
+import React from "react";
+import {
+  BookOpen,
+  ShieldCheck,
+  ExternalLink,
+  Github,
+  FileText,
+  Layers,
+  Smartphone,
+  Sparkles,
+  Store,
+} from "lucide-react";
+import { PERSONAL_PROJECTS } from "../data/portfolioData.ts";
 
 export const ProjectsResearch: React.FC = () => {
   const getBadgeStyle = (accent?: string) => {
     switch (accent) {
-      case 'emerald':
+      case "emerald":
         return {
-          badge: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.2)]',
-          dot: 'text-emerald-400',
-          hoverBorder: 'hover:border-emerald-400/40',
-          titleHover: 'group-hover:text-emerald-200',
-          docBtn: 'bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/40 text-emerald-200',
+          badge:
+            "bg-emerald-500/15 border-emerald-500/30 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.2)]",
+          dot: "text-emerald-400",
+          hoverBorder: "hover:border-emerald-400/40",
+          titleHover: "group-hover:text-emerald-200",
+          docBtn:
+            "bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/40 text-emerald-200",
         };
-      case 'purple':
+      case "purple":
         return {
-          badge: 'bg-purple-500/15 border-purple-500/30 text-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.2)]',
-          dot: 'text-purple-400',
-          hoverBorder: 'hover:border-purple-400/40',
-          titleHover: 'group-hover:text-purple-200',
-          docBtn: 'bg-purple-500/15 hover:bg-purple-500/25 border-purple-500/40 text-purple-200',
+          badge:
+            "bg-purple-500/15 border-purple-500/30 text-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.2)]",
+          dot: "text-purple-400",
+          hoverBorder: "hover:border-purple-400/40",
+          titleHover: "group-hover:text-purple-200",
+          docBtn:
+            "bg-purple-500/15 hover:bg-purple-500/25 border-purple-500/40 text-purple-200",
         };
-      case 'sky':
+      case "sky":
         return {
-          badge: 'bg-sky-500/15 border-sky-500/30 text-sky-300 shadow-[0_0_12px_rgba(14,165,233,0.2)]',
-          dot: 'text-sky-400',
-          hoverBorder: 'hover:border-sky-400/40',
-          titleHover: 'group-hover:text-sky-200',
-          docBtn: 'bg-sky-500/15 hover:bg-sky-500/25 border-sky-500/40 text-sky-200',
+          badge:
+            "bg-sky-500/15 border-sky-500/30 text-sky-300 shadow-[0_0_12px_rgba(14,165,233,0.2)]",
+          dot: "text-sky-400",
+          hoverBorder: "hover:border-sky-400/40",
+          titleHover: "group-hover:text-sky-200",
+          docBtn:
+            "bg-sky-500/15 hover:bg-sky-500/25 border-sky-500/40 text-sky-200",
         };
       default:
         return {
-          badge: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-300 shadow-[0_0_12px_rgba(56,189,248,0.2)]',
-          dot: 'text-cyan-400',
-          hoverBorder: 'hover:border-cyan-400/40',
-          titleHover: 'group-hover:text-cyan-200',
-          docBtn: 'bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-200',
+          badge:
+            "bg-cyan-500/15 border-cyan-500/30 text-cyan-300 shadow-[0_0_12px_rgba(56,189,248,0.2)]",
+          dot: "text-cyan-400",
+          hoverBorder: "hover:border-cyan-400/40",
+          titleHover: "group-hover:text-cyan-200",
+          docBtn:
+            "bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-200",
         };
     }
   };
 
   return (
-    <section id="projects" className="py-20 sm:py-24 border-b border-slate-800/80 relative bg-[#0d131f]">
+    <section
+      id="projects"
+      className="py-20 sm:py-24 border-b border-slate-800/80 relative bg-[#0d131f]"
+    >
       {/* Subtle ambient tricolor glow */}
       <div className="absolute top-1/3 left-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 space-y-12 relative z-10">
-        
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -56,11 +76,12 @@ export const ProjectsResearch: React.FC = () => {
               <span>Research, Tooling & Intellectual Property</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-white tracking-tight">
-              Featured Projects & Publications
+              Featured Projects
             </h2>
           </div>
-          <p className="text-sm text-slate-300 max-w-md">
-            Peer-reviewed IEEE publication, Govt. of India approved copyright, official VS Code Marketplace extension, and open-source mobile platforms.
+          <p className="text-sm text-slate-300 max-w-sm">
+            Selected technical work showcasing practical software engineering,
+            system development, and technical exploration.
           </p>
         </div>
 
@@ -76,14 +97,18 @@ export const ProjectsResearch: React.FC = () => {
                 <div className="space-y-4">
                   {/* Header Badge */}
                   {project.publicationOrCopyright && (
-                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border ${style.badge}`}>
+                    <div
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border ${style.badge}`}
+                    >
                       <ShieldCheck className="w-3.5 h-3.5" />
                       <span>{project.publicationOrCopyright}</span>
                     </div>
                   )}
 
                   <div>
-                    <h3 className={`text-2xl sm:text-3xl font-bold font-display text-white ${style.titleHover} transition-colors`}>
+                    <h3
+                      className={`text-2xl sm:text-3xl font-bold font-display text-white ${style.titleHover} transition-colors`}
+                    >
                       {project.title}
                     </h3>
                     <p className="text-xs font-mono text-slate-400 mt-1">
@@ -103,8 +128,13 @@ export const ProjectsResearch: React.FC = () => {
                     </h4>
                     <ul className="space-y-1.5">
                       {project.highlights.map((h, idx) => (
-                        <li key={idx} className="text-xs text-slate-300 flex items-start gap-2 font-sans">
-                          <span className={`${style.dot} mt-0.5 shrink-0`}>▸</span>
+                        <li
+                          key={idx}
+                          className="text-xs text-slate-300 flex items-start gap-2 font-sans"
+                        >
+                          <span className={`${style.dot} mt-0.5 shrink-0`}>
+                            ▸
+                          </span>
                           <span>{h}</span>
                         </li>
                       ))}
@@ -170,7 +200,6 @@ export const ProjectsResearch: React.FC = () => {
             );
           })}
         </div>
-
       </div>
     </section>
   );

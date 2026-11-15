@@ -113,15 +113,6 @@ export const ContactSection: React.FC = () => {
               </span>
               <div className="grid grid-cols-2 gap-2.5">
                 <a
-                  href={SOCIAL_LINKS.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-all cursor-pointer"
-                >
-                  <Github className="w-4 h-4 text-slate-400" />
-                  <span>GitHub</span>
-                </a>
-                <a
                   href={SOCIAL_LINKS.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -129,6 +120,15 @@ export const ContactSection: React.FC = () => {
                 >
                   <Linkedin className="w-4 h-4 text-cyan-400" />
                   <span>LinkedIn</span>
+                </a>
+                <a
+                  href={SOCIAL_LINKS.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-all cursor-pointer"
+                >
+                  <Github className="w-4 h-4 text-slate-400" />
+                  <span>GitHub</span>
                 </a>
                 <a
                   href={SOCIAL_LINKS.stackoverflow}
@@ -191,7 +191,10 @@ export const ContactSection: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 h-full flex flex-col">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4 h-full flex flex-col"
+              >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[11px] font-mono text-slate-300 font-semibold">
