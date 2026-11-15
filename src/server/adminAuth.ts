@@ -16,7 +16,14 @@ const ALLOWED_ISSUER = "https://accounts.google.com";
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 
-function getConfig() {
+export type GoogleAdminConfig = {
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  allowedEmails: string[];
+};
+
+export function getGoogleAdminConfig() {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
   const redirectUri = process.env.GOOGLE_REDIRECT_URI;
@@ -31,6 +38,57 @@ function getConfig() {
     );
   }
   return { clientId, clientSecret, redirectUri, allowedEmails };
+}
+
+export async function exchangeGoogleCode(
+  code: string,
+  codeVerifier: string,
+  redirectUri: string,
+) {
+  const { clientId, clientSecret, allowedEmails } = getGoogleAdminConfig();
+  const tokenResponse = await fetch(GOOGLE_TOKEN_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      code,
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: redirectUri,
+      grant_type: "authorization_code",
+      code_verifier: codeVerifier,
+    }),
+  });
+  if (!tokenResponse.ok) throw new Error("Google authentication failed.");
+  const tokens = (await tokenResponse.json()) as { id_token?: string };
+  if (!tokens.id_token) throw new Error("Google authentication failed.");
+
+  const profileResponse = await fetch(
+    `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(tokens.id_token)}`,
+  );
+  if (!profileResponse.ok) throw new Error("Google authentication failed.");
+  const profile = (await profileResponse.json()) as {
+    iss?: string;
+    aud?: string;
+    exp?: string;
+    sub?: string;
+    email?: string;
+    email_verified?: string;
+  };
+  const expiresAt = Number(profile.exp);
+  const email = profile.email?.toLowerCase();
+  if (
+    profile.iss !== ALLOWED_ISSUER ||
+    profile.aud !== clientId ||
+    !profile.sub ||
+    !email ||
+    profile.email_verified !== "true" ||
+    !allowedEmails.includes(email) ||
+    !Number.isFinite(expiresAt) ||
+    expiresAt * 1000 <= Date.now()
+  ) {
+    throw new Error("This Google account is not authorized.");
+  }
+  return { subject: profile.sub, email };
 }
 
 function cookieOptions(httpOnly: boolean, maxAge: number) {
@@ -97,7 +155,7 @@ async function createPkceChallenge(verifier: string) {
 }
 
 async function beginGoogleLogin(request: Request) {
-  const { clientId, redirectUri } = getConfig();
+  const { clientId, redirectUri } = getGoogleAdminConfig();
   const { state, codeVerifier } = await createOAuthState();
   const challenge = await createPkceChallenge(codeVerifier);
   const params = new URLSearchParams({
@@ -116,7 +174,7 @@ async function beginGoogleLogin(request: Request) {
 }
 
 async function completeGoogleLogin(request: Request) {
-  const { clientId, clientSecret, redirectUri, allowedEmails } = getConfig();
+  const { clientId, redirectUri } = getGoogleAdminConfig();
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
@@ -126,51 +184,17 @@ async function completeGoogleLogin(request: Request) {
   }
   const codeVerifier = await consumeOAuthState(state);
   if (!codeVerifier) return response({ error: "Expired OAuth request." }, 400);
-
-  const tokenResponse = await fetch(GOOGLE_TOKEN_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      code,
-      client_id: clientId,
-      client_secret: clientSecret,
-      redirect_uri: redirectUri,
-      grant_type: "authorization_code",
-      code_verifier: codeVerifier,
-    }),
-  });
-  if (!tokenResponse.ok) return response({ error: "Google authentication failed." }, 401);
-  const tokens = (await tokenResponse.json()) as { id_token?: string };
-  if (!tokens.id_token) return response({ error: "Google authentication failed." }, 401);
-
-  const profileResponse = await fetch(
-    `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(tokens.id_token)}`,
-  );
-  if (!profileResponse.ok) return response({ error: "Google authentication failed." }, 401);
-  const profile = (await profileResponse.json()) as {
-    iss?: string;
-    aud?: string;
-    exp?: string;
-    sub?: string;
-    email?: string;
-    email_verified?: string;
-  };
-  const expiresAt = Number(profile.exp);
-  const email = profile.email?.toLowerCase();
-  if (
-    profile.iss !== ALLOWED_ISSUER ||
-    profile.aud !== clientId ||
-    !profile.sub ||
-    !email ||
-    profile.email_verified !== "true" ||
-    !allowedEmails.includes(email) ||
-    !Number.isFinite(expiresAt) ||
-    expiresAt * 1000 <= Date.now()
-  ) {
-    return response({ error: "This Google account is not authorized." }, 403);
+  let profile: Awaited<ReturnType<typeof exchangeGoogleCode>>;
+  try {
+    profile = await exchangeGoogleCode(code, codeVerifier, redirectUri);
+  } catch (error) {
+    return response(
+      { error: error instanceof Error ? error.message : "Google authentication failed." },
+      error instanceof Error && error.message.includes("not authorized") ? 403 : 401,
+    );
   }
 
-  const session = await createSession(profile.sub, email);
+  const session = await createSession(profile.subject, profile.email);
   return redirect("/admin", [
     `admin_session=${encodeURIComponent(session.token)}; ${cookieOptions(true, 8 * 60 * 60)}`,
     `admin_csrf=${encodeURIComponent(session.csrfToken)}; ${cookieOptions(false, 8 * 60 * 60)}`,

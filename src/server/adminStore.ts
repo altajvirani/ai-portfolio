@@ -9,7 +9,7 @@ const OAUTH_STATE_TTL_SECONDS = 10 * 60;
 const MAX_DOCUMENT_BYTES = 1_500_000;
 const DOCUMENT_ID = "portfolio";
 
-type AdminSession = {
+export type AdminSession = {
   id: string;
   googleSubject: string;
   email: string;

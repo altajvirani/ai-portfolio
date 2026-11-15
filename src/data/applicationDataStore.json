@@ -10,9 +10,20 @@
   "site": {
     "title": "Altaj Virani | Azure AI & Agentic Systems Portfolio",
     "description": "Portfolio and interactive RAG intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
-    "assetBasePath": "/assets/"
+    "assetBasePath": "/assets/",
+    "assetPaths": {
+      "profileImage": "/assets/altaj-virani-profile.png",
+      "monogram": "/assets/monogram-badge.png",
+      "openToWorkBanner": "/assets/open-to-work-banner.png",
+      "resume": "/assets/resume-altaj-virani.pdf",
+      "longTermResume": "/assets/resume-altaj-virani-ltm.pdf",
+      "powerAppsOverview": "/assets/power-apps-engineering-overview.png",
+      "azureNetworkingOverview": "/assets/power-apps-and-azure-networking-overview.png",
+      "vikiAiWorkDescription": "/assets/viki-ai-work-description.jpeg"
+    }
   },
   "portfolio": {
+    "resumeUrl": "https://flowcv.com/resume/gg0rtbkh7jul",
     "socialLinks": {
       "github": "https://github.com/altajvirani",
       "linkedin": "https://www.linkedin.com/in/altajvirani/",
@@ -188,6 +199,7 @@
         "publicationOrCopyright": "IEEE ICSCSS (2023) Publication",
         "documentUrl": "https://drive.google.com/file/d/1lef8moQmUvzgtEttF1r9qbtEL74lxP0r/view?usp=sharing",
         "githubUrl": "https://github.com/altajvirani/AutoQAGen",
+        "imagePath": "/assets/project-autoqagen.jpg",
         "accentColor": "cyan"
       },
       {
@@ -230,6 +242,7 @@
         "publicationOrCopyright": "Govt. of India Copyright",
         "documentUrl": "https://drive.google.com/file/d/1ae07j8Z6j2pZGD-Qdy74iskDIWAOfpcJ/view",
         "githubUrl": "https://github.com/altajvirani/AutoQA",
+        "imagePath": "/assets/project-autoqa-ai.jpg",
         "accentColor": "emerald"
       },
       {
@@ -272,6 +285,7 @@
         "publicationOrCopyright": "VS Code Marketplace Extension",
         "marketplaceUrl": "https://marketplace.visualstudio.com/items?itemName=altajvirani.snapwright",
         "githubUrl": "https://github.com/altajvirani/SnapWright",
+        "imagePath": "/assets/project-snapwright.jpg",
         "accentColor": "purple"
       },
       {
@@ -312,6 +326,7 @@
         ],
         "publicationOrCopyright": "Open-Source Mobile App",
         "githubUrl": "https://github.com/altajvirani/Nivesh",
+        "imagePath": "/assets/project-nivesh.jpg",
         "accentColor": "sky"
       }
     ],
@@ -1307,12 +1322,16 @@
   },
   "assets": [
     "altaj-virani-profile.png",
+    "monogram-badge.png",
     "resume-altaj-virani.pdf",
     "resume-altaj-virani-ltm.pdf",
+    "project-autoqa-ai.jpg",
+    "project-autoqagen.jpg",
+    "project-nivesh.jpg",
+    "project-snapwright.jpg",
     "power-apps-engineering-overview.png",
     "power-apps-and-azure-networking-overview.png",
     "open-to-work-banner.png",
-    "monogram-badge.png",
     "viki-ai-work-description.jpeg"
   ],
   "chatbot": {
