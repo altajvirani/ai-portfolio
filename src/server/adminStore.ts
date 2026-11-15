@@ -2,7 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
-import applicationData from "../data/applicationDataStore.json";
+import applicationData from "../data/applicationDataStore.json" with { type: "json" };
 
 const SESSION_TTL_SECONDS = 8 * 60 * 60;
 const OAUTH_STATE_TTL_SECONDS = 10 * 60;
