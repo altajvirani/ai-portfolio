@@ -1,7 +1,6 @@
 import {
   WorkProject,
   PersonalProject,
-  SkillCategory,
   AwardItem,
   EducationItem,
   CertificationItem,
@@ -13,7 +12,7 @@ export const SOCIAL_LINKS = {
   stackoverflow: "https://stackoverflow.com/users/10182929/altaj-virani",
   x: "https://x.com/AltajVirani",
   instagram: "https://www.instagram.com/altajvirani",
-  whatsapp: "https://wa.me/+917303934303/",
+  whatsapp: "https://wa.me/+917303934303",
   email: "altajatwork@gmail.com",
   location: "Mumbai, India",
 };
@@ -36,92 +35,105 @@ export const MARQUEE_ITEMS = [
 export const WORK_EXPERIENCE: WorkProject[] = [
   {
     id: "azure-network-engineering",
-    projectName: "Azure Network Engineering | Viki-AI",
+    organization: "LTM",
     businessUnit: "Microsoft Business Unit (MSBU)",
+    location: "Mumbai, IN",
+    projectName: "Azure Network Engineering · Viki-AI",
     role: "Software Engineer",
-    period: "June 2025 – Present",
-    description:
-      "Core contributor to Viki-AI, Microsoft's internal agentic AI operations platform for Azure global network infrastructure.",
+    period: "Jun 2025 – Present",
+    yearLabel: "2025 – Present",
+    monthLabel: "Jun 2025",
+    summary:
+      "Core contributor to Viki-AI, an internal agentic AI operations platform supporting global cloud network infrastructure, reliability, and incident response.",
     keyContributions: [
       {
-        area: "Viki-AI & Agentic Operations",
+        area: "Agentic AI & Platform Enablement",
         points: [
-          "Led cross-team enablement of Viki-AI, co-building automated playbooks, domain agents, and Copilot CLI plugins via Model Context Protocol (MCP) toolkits.",
-          "Built enterprise AI assistants combining document search, autonomous reasoning, and hybrid RAG, reducing troubleshooting time by 80% for 200+ users.",
-          "Developed natural-language scheduling and rostering solutions translating user requests into structured queries with 95% accuracy.",
+          "Co-built MCP toolkits, Copilot CLI plugins, and 20+ domain agents (250+ tools) across engineering tracks.",
+          "Shipped Azure Functions + Copilot Studio chatbots with hybrid RAG/HNSW indexing, cutting troubleshooting time 80% for 200+ users.",
+          "Built natural-language rostering (95% accuracy), Foundry root-cause triage with PII redaction, and containerized MCP servers.",
         ],
       },
       {
-        area: "Cloud Reliability & High-Scale Systems",
+        area: "Cloud Reliability & Security",
         points: [
-          "Reduced production Key Vault calls 35× (2,807 to 79/day) and eliminated failed lookups by implementing a 12-hour distributed cache with strict TLS validation.",
-          "Root-caused 2,640 monthly out-of-memory (OOM) errors using KQL and Application Insights, migrating services to dedicated auto-scaling compute with errors sustained at zero.",
-          "Built a 13-phase load-testing suite executing 35,500 workflows with 45 pass/fail verdicts to validate auto-scaling rules under heavy backlog.",
+          "Cut Key Vault calls 35× (2,807 to 79/day) via a 12-hour shared .NET cache with strict TLS validation and 16 tests.",
+          "Eliminated 2,640 monthly OOM errors via KQL diagnostics and migration to dedicated auto-scaling compute.",
+          "Validated auto-scaling across 35,500 load-test workflows; enforced 100% OWASP Top 10, SSRF, URSA DAST, and Purview compliance.",
         ],
       },
     ],
-    technologies: [
-      "Model Context Protocol (MCP)",
-      "GitHub Copilot SDK",
-      "Azure OpenAI",
-      "Azure Container Apps",
-      "C# / .NET",
-      "KQL / Azure Data Explorer",
-      "Azure Key Vault",
-      "PowerShell",
+    skillIds: [
+      "mcp",
+      "copilot-sdk",
+      "azure-openai",
+      "rag",
+      "container-apps",
+      "key-vault",
+      "kql",
+      "powershell",
+      "csharp",
+      "python",
+      "owasp",
+      "ssrf",
     ],
+    accentColor: "cyan",
   },
   {
     id: "power-apps-engineering",
-    projectName: "Microsoft Power Apps Engineering",
+    organization: "LTM",
     businessUnit: "Microsoft Business Unit (MSBU)",
+    location: "Mumbai, IN",
+    projectName: "Microsoft Power Apps & Copilot Studio Engineering",
     role: "Software Engineer",
-    period: "September 2024 – June 2025",
-    description:
-      "Contributed to Microsoft Power Platform conversational capabilities and developer tools.",
+    period: "Sep 2024 – Jun 2025",
+    yearLabel: "2024 – 2025",
+    monthLabel: "Sep 2024",
+    summary:
+      "Engineered conversational AI backend enhancements, automated E2E QA infrastructure, and developer productivity extensions for Power Platform tooling.",
     keyContributions: [
       {
-        area: "SDK Development & Tooling",
+        area: "Conversational SDKs & QA Automation",
         points: [
-          "Contributed to Microsoft Bot Framework SDK development, focusing on conversational runtime modules and dialog stability.",
-          "Developed and integrated a C# certificate-authentication module to validate certificate-based authentication across supported environments.",
-          "Implemented Python developer tooling for automated workflows, structured references, and documentation.",
+          "Automated 200+ Playwright TS tests with a singleton PageFactory pattern, lifting smoke coverage from 25% to 85% and pass rates to 70%.",
+          "Built a custom VS Code extension for automated Page Object Model (POM) generation and a C# certificate-auth module for 20+ testers.",
+          "Contributed to Microsoft Bot Framework SDK runtime stability and Python automation for structured reference docs.",
         ],
       },
     ],
-    technologies: [
-      "Microsoft Bot Framework SDK",
-      "Microsoft Copilot Studio",
-      "C# / .NET",
-      "Python",
-      "Azure DevOps",
+    skillIds: [
+      "bot-framework",
+      "playwright",
+      "typescript",
+      "csharp",
+      "python",
+      "tls-cert",
     ],
+    accentColor: "emerald",
   },
   {
     id: "graduate-engineer-trainee",
-    projectName: "Graduate Engineer Trainee (Orchard Training Program)",
-    businessUnit: "Microsoft Business Unit (MSBU)",
+    organization: "LTM",
+    businessUnit: "Orchard Training Program",
+    location: "Mumbai, IN",
+    projectName: "Full-Stack .NET & Cloud Microservices Track",
     role: "Graduate Engineer Trainee",
-    period: "June 2024 – September 2024",
-    description:
-      "Intensive full-stack .NET and cloud microservices engineering program.",
+    period: "Jun 2024 – Sep 2024",
+    yearLabel: "2024",
+    monthLabel: "Jun 2024",
+    summary:
+      "Intensive enterprise training program focused on backend .NET microservices, relational database design, and cloud-ready API architectures.",
     keyContributions: [
       {
-        area: "Full-Stack .NET & Cloud Microservices",
+        area: "Core Foundations & Distinction",
         points: [
-          "Completed rigorous engineering curriculum covering C#, ASP.NET Core, Entity Framework, Web APIs, JWT Authentication, and SQL Server.",
-          "Achieved #1 Batch Topper ranking with a 94.67% aggregate across all technical evaluations.",
+          "Completed full-stack engineering modules covering C#, ASP.NET Core, Entity Framework, JWT/OAuth, SQL Server, and Web APIs.",
+          "Ranked #1 Batch Topper across all technical evaluations with a 94.67% aggregate.",
         ],
       },
     ],
-    technologies: [
-      "C#",
-      "ASP.NET Core",
-      "Entity Framework",
-      "Web APIs",
-      "MS SQL Server",
-      "Microservices",
-    ],
+    skillIds: ["csharp", "dotnet-webapi", "sql-server", "typescript", "xunit"],
+    accentColor: "purple",
   },
 ];
 
@@ -130,24 +142,31 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
     id: "autoqagen",
     title: "AutoQAGen",
     subtitle: "IEEE ICSCSS 2023 Published Paper",
+    shortDescription:
+      "T5 + NLP pipeline generating multi-format QA pairs and semantic distractors, benchmarked on SQuAD with BERT scoring.",
     description:
-      "Published and presented a Question-Answer Generation (QAG) architecture paper in the IEEE ICSCSS proceedings. Engineered an NLP pipeline combining Google T5 with Named Entity Recognition, POS tagging, and Sense2Vec for multi-format question synthesis and context-aware distractor generation.",
+      "Published QAG architecture combining Google T5 with NER, POS tagging, and Sense2Vec for automated question synthesis and distractor generation via Flask and React.",
     highlights: [
-      "Multi-format QA pair synthesis using fine-tuned T5 transformer models",
-      "Sense2Vec vector analysis for context-aware, semantically plausible distractor generation",
-      "Automated evaluation pipeline benchmarked against SQuAD dataset baselines with BERT scoring",
-      "Scalable Flask REST API backend paired with a React frontend",
+      "Fine-tuned T5 transformer pipeline for multi-format QA pair synthesis",
+      "Sense2Vec + NER distractor generation benchmarked against SQuAD with BERT scores",
+      "Scalable Flask REST API paired with a component-driven React UI",
     ],
-    technologies: [
-      "Python",
-      "Google T5",
-      "BERT",
-      "Sense2Vec",
-      "NLTK",
-      "Flask",
-      "React",
+    technologies: ["Python", "Google T5", "BERT", "Sense2Vec", "NLTK", "Flask", "React"],
+    slides: [
+      {
+        badge: "Architecture",
+        title: "T5 + NLP Synthesis Engine",
+        metric: "IEEE ICSCSS 2023",
+        detail: "Combines POS tagging, NER, and Sense2Vec vectors for semantic question and distractor pairs.",
+      },
+      {
+        badge: "Benchmark",
+        title: "Automated BERT Scoring",
+        metric: "SQuAD Baselines",
+        detail: "Ranks generated question-answer outputs automatically against SQuAD evaluation criteria.",
+      },
     ],
-    publicationOrCopyright: "IEEE ICSCSS (2023) Proceeding Publication",
+    publicationOrCopyright: "IEEE ICSCSS (2023) Publication",
     documentUrl:
       "https://drive.google.com/file/d/1lef8moQmUvzgtEttF1r9qbtEL74lxP0r/view?usp=sharing",
     githubUrl: "https://github.com/altajvirani/AutoQAGen",
@@ -157,22 +176,31 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
     id: "autoqa-ai",
     title: "AutoQA AI",
     subtitle: "Govt. of India Copyright Approved",
+    shortDescription:
+      "Privacy-first offline desktop assistant for querying local documents using TF-IDF ranking and voice accessibility.",
     description:
-      "Registered intellectual property and copyright approved by the Government of India for 'AutoQA AI - A Question Answering Application'. Built as a privacy-first, fully offline desktop assistant querying local documents without external data transmission.",
+      "Copyright-registered offline desktop Q&A application processing local documents with zero external data transfer, TF-IDF cosine ranking, and text-to-speech output.",
     highlights: [
-      "Approved copyright registered with the Government of India for automated question answering",
-      "Semantic document search using TF-IDF vectorization and cosine similarity scoring",
-      "NLTK pipeline for text preprocessing, sentence segmentation, and keyword extraction",
-      "Desktop interface crafted with KivyMD and integrated Pyttsx3 text-to-speech accessibility",
+      "Government of India approved copyright registration for automated document Q&A",
+      "Offline TF-IDF vectorization and cosine similarity ranking with NLTK preprocessing",
+      "Desktop UI built in KivyMD with Pyttsx3 text-to-speech accessibility",
     ],
-    technologies: [
-      "Python",
-      "Scikit-learn (TF-IDF)",
-      "NLTK",
-      "KivyMD",
-      "Pyttsx3",
+    technologies: ["Python", "Scikit-learn (TF-IDF)", "NLTK", "KivyMD", "Pyttsx3"],
+    slides: [
+      {
+        badge: "Intellectual Property",
+        title: "Privacy-First Offline Q&A",
+        metric: "Govt. Copyright Approved",
+        detail: "Zero external network transmission; executes semantic retrieval locally on user files.",
+      },
+      {
+        badge: "Retrieval",
+        title: "TF-IDF + Cosine Ranking",
+        metric: "Local Vector Engine",
+        detail: "Pairs NLTK sentence segmentation with Pyttsx3 voice synthesis for accessibility.",
+      },
     ],
-    publicationOrCopyright: "Government of India Copyright Approved",
+    publicationOrCopyright: "Govt. of India Copyright",
     documentUrl:
       "https://drive.google.com/file/d/1ae07j8Z6j2pZGD-Qdy74iskDIWAOfpcJ/view",
     githubUrl: "https://github.com/altajvirani/AutoQA",
@@ -181,23 +209,32 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
   {
     id: "snapwright",
     title: "SnapWright",
-    subtitle: "Published VS Code Extension · Marketplace & Open Source",
+    subtitle: "Published VS Code Extension",
+    shortDescription:
+      "Open-source IDE extension automating Page Object Model generation with a singleton PageFactory pattern.",
     description:
-      "Architected and published an open-source Visual Studio Code extension on the official marketplace. Implements a singleton-based PageFactory pattern that automates Page Object Model (POM) generation, consolidates imports, and eliminates memory leaks in enterprise test suites.",
+      "VS Code Marketplace extension automating TypeScript Page Object Model scaffolding, consolidating imports, and eliminating memory leaks across large test suites.",
     highlights: [
-      "Published on the official Visual Studio Code Marketplace (altajvirani.snapwright)",
-      "Automated Page Object Model (POM) generator with smart class-name and path detection",
-      "Singleton PageFactory architecture eliminating memory leaks in high-scale test suites",
-      "Adopted across internal frameworks to accelerate test pipeline execution efficiency",
+      "Published on the official VS Code Marketplace (altajvirani.snapwright)",
+      "Singleton PageFactory pattern eliminating memory leaks in Playwright/E2E suites",
+      "Smart AST class-name and path resolution accelerating QA migration workflows",
     ],
-    technologies: [
-      "TypeScript",
-      "VS Code Extension API",
-      "Node.js",
-      "Developer Tooling",
-      "AST Parsing",
+    technologies: ["TypeScript", "VS Code API", "Node.js", "AST Parsing", "Playwright"],
+    slides: [
+      {
+        badge: "Marketplace",
+        title: "Automated POM Scaffolding",
+        metric: "VS Code Extension",
+        detail: "Generates clean Page Object classes with consolidated imports and path detection.",
+      },
+      {
+        badge: "Pattern",
+        title: "Leak-Free PageFactory",
+        metric: "Singleton Runtime",
+        detail: "Adopted across internal automation suites to eliminate browser memory growth.",
+      },
     ],
-    publicationOrCopyright: "VS Code Marketplace Published Extension",
+    publicationOrCopyright: "VS Code Marketplace Extension",
     marketplaceUrl:
       "https://marketplace.visualstudio.com/items?itemName=altajvirani.snapwright",
     githubUrl: "https://github.com/altajvirani/SnapWright",
@@ -206,125 +243,60 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
   {
     id: "nivesh",
     title: "Nivesh",
-    subtitle: "Start-Up Investment & Crowdfunding Platform",
+    subtitle: "Start-Up Crowdfunding Platform",
+    shortDescription:
+      "Open-source Android app connecting early-stage founders with micro-investors through transparent equity tracking.",
     description:
-      "An open-source Android mobile application designed to democratize venture seed capital and crowdfunding. Connects early-stage startup founders with micro-investors and angel backers through transparent equity tracking and milestone dashboards.",
+      "Native Android platform built to democratize startup seed funding with real-time campaign metrics, milestone tracking, and micro-investor portfolio dashboards.",
     highlights: [
-      "Comprehensive startup discovery feed with real-time crowdfunding metrics and pitch decks",
-      "Interactive investment tracking with portfolio analytics and milestone updates",
-      "Native Android Java architecture with responsive Material Design UI",
+      "Startup discovery feed with live fundraising progress and pitch summaries",
+      "Investor portfolio analytics with equity milestone updates",
+      "Native Android Java architecture backed by REST APIs and Firebase",
     ],
-    technologies: [
-      "Android Java",
-      "Mobile App Architecture",
-      "REST APIs",
-      "Material Design",
-      "Firebase",
+    technologies: ["Android Java", "Material Design", "REST APIs", "Firebase"],
+    slides: [
+      {
+        badge: "Mobile Fintech",
+        title: "Micro-Venture Discovery",
+        metric: "Open-Source Android",
+        detail: "Transparent equity progress tracking connecting founders with angel and micro-investors.",
+      },
+      {
+        badge: "Architecture",
+        title: "Real-Time Portfolio Sync",
+        metric: "Firebase + REST",
+        detail: "Material Design views surfacing milestone progress and funding velocity cleanly.",
+      },
     ],
-    publicationOrCopyright: "Open-Source Venture Platform",
+    publicationOrCopyright: "Open-Source Mobile App",
     githubUrl: "https://github.com/altajvirani/Nivesh",
     accentColor: "sky",
   },
 ];
 
-export const SKILL_CATEGORIES: SkillCategory[] = [
-  {
-    category: "Agentic AI & Orchestration",
-    tagline: "Autonomous reasoning, MCP toolkits & LLM integrations",
-    colorScheme: "cyan",
-    skills: [
-      {
-        name: "Model Context Protocol (MCP)",
-        level: "Architecture",
-        highlight: true,
-      },
-      { name: "GitHub Copilot SDK", level: "Production", highlight: true },
-      { name: "Azure OpenAI SDK", level: "Core", highlight: true },
-      {
-        name: "Hybrid RAG & HNSW Indexing",
-        level: "Architecture",
-        highlight: true,
-      },
-      { name: "Vector Databases", level: "Production" },
-      { name: "Microsoft Copilot Studio", level: "Core" },
-      { name: "Azure AI Foundry", level: "Production" },
-      { name: "Prompt Engineering", level: "Core" },
-    ],
-  },
-  {
-    category: "Azure Cloud & Distributed Systems",
-    tagline: "High-scale compute, serverless & telemetry",
-    colorScheme: "azure",
-    skills: [
-      { name: "Azure Container Apps", level: "Production", highlight: true },
-      { name: "Azure Functions (Serverless)", level: "Core", highlight: true },
-      {
-        name: "Azure Key Vault (Shared Caching)",
-        level: "Production",
-        highlight: true,
-      },
-      {
-        name: "Azure Data Explorer (KQL)",
-        level: "Architecture",
-        highlight: true,
-      },
-      { name: "Application Insights", level: "Production" },
-      { name: "Azure Service Bus & Event Hubs", level: "Core" },
-      { name: "PowerShell & Azure CLI", level: "Production" },
-      { name: "Docker Containers", level: "Core" },
-    ],
-  },
-  {
-    category: "Core Languages & Backend Systems",
-    tagline: "Microservices, APIs & data processing",
-    colorScheme: "emerald",
-    skills: [
-      {
-        name: "Python (FastAPI, Flask, Pandas)",
-        level: "Production",
-        highlight: true,
-      },
-      { name: "C# / .NET Core", level: "Architecture", highlight: true },
-      { name: "ASP.NET Core Web APIs", level: "Production", highlight: true },
-      { name: "TypeScript & JavaScript", level: "Core" },
-      { name: "MS SQL Server", level: "Core" },
-      { name: "Microservices Architecture", level: "Architecture" },
-    ],
-  },
-  {
-    category: "Security & Enterprise Quality",
-    tagline: "Endpoint defense, audit & validation",
-    colorScheme: "purple",
-    skills: [
-      {
-        name: "OWASP Top 10 & Input Validation",
-        level: "Production",
-        highlight: true,
-      },
-      {
-        name: "SSRF Mitigation & Endpoint Hardening",
-        level: "Architecture",
-        highlight: true,
-      },
-      { name: "TLS Certificate Auth", level: "Production", highlight: true },
-      { name: "URSA DAST Scanning", level: "Production" },
-      { name: "Microsoft Purview Audit Logging", level: "Core" },
-      { name: "xUnit Automated Testing", level: "Core" },
-    ],
-  },
-];
-
 export const AWARDS_DATA: AwardItem[] = [
+  {
+    id: "problem-solver-2026",
+    title: "Problem Solver Badge",
+    subtitle: "Agentic AI & Platform Initiatives",
+    organization: "LTM · MSBU",
+    date: "Sep 2026",
+    category: "Technical Problem Solving",
+    reason:
+      "Nominated for contributions to Viki-AI, agentic operations tooling, and resolving complex platform challenges.",
+    impactHighlight: "Agentic Operations & Stakeholder Trust",
+    accentColor: "amber",
+  },
   {
     id: "spot-nov-2025",
     title: "Hi-Five Spot Award",
-    subtitle: "High-Impact AI Use Cases & Innovation",
-    organization: "LTM · Microsoft Business Unit (MSBU)",
+    subtitle: "AI Innovation & Use Cases",
+    organization: "LTM · MSBU",
     date: "Nov 2025",
-    category: "AI Innovation & Agentic Systems",
+    category: "Individual Excellence",
     reason:
-      "Recognized for consistently exceeding expectations by demonstrating exceptional innovation in formulating high-impact AI use cases and driving collaborative engineering excellence.",
-    impactHighlight: "High-Impact AI Innovation",
+      "Recognized for innovating high-impact enterprise AI use cases and cross-team technical execution.",
+    impactHighlight: "High-Impact AI Use Cases",
     documentUrl:
       "https://drive.google.com/file/d/18K2sELoqpOP2vz0gN2iA98Z_g0hWm1qD/view?usp=drive_link",
     accentColor: "emerald",
@@ -332,13 +304,13 @@ export const AWARDS_DATA: AwardItem[] = [
   {
     id: "spot-aug-2025",
     title: "Super Crew Spot Award",
-    subtitle: "Enterprise Generative AI & Automation",
-    organization: "LTM · Microsoft Business Unit (MSBU)",
+    subtitle: "Enterprise GenAI & Automation",
+    organization: "LTM · MSBU",
     date: "Aug 2025",
-    category: "Enterprise GenAI & Automation Systems",
+    category: "Team Delivery",
     reason:
-      "Awarded along with the engineering squad for outstanding efforts in architecting and deploying compliant, enterprise-grade Generative AI and Automation systems modernizing internal operations.",
-    impactHighlight: "Enterprise GenAI Modernization",
+      "Awarded with the engineering squad for delivering compliant Generative AI and automation systems.",
+    impactHighlight: "Compliant GenAI Modernization",
     documentUrl:
       "https://drive.google.com/file/d/1vt7842TyYoa6MsA7CXNONp2AQxTDPuyT/view?usp=drive_link",
     accentColor: "purple",
@@ -346,13 +318,13 @@ export const AWARDS_DATA: AwardItem[] = [
   {
     id: "spot-jul-2025",
     title: "Hi-Five Spot Award",
-    subtitle: "Systems Migration & Developer Tooling",
-    organization: "LTM · Microsoft Business Unit (MSBU)",
+    subtitle: "Migrations & Developer Tooling",
+    organization: "LTM · MSBU",
     date: "Jul 2025",
-    category: "Velocity & Productivity Tooling",
+    category: "Automation Velocity",
     reason:
-      "Commended for leading critical platform migrations and independently engineering custom automation utilities that eliminated repetitive friction and significantly accelerated team productivity.",
-    impactHighlight: "Automation & Migration Velocity",
+      "Commended for stabilizing QA frameworks, leading migrations, and building productivity utilities.",
+    impactHighlight: "QA & Migration Velocity",
     documentUrl:
       "https://drive.google.com/file/d/1lLLw5HtWZtIoV_LdTjDxVahClUSr6iLq/view?usp=drive_link",
     accentColor: "cyan",
@@ -361,10 +333,9 @@ export const AWARDS_DATA: AwardItem[] = [
 
 export const EDUCATION_ITEMS: EducationItem[] = [
   {
-    degree: "Bachelor of Engineering in Computer Engineering",
-    institution:
-      "Vidyavardhini's College of Engineering and Technology (University of Mumbai)",
-    duration: "Feb 2021 – May 2023",
+    degree: "B.E. in Computer Engineering",
+    institution: "Vidyavardhini's College of Engineering & Technology (Mumbai University)",
+    duration: "2021 – 2023",
     grade: "9.00 CGPA",
     documentUrl:
       "https://drive.google.com/file/d/13Ar1FiG4B4QjiCjCQi0kefs5FlJq7o77/view",
@@ -372,7 +343,7 @@ export const EDUCATION_ITEMS: EducationItem[] = [
   {
     degree: "Diploma in Computer Engineering",
     institution: "Vidyavardhini's Bhausaheb Vartak Polytechnic (MSBTE)",
-    duration: "Aug 2017 – Nov 2020",
+    duration: "2017 – 2020",
     grade: "94.00%",
     documentUrl:
       "https://drive.google.com/file/d/1cwvFmlKVv0WVhkpgj0W2K37e0_sl4H8q/view",
@@ -380,7 +351,7 @@ export const EDUCATION_ITEMS: EducationItem[] = [
   {
     degree: "Secondary School Certificate (SSC)",
     institution: "Holy Paradise High School (MSBSHSE)",
-    duration: "Jun 2016 – May 2017",
+    duration: "2016 – 2017",
     grade: "80.60%",
     documentUrl:
       "https://drive.google.com/file/d/1A6t9XAIur-sXbHWvXvRx1l8eb17VYs_l/view",

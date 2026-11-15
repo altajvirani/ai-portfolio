@@ -139,11 +139,12 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     title: 'Industry Awards & Recognition at LTM',
     category: 'awards',
     source: 'altaj-virani_ltm-resume.pdf (Page 5) & altaj-virani-resume.pdf (Page 2)',
-    keywords: ['awards', 'recognition', 'spot award', 'hi-five', 'super crew', 'honors'],
+    keywords: ['awards', 'recognition', 'spot award', 'hi-five', 'super crew', 'problem solver', 'honors'],
     content: `Awards & Honors at LTM (Microsoft Business Unit):
-1. Hi-Five Spot Award (Nov 2025): Recognized for consistently exceeding expectations by demonstrating exceptional innovation in developing AI use cases.
-2. Super Crew Spot Award (Aug 2025 / Oct 2025): Awarded along with the team for outstanding efforts in architecting and deploying compliant, enterprise-grade Generative AI and Automation systems that modernized internal operations.
-3. Hi-Five Spot Award (Jul 2025): Commended for leading system migrations and independently building automation tools that boosted engineering productivity.`
+1. Problem Solver Badge (Sep 2026): Nominated for contributions to Viki AI, Azure Networking’s agentic operations platform, and internal AI initiatives, earning stakeholder confidence through technical solutions.
+2. Hi-Five Spot Award (Nov 2025): Recognized for consistently exceeding expectations by demonstrating exceptional innovation in developing AI use cases.
+3. Super Crew Spot Award (Aug 2025 / Oct 2025): Awarded along with the team for outstanding efforts in architecting and deploying compliant, enterprise-grade Generative AI and Automation systems that modernized internal operations.
+4. Hi-Five Spot Award (Jul 2025): Commended for leading QA framework stability improvements, system migrations, and independently building automation tools that boosted engineering productivity.`
   },
   {
     id: 'education_certifications',

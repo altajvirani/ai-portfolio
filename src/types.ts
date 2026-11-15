@@ -1,24 +1,38 @@
 export interface WorkProject {
   id: string;
+  organization: string;
+  businessUnit?: string;
+  location?: string;
   projectName: string;
-  businessUnit: string;
   role: string;
   period: string;
-  description: string;
+  yearLabel: string;
+  monthLabel: string;
+  summary: string;
   keyContributions: {
     area: string;
     points: string[];
   }[];
-  technologies: string[];
+  skillIds: string[];
+  accentColor: 'cyan' | 'emerald' | 'purple' | 'sky';
+}
+
+export interface ProjectSlide {
+  badge: string;
+  title: string;
+  metric: string;
+  detail: string;
 }
 
 export interface PersonalProject {
   id: string;
   title: string;
   subtitle: string;
+  shortDescription: string;
   description: string;
   highlights: string[];
   technologies: string[];
+  slides: ProjectSlide[];
   publicationOrCopyright?: string;
   documentUrl?: string;
   githubUrl?: string;
@@ -49,7 +63,7 @@ export interface AwardItem {
   reason: string;
   impactHighlight: string;
   documentUrl?: string;
-  accentColor: 'emerald' | 'purple' | 'cyan';
+  accentColor: 'emerald' | 'purple' | 'cyan' | 'amber';
 }
 
 export interface EducationItem {

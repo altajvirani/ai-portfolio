@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { processRAGQuery } from './src/server/ragEngine.ts';
+import { dispatchContactSubmission } from './src/server/contactHandler.ts';
 
 dotenv.config();
 
@@ -27,6 +28,19 @@ async function startServer() {
       const errorMessage = err instanceof Error ? err.message : 'Internal Server Error';
       console.error('Error handling /api/chat:', err);
       res.status(500).json({ error: errorMessage });
+    }
+  });
+
+  // Contact Inquiry & Email Dispatch Endpoint
+  app.post('/api/contact', async (req, res) => {
+    try {
+      const origin = typeof req.headers.origin === 'string' ? req.headers.origin : undefined;
+      const result = await dispatchContactSubmission(req.body, origin);
+      res.status(result.status).json(result.body);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Internal Server Error';
+      console.error('Error handling /api/contact:', err);
+      res.status(500).json({ ok: false, error: errorMessage });
     }
   });
 

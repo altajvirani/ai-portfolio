@@ -43,12 +43,11 @@ export const Hero: React.FC = () => {
               </p>
             </div>
 
-            {/* Concise Pitch - Secondary color in clear slate-300 */}
+            {/* Concise Pitch */}
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl mx-auto md:mx-0 font-sans">
-              Software Engineer specializing in enterprise agentic platforms,
-              cloud reliability, and high-scale distributed systems. Focused on
-              practical LLM integration, runtime stability, and automated
-              engineering workflows.
+              Software Engineer focused on agentic AI platforms, cloud
+              reliability, and distributed systems—turning LLM orchestration,
+              telemetry diagnostics, and automation into production impact.
             </p>
 
             {/* Simple Primary Actions */}

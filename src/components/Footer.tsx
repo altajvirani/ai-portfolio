@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
             ALTAJ VIRANI
           </span>
           <p className="text-xs text-slate-400 mt-0.5">
-            Azure AI Engineer · LTM (Microsoft Business Unit)
+            Azure AI Engineer · Agentic Platforms & Cloud Systems
           </p>
         </div>
 
