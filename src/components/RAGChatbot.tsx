@@ -39,8 +39,8 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
     {
       id: "welcome",
       role: "assistant",
-      content: `Hello! I am Altaj Virani's AI Representative, augmented directly with his verified resume documents (altaj-virani-resume.pdf and altaj-virani_ltm-resume.pdf).\n\nAsk me anything about his enterprise agentic AI architectures (Viki AI, MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!`,
-      sources: ["altaj-virani-resume.pdf", "altaj-virani_ltm-resume.pdf"],
+      content: `Hello! I am Altaj Virani's AI Representative, augmented directly with his verified resume documents (resume-altaj-virani.pdf and resume-altaj-virani-ltm.pdf).\n\nAsk me anything about his enterprise agentic AI architectures (Viki AI, MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!`,
+      sources: ["resume-altaj-virani.pdf", "resume-altaj-virani-ltm.pdf"],
       timestamp: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -120,7 +120,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         role: "assistant",
         content:
           data.answer || "No response generated from the knowledge base.",
-        sources: data.sources || ["altaj-virani-resume.pdf"],
+        sources: data.sources || ["resume-altaj-virani.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -141,7 +141,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         queryLower.includes("vscode") ||
         queryLower.includes("pagefactory")
       ) {
-        fallbackContent += `• **SnapWright**: An open-source Visual Studio Code extension published on the official marketplace (\`altajvirani.snapwright\`).\n• **Architecture**: Implements an automated PageFactory and Page Object Model (POM) pattern generator for web test suites, featuring smart class-name detection and import consolidation to eliminate memory leaks.\n• **Adoption**: Led the migration of internal Copilot Studio automation frameworks to adopt SnapWright, significantly improving pipeline efficiency.\n\n[Source: altaj-virani-resume.pdf (Page 2) & VS Code Marketplace]`;
+        fallbackContent += `• **SnapWright**: An open-source Visual Studio Code extension published on the official marketplace (\`altajvirani.snapwright\`).\n• **Architecture**: Implements an automated PageFactory and Page Object Model (POM) pattern generator for web test suites, featuring smart class-name detection and import consolidation to eliminate memory leaks.\n• **Adoption**: Led the migration of internal Copilot Studio automation frameworks to adopt SnapWright, significantly improving pipeline efficiency.\n\n[Source: resume-altaj-virani.pdf (Page 2) & VS Code Marketplace]`;
       } else if (
         queryLower.includes("nivesh") ||
         queryLower.includes("crowdfunding") ||
@@ -153,35 +153,35 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         queryLower.includes("35x") ||
         queryLower.includes("cache")
       ) {
-        fallbackContent += `• **Azure Key Vault Caching**: Cut calls 35× (from 2,807 down to 79/day) by replacing repeated certificate downloads with a shared 12-hour cache across three .NET services on Azure Container Apps.\n• **Reliability**: Eliminated ~13% failed lookups and enforced strict TLS validation with 16 unit tests.\n\n[Source: altaj-virani-resume.pdf (Page 1)]`;
+        fallbackContent += `• **Azure Key Vault Caching**: Cut calls 35× (from 2,807 down to 79/day) by replacing repeated certificate downloads with a shared 12-hour cache across three .NET services on Azure Container Apps.\n• **Reliability**: Eliminated ~13% failed lookups and enforced strict TLS validation with 16 unit tests.\n\n[Source: resume-altaj-virani.pdf (Page 1)]`;
       } else if (
         queryLower.includes("viki") ||
         queryLower.includes("mcp") ||
         queryLower.includes("agent")
       ) {
-        fallbackContent += `• **Viki AI Enterprise Platform**: Led cross-team adoption of Microsoft's internal agentic operations platform across Azure Networking tracks.\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling 20+ specialized agents to call 250+ integrated networking tools.\n\n[Source: altaj-virani_ltm-resume.pdf (Page 3)]`;
+        fallbackContent += `• **Viki AI Enterprise Platform**: Led cross-team adoption of Microsoft's internal agentic operations platform across Azure Networking tracks.\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling 20+ specialized agents to call 250+ integrated networking tools.\n\n[Source: resume-altaj-virani-ltm.pdf (Page 3)]`;
       } else if (
         queryLower.includes("oom") ||
         queryLower.includes("memory") ||
         queryLower.includes("kql")
       ) {
-        fallbackContent += `• **Root-Cause Analysis**: Diagnosed 2,640 monthly OOM errors in Azure Container Apps via KQL and Application Insights, uncovering .NET runtime limits (780 MB cap).\n• **Compute Migration**: Drove migration to dedicated auto-scaling compute, sustaining zero errors thereafter.\n\n[Source: altaj-virani-resume.pdf (Page 1)]`;
+        fallbackContent += `• **Root-Cause Analysis**: Diagnosed 2,640 monthly OOM errors in Azure Container Apps via KQL and Application Insights, uncovering .NET runtime limits (780 MB cap).\n• **Compute Migration**: Drove migration to dedicated auto-scaling compute, sustaining zero errors thereafter.\n\n[Source: resume-altaj-virani.pdf (Page 1)]`;
       } else if (
         queryLower.includes("ieee") ||
         queryLower.includes("paper") ||
         queryLower.includes("t5") ||
         queryLower.includes("publication")
       ) {
-        fallbackContent += `• **IEEE ICSCSS (2023) Paper**: 'Automatic Question Answer Generation using T5 and NLP'.\n• Combines Google's T5 model with Named Entity Recognition, POS tagging, and Sense2Vec for automated question synthesis and distractor generation.\n\n[Source: altaj-virani-resume.pdf (Page 2)]`;
+        fallbackContent += `• **IEEE ICSCSS (2023) Paper**: 'Automatic Question Answer Generation using T5 and NLP'.\n• Combines Google's T5 model with Named Entity Recognition, POS tagging, and Sense2Vec for automated question synthesis and distractor generation.\n\n[Source: resume-altaj-virani.pdf (Page 2)]`;
       } else {
-        fallbackContent += `• **Profile**: Azure AI Engineer in Microsoft Business Unit (MSBU).\n• **Core Strengths**: Model Context Protocol (MCP), Viki AI agent orchestration, Hybrid RAG with HNSW vector indexing (80% troubleshooting acceleration), high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\n\n[Source: altaj-virani_ltm-resume.pdf & altaj-virani-resume.pdf]`;
+        fallbackContent += `• **Profile**: Azure AI Engineer in Microsoft Business Unit (MSBU).\n• **Core Strengths**: Model Context Protocol (MCP), Viki AI agent orchestration, Hybrid RAG with HNSW vector indexing (80% troubleshooting acceleration), high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\n\n[Source: resume-altaj-virani-ltm.pdf & resume-altaj-virani.pdf]`;
       }
 
       const fallbackMessage: ChatMessage = {
         id: `assistant-${Date.now()}`,
         role: "assistant",
         content: fallbackContent,
-        sources: ["altaj-virani-resume.pdf", "altaj-virani_ltm-resume.pdf"],
+        sources: ["resume-altaj-virani.pdf", "resume-altaj-virani-ltm.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -206,7 +206,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         id: "welcome-reset",
         role: "assistant",
         content: `Conversation reset. Ask any question about Altaj Virani's enterprise AI engineering, MCP toolkits, or Azure cloud systems.`,
-        sources: ["altaj-virani-resume.pdf"],
+        sources: ["resume-altaj-virani.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -233,7 +233,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
             </div>
             <div className="text-xs text-slate-300 font-mono">
               Knowledge Base:{" "}
-              <span className="text-cyan-300">altaj-virani-resume.pdf</span> &{" "}
+              <span className="text-cyan-300">resume-altaj-virani.pdf</span> &{" "}
               <span className="text-purple-300">ltm-resume.pdf</span>
             </div>
           </div>

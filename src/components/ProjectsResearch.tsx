@@ -18,16 +18,11 @@ import { PersonalProject } from "../types.ts";
 import { SkillChip } from "./SkillChip.tsx";
 import { HoverPopup } from "./HoverPopup.tsx";
 
-import autoqagenImg from "../assets/images/project_autoqagen_1794743835441.jpg";
-import autoqaAiImg from "../assets/images/project_autoqa_ai_1794743835349.jpg";
-import snapwrightImg from "../assets/images/project_snapwright_1794743836111.jpg";
-import niveshImg from "../assets/images/project_nivesh_1794743836307.jpg";
-
 const PROJECT_IMAGES: Record<string, string> = {
-  autoqagen: autoqagenImg,
-  "autoqa-ai": autoqaAiImg,
-  snapwright: snapwrightImg,
-  nivesh: niveshImg,
+  autoqagen: "/assets/project-autoqagen.jpg",
+  "autoqa-ai": "/assets/project-autoqa-ai.jpg",
+  snapwright: "/assets/project-snapwright.jpg",
+  nivesh: "/assets/project-nivesh.jpg",
 };
 
 function getAccentTheme(accent?: string) {

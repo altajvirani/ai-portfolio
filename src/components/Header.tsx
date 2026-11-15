@@ -82,7 +82,7 @@ export const Header: React.FC = () => {
           className="flex items-center gap-2 text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg shrink-0"
         >
           <img
-            src="/assets/monogram-badge-logo.png"
+            src="/assets/monogram-badge.png"
             alt="Altaj Virani monogram"
             className="h-9 w-9 object-contain shrink-0"
           />

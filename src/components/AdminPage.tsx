@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowLeft, Braces, ChevronDown, ChevronRight, Database, LockKeyhole, LogIn, Plus, ShieldCheck, Sparkles, Trash2 } from "lucide-react";
-
-type JsonPrimitive = string | number | boolean | null;
-type JsonValue = JsonPrimitive | JsonValue[] | { [key: string]: JsonValue };
-type JsonPath = (string | number)[];
+import { ArrowLeft, Braces, Database, LockKeyhole, LogIn, ShieldCheck, Sparkles } from "lucide-react";
 
 type AdminDocumentResponse = {
   document: unknown;
@@ -21,138 +17,6 @@ function getCsrfToken() {
     .slice(1)
     .join("=");
 }
-
-function isJsonValue(value: unknown): value is JsonValue {
-  return value === null || typeof value === "string" || typeof value === "number" || typeof value === "boolean"
-    || Array.isArray(value) || (typeof value === "object" && value !== null);
-}
-
-function updateAtPath(value: JsonValue, path: JsonPath, next: JsonValue): JsonValue {
-  if (path.length === 0) return next;
-  const [key, ...rest] = path;
-  if (Array.isArray(value)) {
-    const copy = [...value];
-    copy[key as number] = updateAtPath(copy[key as number], rest, next);
-    return copy;
-  }
-  const copy = { ...value as { [key: string]: JsonValue } };
-  copy[key as string] = updateAtPath(copy[key as string], rest, next);
-  return copy;
-}
-
-function deleteAtPath(value: JsonValue, path: JsonPath): JsonValue {
-  if (path.length === 0) return value;
-  const [key, ...rest] = path;
-  if (rest.length === 0) {
-    if (Array.isArray(value)) return value.filter((_, index) => index !== key);
-    const copy = { ...value as { [key: string]: JsonValue } };
-    delete copy[key as string];
-    return copy;
-  }
-  if (Array.isArray(value)) {
-    const copy = [...value];
-    copy[key as number] = deleteAtPath(copy[key as number], rest);
-    return copy;
-  }
-  const copy = { ...value as { [key: string]: JsonValue } };
-  copy[key as string] = deleteAtPath(copy[key as string], rest);
-  return copy;
-}
-
-function defaultForType(type: string): JsonValue {
-  if (type === "object") return {};
-  if (type === "array") return [];
-  if (type === "number") return 0;
-  if (type === "boolean") return false;
-  if (type === "null") return null;
-  return "";
-}
-
-type JsonFormProps = {
-  label: string;
-  value: JsonValue;
-  path: JsonPath;
-  onChange: (path: JsonPath, value: JsonValue) => void;
-  onDelete?: (path: JsonPath) => void;
-  isRoot?: boolean;
-};
-
-const JsonForm: React.FC<JsonFormProps> = ({ label, value, path, onChange, onDelete, isRoot = false }) => {
-  const [expanded, setExpanded] = useState(true);
-  const isContainer = Array.isArray(value) || (typeof value === "object" && value !== null);
-  const type = value === null ? "null" : Array.isArray(value) ? "array" : typeof value;
-
-  const changeType = (nextType: string) => onChange(path, defaultForType(nextType));
-  const updatePrimitive = (next: string | boolean) => {
-    if (typeof value === "number") onChange(path, Number(next));
-    else if (typeof value === "boolean") onChange(path, next as boolean);
-    else onChange(path, next as string);
-  };
-
-  return (
-    <div className={`${isRoot ? "" : "border-l border-slate-800 pl-4"} space-y-2`}>
-      <div className="flex flex-wrap items-center gap-2">
-        {isContainer && (
-          <button type="button" onClick={() => setExpanded(!expanded)} className="text-slate-500 hover:text-cyan-300" aria-label={`${expanded ? "Collapse" : "Expand"} ${label}`}>
-            {expanded ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
-          </button>
-        )}
-        <label className="min-w-32 text-xs font-mono font-semibold text-cyan-300">{label}</label>
-        <select
-          value={type}
-          onChange={(event) => changeType(event.target.value)}
-          className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 outline-none focus:border-cyan-400"
-          aria-label={`Type of ${label}`}
-        >
-          {["object", "array", "string", "number", "boolean", "null"].map((option) => <option key={option}>{option}</option>)}
-        </select>
-        {!isRoot && onDelete && (
-          <button type="button" onClick={() => onDelete(path)} className="ml-auto text-slate-600 hover:text-rose-300" aria-label={`Delete ${label}`}>
-            <Trash2 size={14} />
-          </button>
-        )}
-      </div>
-
-      {expanded && isContainer && (
-        <div className="space-y-3">
-          {Array.isArray(value)
-            ? value.map((child, index) => (
-              <JsonForm key={index} label={`[${index}]`} value={child} path={[...path, index]} onChange={onChange} onDelete={onDelete} />
-            ))
-            : Object.entries(value).map(([key, child]) => (
-              <JsonForm key={key} label={key} value={child} path={[...path, key]} onChange={onChange} onDelete={onDelete} />
-            ))}
-          <button
-            type="button"
-            onClick={() => {
-              const next = Array.isArray(value) ? [...value, ""] : { ...value, [`newField${Object.keys(value).length + 1}`]: "" };
-              onChange(path, next);
-            }}
-            className="inline-flex items-center gap-1 rounded border border-dashed border-slate-700 px-2 py-1 text-[11px] font-mono text-slate-400 hover:border-cyan-400 hover:text-cyan-300"
-          >
-            <Plus size={13} /> Add {Array.isArray(value) ? "item" : "field"}
-          </button>
-        </div>
-      )}
-
-      {expanded && !isContainer && type !== "null" && (
-        typeof value === "boolean" ? (
-          <label className="flex items-center gap-2 text-xs text-slate-300">
-            <input type="checkbox" checked={value} onChange={(event) => updatePrimitive(event.target.checked)} className="accent-cyan-400" />
-            {value ? "true" : "false"}
-          </label>
-        ) : (
-          <input
-            type={type === "number" ? "number" : "text"}
-            value={String(value)}
-            onChange={(event) => updatePrimitive(event.target.value)}
-            className="w-full rounded-lg border border-slate-800 bg-[#080c14] px-3 py-2 text-xs text-slate-200 outline-none focus:border-cyan-400"
-          />
-        )
-      )}
-    </div>
-  );
-};
 
 const UnauthorizedScreen: React.FC = () => (
   <main className="relative min-h-screen overflow-hidden bg-[#080c14] px-5 py-12 text-slate-100">
@@ -194,12 +58,10 @@ export const AdminPage: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [email, setEmail] = useState("");
   const [editorValue, setEditorValue] = useState("");
-  const [documentValue, setDocumentValue] = useState<JsonValue | null>(null);
   const [version, setVersion] = useState<number | null>(null);
   const [updatedAt, setUpdatedAt] = useState("");
   const [status, setStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [viewMode, setViewMode] = useState<"form" | "code">("form");
 
   const loadDocument = async () => {
     setStatus("Loading datastore...");
@@ -209,15 +71,10 @@ export const AdminPage: React.FC = () => {
       setStatus(data.error || "Unable to load the datastore.");
       return;
     }
-    if (!isJsonValue(data.document)) {
-      setStatus("The datastore returned an unsupported value.");
-      return;
-    }
     setAuthenticated(true);
     setEmail(data.actor.email);
     setVersion(data.version);
     setUpdatedAt(data.updatedAt);
-    setDocumentValue(data.document);
     setEditorValue(JSON.stringify(data.document, null, 2));
     setStatus("");
   };
@@ -232,32 +89,6 @@ export const AdminPage: React.FC = () => {
       })
       .catch(() => setStatus("Unable to reach the admin service."));
   }, []);
-
-  const updateFormValue = (path: JsonPath, value: JsonValue) => {
-    if (documentValue === null) return;
-    const next = updateAtPath(documentValue, path, value);
-    setDocumentValue(next);
-    setEditorValue(JSON.stringify(next, null, 2));
-  };
-
-  const deleteFormValue = (path: JsonPath) => {
-    if (documentValue === null || path.length === 0) return;
-    const next = deleteAtPath(documentValue, path);
-    setDocumentValue(next);
-    setEditorValue(JSON.stringify(next, null, 2));
-  };
-
-  const switchToForm = () => {
-    try {
-      const parsed = JSON.parse(editorValue);
-      if (!isJsonValue(parsed)) throw new Error();
-      setDocumentValue(parsed);
-      setViewMode("form");
-      setStatus("");
-    } catch {
-      setStatus("Fix the JSON syntax before switching to form view.");
-    }
-  };
 
   const saveDocument = async () => {
     if (version === null) return;
@@ -282,7 +113,6 @@ export const AdminPage: React.FC = () => {
         setStatus(data.error || "Unable to save the datastore.");
         return;
       }
-      if (isJsonValue(data.document)) setDocumentValue(data.document);
       setVersion(data.version);
       setUpdatedAt(data.updatedAt);
       setEditorValue(JSON.stringify(data.document, null, 2));
@@ -319,29 +149,18 @@ export const AdminPage: React.FC = () => {
             <span className="text-xs font-mono text-slate-400">Version {version ?? "—"} {updatedAt && `· Updated ${new Date(updatedAt).toLocaleString()}`}</span>
             <div className="flex flex-wrap items-center gap-2">
               {status && <span className="mr-2 text-xs text-slate-300">{status}</span>}
-              <div className="flex rounded-lg border border-slate-700 p-1">
-                <button type="button" onClick={switchToForm} className={`rounded px-3 py-1.5 text-xs font-mono ${viewMode === "form" ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:text-white"}`}>Form view</button>
-                <button type="button" onClick={() => setViewMode("code")} className={`rounded px-3 py-1.5 text-xs font-mono ${viewMode === "code" ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:text-white"}`}>JSON code</button>
-              </div>
               <button type="button" onClick={loadDocument} className="rounded-lg border border-slate-700 px-3 py-2 text-xs font-mono text-slate-300 hover:border-cyan-400 hover:text-white">Reload</button>
               <button type="button" onClick={saveDocument} disabled={isSaving} className="rounded-lg bg-cyan-400 px-3 py-2 text-xs font-mono font-bold text-slate-950 disabled:opacity-50">{isSaving ? "Saving..." : "Save datastore"}</button>
             </div>
           </div>
 
-          {viewMode === "form" && documentValue !== null ? (
-            <div className="min-h-[70vh] rounded-xl border border-slate-800 bg-[#080c14] p-5">
-              <div className="mb-5 flex items-center gap-2 border-b border-slate-800 pb-4 text-xs text-slate-400"><Database size={15} className="text-cyan-300" /> Structured editor · changes mirror the JSON code view</div>
-              <JsonForm label="datastore" value={documentValue} path={[]} onChange={updateFormValue} onDelete={deleteFormValue} isRoot />
-            </div>
-          ) : (
-            <textarea
-              value={editorValue}
-              onChange={(event) => setEditorValue(event.target.value)}
-              spellCheck={false}
-              aria-label="Portfolio datastore JSON"
-              className="min-h-[70vh] w-full resize-y rounded-xl border border-slate-800 bg-[#080c14] p-4 font-mono text-xs leading-relaxed text-slate-200 outline-none focus:border-cyan-400"
-            />
-          )}
+          <textarea
+            value={editorValue}
+            onChange={(event) => setEditorValue(event.target.value)}
+            spellCheck={false}
+            aria-label="Portfolio datastore JSON"
+            className="min-h-[70vh] w-full resize-y rounded-xl border border-slate-800 bg-[#080c14] p-4 font-mono text-xs leading-relaxed text-slate-200 outline-none focus:border-cyan-400"
+          />
         </div>
       </div>
     </main>

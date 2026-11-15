@@ -1045,7 +1045,7 @@
       "id": "profile_overview",
       "title": "Professional Profile & Executive Summary",
       "category": "role_summary",
-      "source": "altaj-virani_ltm-resume.pdf (Page 1-2)",
+      "source": "resume-altaj-virani-ltm.pdf (Page 1-2)",
       "keywords": [
         "altaj",
         "virani",
@@ -1066,7 +1066,7 @@
       "id": "viki_ai_platform",
       "title": "Viki-AI: Microsoft Azure Networking Agentic AI Operations Platform",
       "category": "viki_ai",
-      "source": "Work Description for Viki-AI & altaj-virani_ltm-resume.pdf",
+      "source": "Work Description for Viki-AI & resume-altaj-virani-ltm.pdf",
       "keywords": [
         "viki",
         "viki ai",
@@ -1087,7 +1087,7 @@
       "id": "key_vault_optimization",
       "title": "Certificate Authentication Fix & 35× Azure Key Vault Call Reduction",
       "category": "cloud_infrastructure",
-      "source": "Work Description for Viki-AI & altaj-virani-resume.pdf",
+      "source": "Work Description for Viki-AI & resume-altaj-virani.pdf",
       "keywords": [
         "key vault",
         "caching",
@@ -1108,7 +1108,7 @@
       "id": "oom_root_cause_scaling",
       "title": "Production Memory Failures Root-Cause Analysis (2,640 Monthly OOMs Eliminated)",
       "category": "cloud_infrastructure",
-      "source": "Work Description for Viki-AI & altaj-virani-resume.pdf",
+      "source": "Work Description for Viki-AI & resume-altaj-virani.pdf",
       "keywords": [
         "oom",
         "kql",
@@ -1127,7 +1127,7 @@
       "id": "load_testing_capacity_suite",
       "title": "13-Phase Auto-Scaling Load Test Suite (35,500 Workflows)",
       "category": "cloud_infrastructure",
-      "source": "Work Description for Viki-AI & altaj-virani-resume.pdf",
+      "source": "Work Description for Viki-AI & resume-altaj-virani.pdf",
       "keywords": [
         "load testing",
         "capacity",
@@ -1163,7 +1163,7 @@
       "id": "security_governance",
       "title": "Security, Compliance & Production Quality Scoring",
       "category": "enterprise_ai",
-      "source": "altaj-virani-resume.pdf (Page 1)",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "security",
         "compliance",
@@ -1181,7 +1181,7 @@
       "id": "research_publications",
       "title": "IEEE Research Publication: Automatic QA Generation using T5 & NLP",
       "category": "publications",
-      "source": "altaj-virani-resume.pdf (Page 2)",
+      "source": "resume-altaj-virani.pdf (Page 2)",
       "keywords": [
         "publication",
         "ieee",
@@ -1200,7 +1200,7 @@
       "id": "patents_copyrights",
       "title": "Government Patent & Copyright: AutoQA AI",
       "category": "publications",
-      "source": "altaj-virani-resume.pdf (Page 2)",
+      "source": "resume-altaj-virani.pdf (Page 2)",
       "keywords": [
         "patent",
         "copyright",
@@ -1214,7 +1214,7 @@
       "id": "notable_projects",
       "title": "Featured Software Projects: AutoQAGen, AutoQA AI, SnapWright & Nivesh",
       "category": "projects",
-      "source": "altaj-virani-resume.pdf (Page 2) & Verified Portfolios",
+      "source": "resume-altaj-virani.pdf (Page 2) & Verified Portfolios",
       "keywords": [
         "projects",
         "autoqagen",
@@ -1235,7 +1235,7 @@
       "id": "awards_recognition",
       "title": "Industry Awards & Recognition at LTM",
       "category": "awards",
-      "source": "altaj-virani_ltm-resume.pdf (Page 5) & altaj-virani-resume.pdf (Page 2)",
+      "source": "resume-altaj-virani-ltm.pdf (Page 5) & resume-altaj-virani.pdf (Page 2)",
       "keywords": [
         "awards",
         "recognition",
@@ -1251,7 +1251,7 @@
       "id": "education_certifications",
       "title": "Academic Qualifications & Professional Certifications",
       "category": "education",
-      "source": "altaj-virani_ltm-resume.pdf (Page 2, 5) & altaj-virani-resume.pdf (Page 1)",
+      "source": "resume-altaj-virani-ltm.pdf (Page 2, 5) & resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "education",
         "degree",
@@ -1268,7 +1268,7 @@
       "id": "technical_skills_matrix",
       "title": "Core Technical Skills & Tooling (AI, Cloud & Languages)",
       "category": "skills",
-      "source": "altaj-virani-resume.pdf (Page 2)",
+      "source": "resume-altaj-virani.pdf (Page 2)",
       "keywords": [
         "skills",
         "tech stack",
@@ -1306,14 +1306,14 @@
     ]
   },
   "assets": [
-    "1000181295-clean_34605519.png",
-    "altaj-virani-resume_7052121d.pdf",
-    "altaj-virani_ltm-resume_ae17ced8.pdf",
-    "image_1d9d5134.png",
-    "image_1fc0b967.png",
-    "image_c609f1ba.png",
-    "monogram-badge-logo.png",
-    "work-description-for-viki-ai_6031a629.jpeg"
+    "altaj-virani-profile.png",
+    "resume-altaj-virani.pdf",
+    "resume-altaj-virani-ltm.pdf",
+    "power-apps-engineering-overview.png",
+    "power-apps-and-azure-networking-overview.png",
+    "open-to-work-banner.png",
+    "monogram-badge.png",
+    "viki-ai-work-description.jpeg"
   ],
   "chatbot": {
     "suggestedQueries": [
@@ -1325,23 +1325,23 @@
       "Summarize his IEEE research paper on T5 question answering"
     ],
     "welcomeMessage": {
-      "content": "Hello! I am Altaj Virani's AI Representative, augmented directly with his verified resume documents (altaj-virani-resume.pdf and altaj-virani_ltm-resume.pdf).\\n\\nAsk me anything about his enterprise agentic AI architectures (Viki AI, MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!",
+      "content": "Hello! I am Altaj Virani's AI Representative, augmented directly with his verified resume documents (resume-altaj-virani.pdf and resume-altaj-virani-ltm.pdf).\\n\\nAsk me anything about his enterprise agentic AI architectures (Viki AI, MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!",
       "sources": [
-        "altaj-virani-resume.pdf",
-        "altaj-virani_ltm-resume.pdf"
+        "resume-altaj-virani.pdf",
+        "resume-altaj-virani-ltm.pdf"
       ]
     },
     "resetMessage": {
       "content": "Conversation reset. Ask any question about Altaj Virani's enterprise AI engineering, MCP toolkits, or Azure cloud systems.",
       "sources": [
-        "altaj-virani-resume.pdf"
+        "resume-altaj-virani.pdf"
       ]
     },
     "fallback": {
       "intro": "Based on Altaj Virani's verified resume documents:\\n\\n",
       "sourceDefaults": [
-        "altaj-virani-resume.pdf",
-        "altaj-virani_ltm-resume.pdf"
+        "resume-altaj-virani.pdf",
+        "resume-altaj-virani-ltm.pdf"
       ],
       "responses": [
         {
@@ -1350,7 +1350,7 @@
             "vscode",
             "pagefactory"
           ],
-          "content": "• **SnapWright**: An open-source Visual Studio Code extension published on the official marketplace (`altajvirani.snapwright`).\\n• **Architecture**: Implements an automated PageFactory and Page Object Model (POM) pattern generator for web test suites, featuring smart class-name detection and import consolidation to eliminate memory leaks.\\n• **Adoption**: Led the migration of internal Copilot Studio automation frameworks to adopt SnapWright, significantly improving pipeline efficiency.\\n\\n[Source: altaj-virani-resume.pdf (Page 2) & VS Code Marketplace]"
+          "content": "• **SnapWright**: An open-source Visual Studio Code extension published on the official marketplace (`altajvirani.snapwright`).\\n• **Architecture**: Implements an automated PageFactory and Page Object Model (POM) pattern generator for web test suites, featuring smart class-name detection and import consolidation to eliminate memory leaks.\\n• **Adoption**: Led the migration of internal Copilot Studio automation frameworks to adopt SnapWright, significantly improving pipeline efficiency.\\n\\n[Source: resume-altaj-virani.pdf (Page 2) & VS Code Marketplace]"
         },
         {
           "matchTerms": [
@@ -1366,7 +1366,7 @@
             "35x",
             "cache"
           ],
-          "content": "• **Azure Key Vault Caching**: Cut calls 35× (from 2,807 down to 79/day) by replacing repeated certificate downloads with a shared 12-hour cache across three .NET services on Azure Container Apps.\\n• **Reliability**: Eliminated ~13% failed lookups and enforced strict TLS validation with 16 unit tests.\\n\\n[Source: altaj-virani-resume.pdf (Page 1)]"
+          "content": "• **Azure Key Vault Caching**: Cut calls 35× (from 2,807 down to 79/day) by replacing repeated certificate downloads with a shared 12-hour cache across three .NET services on Azure Container Apps.\\n• **Reliability**: Eliminated ~13% failed lookups and enforced strict TLS validation with 16 unit tests.\\n\\n[Source: resume-altaj-virani.pdf (Page 1)]"
         },
         {
           "matchTerms": [
@@ -1374,7 +1374,7 @@
             "mcp",
             "agent"
           ],
-          "content": "• **Viki AI Enterprise Platform**: Led cross-team adoption of Microsoft's internal agentic operations platform across Azure Networking tracks.\\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling 20+ specialized agents to call 250+ integrated networking tools.\\n\\n[Source: altaj-virani_ltm-resume.pdf (Page 3)]"
+          "content": "• **Viki AI Enterprise Platform**: Led cross-team adoption of Microsoft's internal agentic operations platform across Azure Networking tracks.\\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling 20+ specialized agents to call 250+ integrated networking tools.\\n\\n[Source: resume-altaj-virani-ltm.pdf (Page 3)]"
         },
         {
           "matchTerms": [
@@ -1382,7 +1382,7 @@
             "memory",
             "kql"
           ],
-          "content": "• **Root-Cause Analysis**: Diagnosed 2,640 monthly OOM errors in Azure Container Apps via KQL and Application Insights, uncovering .NET runtime limits (780 MB cap).\\n• **Compute Migration**: Drove migration to dedicated auto-scaling compute, sustaining zero errors thereafter.\\n\\n[Source: altaj-virani-resume.pdf (Page 1)]"
+          "content": "• **Root-Cause Analysis**: Diagnosed 2,640 monthly OOM errors in Azure Container Apps via KQL and Application Insights, uncovering .NET runtime limits (780 MB cap).\\n• **Compute Migration**: Drove migration to dedicated auto-scaling compute, sustaining zero errors thereafter.\\n\\n[Source: resume-altaj-virani.pdf (Page 1)]"
         },
         {
           "matchTerms": [
@@ -1391,11 +1391,11 @@
             "t5",
             "publication"
           ],
-          "content": "• **IEEE ICSCSS (2023) Paper**: 'Automatic Question Answer Generation using T5 and NLP'.\\n• Combines Google's T5 model with Named Entity Recognition, POS tagging, and Sense2Vec for automated question synthesis and distractor generation.\\n\\n[Source: altaj-virani-resume.pdf (Page 2)]"
+          "content": "• **IEEE ICSCSS (2023) Paper**: 'Automatic Question Answer Generation using T5 and NLP'.\\n• Combines Google's T5 model with Named Entity Recognition, POS tagging, and Sense2Vec for automated question synthesis and distractor generation.\\n\\n[Source: resume-altaj-virani.pdf (Page 2)]"
         },
         {
           "matchTerms": [],
-          "content": "• **Profile**: Azure AI Engineer in Microsoft Business Unit (MSBU).\\n• **Core Strengths**: Model Context Protocol (MCP), Viki AI agent orchestration, Hybrid RAG with HNSW vector indexing (80% troubleshooting acceleration), high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\\n\\n[Source: altaj-virani_ltm-resume.pdf & altaj-virani-resume.pdf]"
+          "content": "• **Profile**: Azure AI Engineer in Microsoft Business Unit (MSBU).\\n• **Core Strengths**: Model Context Protocol (MCP), Viki AI agent orchestration, Hybrid RAG with HNSW vector indexing (80% troubleshooting acceleration), high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\\n\\n[Source: resume-altaj-virani-ltm.pdf & resume-altaj-virani.pdf]"
         }
       ]
     }

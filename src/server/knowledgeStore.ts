@@ -12,7 +12,7 @@ export const KNOWLEDGE_STORE: KnowledgeChunk[] = [
     id: 'profile_overview',
     title: 'Professional Profile & Executive Summary',
     category: 'role_summary',
-    source: 'altaj-virani_ltm-resume.pdf (Page 1-2)',
+    source: 'resume-altaj-virani-ltm.pdf (Page 1-2)',
     keywords: ['altaj', 'virani', 'azure', 'ai', 'engineer', 'agentic', 'summary', 'about', 'bio', 'who', 'contact', 'email'],
     content: `Altaj A. Virani is an Azure AI Engineer specializing in Agentic AI Platforms, LLM integration, and Enterprise Cloud Systems.
 Based in Mumbai, India.
@@ -23,7 +23,7 @@ Summary: Experienced in Azure AI platform engineering, agentic AI, and engineeri
     id: 'viki_ai_platform',
     title: 'Viki-AI: Microsoft Azure Networking Agentic AI Operations Platform',
     category: 'viki_ai',
-    source: 'Work Description for Viki-AI & altaj-virani_ltm-resume.pdf',
+    source: 'Work Description for Viki-AI & resume-altaj-virani-ltm.pdf',
     keywords: ['viki', 'viki ai', 'agentic', 'agents', 'mcp', 'model context protocol', 'playbooks', 'cli', 'copilot', 'operations', 'network', 'azure networking'],
     content: `Viki-AI is the internal AI platform Azure network engineering teams use to investigate incidents and automate operational work, serving datacenter networking, wide-area networking (WAN), optical networks, hardware and firmware, device buildout, datacenter operations, and on-call incident teams.
 Engineers use it in two ways:
@@ -36,7 +36,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'key_vault_optimization',
     title: 'Certificate Authentication Fix & 35× Azure Key Vault Call Reduction',
     category: 'cloud_infrastructure',
-    source: 'Work Description for Viki-AI & altaj-virani-resume.pdf',
+    source: 'Work Description for Viki-AI & resume-altaj-virani.pdf',
     keywords: ['key vault', 'caching', 'memory', 'oom', '35x', 'cache', 'container apps', 'tls', 'certificates', 'overhead', 'reliability', 'xunit'],
     content: `Certificate Authentication Fix & Key Vault Optimization (C#/.NET, Azure Key Vault, xUnit):
 - Problem: The certificate the backend services use to authenticate to internal network APIs was re-downloaded from Azure Key Vault every ~2 minutes and never released, and production requested a staging certificate that did not exist, failing ~13% of lookups.
@@ -47,7 +47,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'oom_root_cause_scaling',
     title: 'Production Memory Failures Root-Cause Analysis (2,640 Monthly OOMs Eliminated)',
     category: 'cloud_infrastructure',
-    source: 'Work Description for Viki-AI & altaj-virani-resume.pdf',
+    source: 'Work Description for Viki-AI & resume-altaj-virani.pdf',
     keywords: ['oom', 'kql', 'application insights', 'out of memory', 'errors', 'azure container apps', 'auto scaling', 'dedicated compute', 'kusto', 'adx'],
     content: `Production Memory Failures Investigation (KQL, Azure Data Explorer, Application Insights, .NET):
 - Investigated out-of-memory errors in the workflow-execution service that peaked at 2,640 per 30 days, each losing a workflow in-progress work.
@@ -59,7 +59,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'load_testing_capacity_suite',
     title: '13-Phase Auto-Scaling Load Test Suite (35,500 Workflows)',
     category: 'cloud_infrastructure',
-    source: 'Work Description for Viki-AI & altaj-virani-resume.pdf',
+    source: 'Work Description for Viki-AI & resume-altaj-virani.pdf',
     keywords: ['load testing', 'capacity', 'auto scaling', 'powershell', 'azure monitor', '35500', 'workflows', 'stress', 'scaling rules', 'backlog'],
     content: `Auto-Scaling Test Suite (PowerShell, Azure CLI, Azure Monitor, Azure Service Bus):
 - Built a 13-phase suite that generates load against a deployed environment and checks every auto-scaling rule (scale-out, scale-in, recovery, and safety) with 45 pass/fail verdicts; a full run drives 35,500 workflow executions.
@@ -83,7 +83,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'security_governance',
     title: 'Security, Compliance & Production Quality Scoring',
     category: 'enterprise_ai',
-    source: 'altaj-virani-resume.pdf (Page 1)',
+    source: 'resume-altaj-virani.pdf (Page 1)',
     keywords: ['security', 'compliance', 'owasp', 'ssrf', 'purview', 'groundedness', 'f1', 'quality scoring', 'azure sql'],
     content: `Security, Governance & AI Evaluation:
 - Achieved 100% compliance across production endpoints via a centralized validation microservice (OWASP Top 10, SSRF defense), automated URSA DAST scanning, and Microsoft Purview-compliant Azure SQL audit logging.
@@ -93,7 +93,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'research_publications',
     title: 'IEEE Research Publication: Automatic QA Generation using T5 & NLP',
     category: 'publications',
-    source: 'altaj-virani-resume.pdf (Page 2)',
+    source: 'resume-altaj-virani.pdf (Page 2)',
     keywords: ['publication', 'ieee', 't5', 'nlp', 'research', 'paper', 'autoqa', 'question answering', 'sense2vec', 'distractor generation'],
     content: `Published IEEE Research:
 - Title: 'Automatic Question Answer Generation using T5 and NLP' (IEEE ICSCSS 2023).
@@ -104,7 +104,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'patents_copyrights',
     title: 'Government Patent & Copyright: AutoQA AI',
     category: 'publications',
-    source: 'altaj-virani-resume.pdf (Page 2)',
+    source: 'resume-altaj-virani.pdf (Page 2)',
     keywords: ['patent', 'copyright', 'government of india', 'autoqa ai', 'intellectual property'],
     content: `Patents & Copyrights:
 - Project: 'AutoQA AI - A Question Answering Application'.
@@ -114,7 +114,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'notable_projects',
     title: 'Featured Software Projects: AutoQAGen, AutoQA AI, SnapWright & Nivesh',
     category: 'projects',
-    source: 'altaj-virani-resume.pdf (Page 2) & Verified Portfolios',
+    source: 'resume-altaj-virani.pdf (Page 2) & Verified Portfolios',
     keywords: ['projects', 'autoqagen', 'autoqa ai', 'snapwright', 'nivesh', 'vs code extension', 'android', 'crowdfunding', 'playwright', 'pagefactory', 'pom', 'offline'],
     content: `Featured Projects:
 1. AutoQAGen (Python, Flask, T5, BERT, NLTK, React):
@@ -138,7 +138,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'awards_recognition',
     title: 'Industry Awards & Recognition at LTM',
     category: 'awards',
-    source: 'altaj-virani_ltm-resume.pdf (Page 5) & altaj-virani-resume.pdf (Page 2)',
+    source: 'resume-altaj-virani-ltm.pdf (Page 5) & resume-altaj-virani.pdf (Page 2)',
     keywords: ['awards', 'recognition', 'spot award', 'hi-five', 'super crew', 'problem solver', 'honors'],
     content: `Awards & Honors at LTM (Microsoft Business Unit):
 1. Problem Solver Badge (Sep 2026): Nominated for contributions to Viki AI, Azure Networking’s agentic operations platform, and internal AI initiatives, earning stakeholder confidence through technical solutions.
@@ -150,7 +150,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'education_certifications',
     title: 'Academic Qualifications & Professional Certifications',
     category: 'education',
-    source: 'altaj-virani_ltm-resume.pdf (Page 2, 5) & altaj-virani-resume.pdf (Page 1)',
+    source: 'resume-altaj-virani-ltm.pdf (Page 2, 5) & resume-altaj-virani.pdf (Page 1)',
     keywords: ['education', 'degree', 'cgpa', 'university of mumbai', 'college', 'certifications', 'ai-900', 'azure ai fundamentals'],
     content: `Education & Academic Excellence:
 - Bachelor of Engineering (B.E.) in Computer Engineering: Vidyavardhini's College of Engineering and Technology, University of Mumbai. CGPA: 9.00 / 10.0 (Feb 2021 – May 2023).
@@ -165,7 +165,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'technical_skills_matrix',
     title: 'Core Technical Skills & Tooling (AI, Cloud & Languages)',
     category: 'skills',
-    source: 'altaj-virani-resume.pdf (Page 2)',
+    source: 'resume-altaj-virani.pdf (Page 2)',
     keywords: ['skills', 'tech stack', 'languages', 'python', 'typescript', 'c#', '.net', 'azure', 'kql', 'docker', 'fastapi'],
     content: `Core Technical Skills Matrix:
 - Programming Languages: Python, TypeScript, JavaScript, C#, .NET, PowerShell, SQL, KQL (Kusto Query Language), Java.
