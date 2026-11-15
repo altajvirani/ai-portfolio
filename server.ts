@@ -4,7 +4,9 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { processRAGQuery } from './src/server/ragEngine.ts';
 import { dispatchContactSubmission } from './src/server/contactHandler.ts';
+import { handleAdminRequest } from './src/server/adminAuth.ts';
 
+dotenv.config({ path: '.env.local' });
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,6 +18,47 @@ async function startServer() {
   const isDev = process.env.NODE_ENV !== 'production';
 
   app.use(express.json());
+
+  const adminRoute = async (req: express.Request, res: express.Response) => {
+    try {
+      const protocol = typeof req.headers['x-forwarded-proto'] === 'string'
+        ? req.headers['x-forwarded-proto']
+        : 'http';
+      const host = req.get('host') || `localhost:${port}`;
+      const headers = new Headers();
+      Object.entries(req.headers).forEach(([key, value]) => {
+        if (typeof value === 'string') headers.set(key, value);
+        if (Array.isArray(value)) headers.set(key, value.join(', '));
+      });
+      const body = req.method === 'GET' || req.method === 'HEAD'
+        ? undefined
+        : JSON.stringify(req.body ?? {});
+      const result = await handleAdminRequest(
+        new Request(`${protocol}://${host}${req.originalUrl}`, {
+          method: req.method,
+          headers,
+          body,
+        }),
+      );
+      res.status(result.status);
+      const setCookies = result.headers.getSetCookie?.() || [];
+      result.headers.forEach((value, key) => {
+        if (key !== 'set-cookie') res.setHeader(key, value);
+      });
+      if (setCookies.length > 0) res.setHeader('Set-Cookie', setCookies);
+      res.send(await result.text());
+    } catch (error) {
+      console.error('Error handling admin endpoint:', error);
+      res.status(503).json({ error: 'Admin service unavailable.' });
+    }
+  };
+
+  app.get('/api/auth/google/start', adminRoute);
+  app.get('/api/auth/google/callback', adminRoute);
+  app.get('/api/auth/session', adminRoute);
+  app.post('/api/auth/logout', adminRoute);
+  app.get('/api/admin/data', adminRoute);
+  app.put('/api/admin/data', adminRoute);
 
   // Grounded LLM Chatbot API Endpoint
   app.post('/api/chat', async (req, res) => {

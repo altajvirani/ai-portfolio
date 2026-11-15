@@ -1,0 +1,1413 @@
+{
+  "metadata": {
+    "name": "Altaj Virani | Azure AI & Agentic Systems Portfolio",
+    "description": "Portfolio and interactive RAG intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
+    "requestFramePermissions": [],
+    "majorCapabilities": [
+      "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+    ]
+  },
+  "site": {
+    "title": "Altaj Virani | Azure AI & Agentic Systems Portfolio",
+    "description": "Portfolio and interactive RAG intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
+    "assetBasePath": "/assets/"
+  },
+  "portfolio": {
+    "socialLinks": {
+      "github": "https://github.com/altajvirani",
+      "linkedin": "https://www.linkedin.com/in/altajvirani/",
+      "stackoverflow": "https://stackoverflow.com/users/10182929/altaj-virani",
+      "x": "https://x.com/AltajVirani",
+      "instagram": "https://www.instagram.com/altajvirani",
+      "whatsapp": "https://wa.me/+917303934303",
+      "email": "altajatwork@gmail.com",
+      "location": "Mumbai, India"
+    },
+    "marqueeItems": [
+      "ENTERPRISE AI ENGINEERING",
+      "CLOUD-NATIVE ARCHITECTURE",
+      "AGENTIC AI SYSTEMS",
+      "HIGH-SCALE MICROSERVICES",
+      "INTELLIGENT AUTOMATION",
+      "DISTRIBUTED SYSTEMS DESIGN",
+      "LLM & RAG INTEGRATION",
+      "SYSTEM RELIABILITY ENGINEERING",
+      "AUTOMATION ARCHITECTURE",
+      "SECURE CLOUD INFRASTRUCTURE",
+      "FULL-STACK DEVELOPMENT",
+      "AZURE PLATFORM SOLUTIONS"
+    ],
+    "workExperience": [
+      {
+        "id": "azure-network-engineering",
+        "organization": "LTM",
+        "businessUnit": "Microsoft Business Unit (MSBU)",
+        "location": "Mumbai, IN",
+        "projectName": "Azure Network Engineering · Viki-AI",
+        "role": "Software Engineer",
+        "period": "Jun 2025 – Present",
+        "yearLabel": "2025 – Present",
+        "monthLabel": "Jun 2025",
+        "summary": "Core contributor to Viki-AI, an internal agentic AI operations platform supporting global cloud network infrastructure, reliability, and incident response.",
+        "keyContributions": [
+          {
+            "area": "Agentic AI & Platform Enablement",
+            "points": [
+              "Co-built MCP toolkits, Copilot CLI plugins, and 20+ domain agents (250+ tools) across engineering tracks.",
+              "Shipped Azure Functions + Copilot Studio chatbots with hybrid RAG/HNSW indexing, cutting troubleshooting time 80% for 200+ users.",
+              "Built natural-language rostering (95% accuracy), Foundry root-cause triage with PII redaction, and containerized MCP servers."
+            ]
+          },
+          {
+            "area": "Cloud Reliability & Security",
+            "points": [
+              "Cut Key Vault calls 35× (2,807 to 79/day) via a 12-hour shared .NET cache with strict TLS validation and 16 tests.",
+              "Eliminated 2,640 monthly OOM errors via KQL diagnostics and migration to dedicated auto-scaling compute.",
+              "Validated auto-scaling across 35,500 load-test workflows; enforced 100% OWASP Top 10, SSRF, URSA DAST, and Purview compliance."
+            ]
+          }
+        ],
+        "skillIds": [
+          "mcp",
+          "copilot-sdk",
+          "azure-openai",
+          "rag",
+          "container-apps",
+          "key-vault",
+          "kql",
+          "powershell",
+          "csharp",
+          "python",
+          "owasp",
+          "ssrf"
+        ],
+        "accentColor": "cyan"
+      },
+      {
+        "id": "power-apps-engineering",
+        "organization": "LTM",
+        "businessUnit": "Microsoft Business Unit (MSBU)",
+        "location": "Mumbai, IN",
+        "projectName": "Microsoft Power Apps & Copilot Studio Engineering",
+        "role": "Software Engineer",
+        "period": "Sep 2024 – Jun 2025",
+        "yearLabel": "2024 – 2025",
+        "monthLabel": "Sep 2024",
+        "summary": "Engineered conversational AI backend enhancements, automated E2E QA infrastructure, and developer productivity extensions for Power Platform tooling.",
+        "keyContributions": [
+          {
+            "area": "Conversational SDKs & QA Automation",
+            "points": [
+              "Automated 200+ Playwright TS tests with a singleton PageFactory pattern, lifting smoke coverage from 25% to 85% and pass rates to 70%.",
+              "Built a custom VS Code extension for automated Page Object Model (POM) generation and a C# certificate-auth module for 20+ testers.",
+              "Contributed to Microsoft Bot Framework SDK runtime stability and Python automation for structured reference docs."
+            ]
+          }
+        ],
+        "skillIds": [
+          "bot-framework",
+          "playwright",
+          "typescript",
+          "csharp",
+          "python",
+          "tls-cert"
+        ],
+        "accentColor": "emerald"
+      },
+      {
+        "id": "graduate-engineer-trainee",
+        "organization": "LTM",
+        "businessUnit": "Orchard Training Program",
+        "location": "Mumbai, IN",
+        "projectName": "Full-Stack .NET & Cloud Microservices Track",
+        "role": "Graduate Engineer Trainee",
+        "period": "Jun 2024 – Sep 2024",
+        "yearLabel": "2024",
+        "monthLabel": "Jun 2024",
+        "summary": "Intensive enterprise training program focused on backend .NET microservices, relational database design, and cloud-ready API architectures.",
+        "keyContributions": [
+          {
+            "area": "Core Foundations & Distinction",
+            "points": [
+              "Completed full-stack engineering modules covering C#, ASP.NET Core, Entity Framework, JWT/OAuth, SQL Server, and Web APIs.",
+              "Ranked #1 Batch Topper across all technical evaluations with a 94.67% aggregate."
+            ]
+          }
+        ],
+        "skillIds": [
+          "csharp",
+          "dotnet-webapi",
+          "sql-server",
+          "typescript",
+          "xunit"
+        ],
+        "accentColor": "purple"
+      }
+    ],
+    "personalProjects": [
+      {
+        "id": "autoqagen",
+        "title": "AutoQAGen",
+        "subtitle": "IEEE ICSCSS 2023 Published Paper",
+        "shortDescription": "T5 + NLP pipeline generating multi-format QA pairs and semantic distractors, benchmarked on SQuAD with BERT scoring.",
+        "description": "Published QAG architecture combining Google T5 with NER, POS tagging, and Sense2Vec for automated question synthesis and distractor generation via Flask and React.",
+        "highlights": [
+          "Fine-tuned T5 transformer pipeline for multi-format QA pair synthesis",
+          "Sense2Vec + NER distractor generation benchmarked against SQuAD with BERT scores",
+          "Scalable Flask REST API paired with a component-driven React UI"
+        ],
+        "technologies": [
+          "Python",
+          "Google T5",
+          "BERT",
+          "Sense2Vec",
+          "NLTK",
+          "Flask",
+          "React"
+        ],
+        "skillIds": [
+          "python",
+          "nlp-transformers",
+          "vector-db",
+          "typescript"
+        ],
+        "slides": [
+          {
+            "badge": "Architecture",
+            "title": "T5 + NLP Synthesis Engine",
+            "metric": "IEEE ICSCSS 2023",
+            "detail": "Combines POS tagging, NER, and Sense2Vec vectors for semantic question and distractor pairs."
+          },
+          {
+            "badge": "Benchmark",
+            "title": "Automated BERT Scoring",
+            "metric": "SQuAD Baselines",
+            "detail": "Ranks generated question-answer outputs automatically against SQuAD evaluation criteria."
+          }
+        ],
+        "publicationOrCopyright": "IEEE ICSCSS (2023) Publication",
+        "documentUrl": "https://drive.google.com/file/d/1lef8moQmUvzgtEttF1r9qbtEL74lxP0r/view?usp=sharing",
+        "githubUrl": "https://github.com/altajvirani/AutoQAGen",
+        "accentColor": "cyan"
+      },
+      {
+        "id": "autoqa-ai",
+        "title": "AutoQA AI",
+        "subtitle": "Govt. of India Copyright Approved",
+        "shortDescription": "Privacy-first offline desktop assistant for querying local documents using TF-IDF ranking and voice accessibility.",
+        "description": "Copyright-registered offline desktop Q&A application processing local documents with zero external data transfer, TF-IDF cosine ranking, and text-to-speech output.",
+        "highlights": [
+          "Government of India approved copyright registration for automated document Q&A",
+          "Offline TF-IDF vectorization and cosine similarity ranking with NLTK preprocessing",
+          "Desktop UI built in KivyMD with Pyttsx3 text-to-speech accessibility"
+        ],
+        "technologies": [
+          "Python",
+          "Scikit-learn (TF-IDF)",
+          "NLTK",
+          "KivyMD",
+          "Pyttsx3"
+        ],
+        "skillIds": [
+          "python",
+          "nlp-transformers",
+          "vector-db"
+        ],
+        "slides": [
+          {
+            "badge": "Intellectual Property",
+            "title": "Privacy-First Offline Q&A",
+            "metric": "Govt. Copyright Approved",
+            "detail": "Zero external network transmission; executes semantic retrieval locally on user files."
+          },
+          {
+            "badge": "Retrieval",
+            "title": "TF-IDF + Cosine Ranking",
+            "metric": "Local Vector Engine",
+            "detail": "Pairs NLTK sentence segmentation with Pyttsx3 voice synthesis for accessibility."
+          }
+        ],
+        "publicationOrCopyright": "Govt. of India Copyright",
+        "documentUrl": "https://drive.google.com/file/d/1ae07j8Z6j2pZGD-Qdy74iskDIWAOfpcJ/view",
+        "githubUrl": "https://github.com/altajvirani/AutoQA",
+        "accentColor": "emerald"
+      },
+      {
+        "id": "snapwright",
+        "title": "SnapWright",
+        "subtitle": "Published VS Code Extension",
+        "shortDescription": "Open-source IDE extension automating Page Object Model generation with a singleton PageFactory pattern.",
+        "description": "VS Code Marketplace extension automating TypeScript Page Object Model scaffolding, consolidating imports, and eliminating memory leaks across large test suites.",
+        "highlights": [
+          "Published on the official VS Code Marketplace (altajvirani.snapwright)",
+          "Singleton PageFactory pattern eliminating memory leaks in Playwright/E2E suites",
+          "Smart AST class-name and path resolution accelerating QA migration workflows"
+        ],
+        "technologies": [
+          "TypeScript",
+          "VS Code API",
+          "Node.js",
+          "AST Parsing",
+          "Playwright"
+        ],
+        "skillIds": [
+          "typescript",
+          "vscode-ast",
+          "playwright"
+        ],
+        "slides": [
+          {
+            "badge": "Marketplace",
+            "title": "Automated POM Scaffolding",
+            "metric": "VS Code Extension",
+            "detail": "Generates clean Page Object classes with consolidated imports and path detection."
+          },
+          {
+            "badge": "Pattern",
+            "title": "Leak-Free PageFactory",
+            "metric": "Singleton Runtime",
+            "detail": "Adopted across internal automation suites to eliminate browser memory growth."
+          }
+        ],
+        "publicationOrCopyright": "VS Code Marketplace Extension",
+        "marketplaceUrl": "https://marketplace.visualstudio.com/items?itemName=altajvirani.snapwright",
+        "githubUrl": "https://github.com/altajvirani/SnapWright",
+        "accentColor": "purple"
+      },
+      {
+        "id": "nivesh",
+        "title": "Nivesh",
+        "subtitle": "Start-Up Crowdfunding Platform",
+        "shortDescription": "Open-source Android app connecting early-stage founders with micro-investors through transparent equity tracking.",
+        "description": "Native Android platform built to democratize startup seed funding with real-time campaign metrics, milestone tracking, and micro-investor portfolio dashboards.",
+        "highlights": [
+          "Startup discovery feed with live fundraising progress and pitch summaries",
+          "Investor portfolio analytics with equity milestone updates",
+          "Native Android Java architecture backed by REST APIs and Firebase"
+        ],
+        "technologies": [
+          "Android Java",
+          "Material Design",
+          "REST APIs",
+          "Firebase"
+        ],
+        "skillIds": [
+          "android-mobile",
+          "firebase-rest",
+          "sql-server"
+        ],
+        "slides": [
+          {
+            "badge": "Mobile Fintech",
+            "title": "Micro-Venture Discovery",
+            "metric": "Open-Source Android",
+            "detail": "Transparent equity progress tracking connecting founders with angel and micro-investors."
+          },
+          {
+            "badge": "Architecture",
+            "title": "Real-Time Portfolio Sync",
+            "metric": "Firebase + REST",
+            "detail": "Material Design views surfacing milestone progress and funding velocity cleanly."
+          }
+        ],
+        "publicationOrCopyright": "Open-Source Mobile App",
+        "githubUrl": "https://github.com/altajvirani/Nivesh",
+        "accentColor": "sky"
+      }
+    ],
+    "awards": [
+      {
+        "id": "problem-solver-2026",
+        "title": "Problem Solver Badge",
+        "subtitle": "Agentic AI & Platform Initiatives",
+        "organization": "LTM · MSBU",
+        "date": "Sep 2026",
+        "category": "Technical Problem Solving",
+        "reason": "Nominated for contributions to Viki-AI, agentic operations tooling, and resolving complex platform challenges.",
+        "impactHighlight": "Agentic Operations & Stakeholder Trust",
+        "accentColor": "amber"
+      },
+      {
+        "id": "spot-nov-2025",
+        "title": "Hi-Five Spot Award",
+        "subtitle": "AI Innovation & Use Cases",
+        "organization": "LTM · MSBU",
+        "date": "Nov 2025",
+        "category": "Individual Excellence",
+        "reason": "Recognized for innovating high-impact enterprise AI use cases and cross-team technical execution.",
+        "impactHighlight": "High-Impact AI Use Cases",
+        "documentUrl": "https://drive.google.com/file/d/18K2sELoqpOP2vz0gN2iA98Z_g0hWm1qD/view?usp=drive_link",
+        "accentColor": "emerald"
+      },
+      {
+        "id": "spot-aug-2025",
+        "title": "Super Crew Spot Award",
+        "subtitle": "Enterprise GenAI & Automation",
+        "organization": "LTM · MSBU",
+        "date": "Aug 2025",
+        "category": "Team Delivery",
+        "reason": "Awarded with the engineering squad for delivering compliant Generative AI and automation systems.",
+        "impactHighlight": "Compliant GenAI Modernization",
+        "documentUrl": "https://drive.google.com/file/d/1vt7842TyYoa6MsA7CXNONp2AQxTDPuyT/view?usp=drive_link",
+        "accentColor": "purple"
+      },
+      {
+        "id": "spot-jul-2025",
+        "title": "Hi-Five Spot Award",
+        "subtitle": "Migrations & Developer Tooling",
+        "organization": "LTM · MSBU",
+        "date": "Jul 2025",
+        "category": "Automation Velocity",
+        "reason": "Commended for stabilizing QA frameworks, leading migrations, and building productivity utilities.",
+        "impactHighlight": "QA & Migration Velocity",
+        "documentUrl": "https://drive.google.com/file/d/1lLLw5HtWZtIoV_LdTjDxVahClUSr6iLq/view?usp=drive_link",
+        "accentColor": "cyan"
+      }
+    ],
+    "education": [
+      {
+        "degree": "B.E. in Computer Engineering",
+        "institution": "Vidyavardhini's College of Engineering & Technology (Mumbai University)",
+        "duration": "2021 – 2023",
+        "grade": "9.00 CGPA",
+        "percentageValue": 90,
+        "highlights": [
+          "Published IEEE ICSCSS 2023 NLP research (AutoQAGen) during undergraduate engineering.",
+          "Core focus across Machine Learning, Distributed Computing, Software Architecture, and Cloud Databases."
+        ],
+        "documentUrl": "https://drive.google.com/file/d/13Ar1FiG4B4QjiCjCQi0kefs5FlJq7o77/view"
+      },
+      {
+        "degree": "Diploma in Computer Engineering",
+        "institution": "Vidyavardhini's Bhausaheb Vartak Polytechnic (MSBTE)",
+        "duration": "2017 – 2020",
+        "grade": "94.00%",
+        "percentageValue": 94,
+        "highlights": [
+          "Graduated with top academic distinction (94.00% aggregate).",
+          "Strong systems foundations in Data Structures, Operating Systems, Java, and Web Engineering."
+        ],
+        "documentUrl": "https://drive.google.com/file/d/1cwvFmlKVv0WVhkpgj0W2K37e0_sl4H8q/view"
+      },
+      {
+        "degree": "Secondary School Certificate (SSC)",
+        "institution": "Holy Paradise High School (MSBSHSE)",
+        "duration": "2016 – 2017",
+        "grade": "80.60%",
+        "percentageValue": 80.6,
+        "highlights": [
+          "First-class distinction across Mathematics and Science foundations."
+        ],
+        "documentUrl": "https://drive.google.com/file/d/1A6t9XAIur-sXbHWvXvRx1l8eb17VYs_l/view"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Microsoft Certified: Azure AI Fundamentals (AI-900)",
+        "issuer": "Microsoft",
+        "focus": "Core Azure AI workloads, ML, NLP, and Responsible AI governance",
+        "url": "https://learn.microsoft.com/api/credentials/share/en-in/altajvirani/C0872E8742B2D90?sharingId=48999C5125E08B64"
+      },
+      {
+        "name": "Azure AI Studio (AI Foundry)",
+        "issuer": "Udemy",
+        "focus": "Prompt flows, agent evaluation, groundedness scoring, and model deployment",
+        "url": "https://ude.my/UC-e65a23d5-0f7f-4f02-816e-aaf2e53c4401"
+      },
+      {
+        "name": "Azure Functions Masterclass",
+        "issuer": "Udemy",
+        "focus": "Event-driven serverless compute, triggers, bindings, and scalable APIs",
+        "url": "https://ude.my/UC-ed09d39d-725e-474e-8f85-4b0a3b33615c/"
+      }
+    ]
+  },
+  "skills": {
+    "layers": [
+      {
+        "id": "agentic",
+        "layerNumber": "01",
+        "title": "Agentic Orchestration & AI Systems",
+        "shortTag": "MCP / Copilot / RAG"
+      },
+      {
+        "id": "cloud",
+        "layerNumber": "02",
+        "title": "Cloud Infrastructure & Reliability",
+        "shortTag": "Container Apps / Telemetry"
+      },
+      {
+        "id": "backend",
+        "layerNumber": "03",
+        "title": "Languages, APIs & Runtime Core",
+        "shortTag": "C# .NET / Python / TS"
+      },
+      {
+        "id": "security",
+        "layerNumber": "04",
+        "title": "Security, Compliance & Quality Assurance",
+        "shortTag": "OWASP / TLS / QA"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "mcp",
+        "name": "Model Context Protocol (MCP)",
+        "shortName": "MCP",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Standardized tool calling & Copilot CLI plugins",
+        "projectContext": "Co-built automated playbooks, domain agents, and containerized MCP servers for enterprise incident operations.",
+        "connections": [
+          "copilot-sdk",
+          "azure-openai",
+          "container-apps"
+        ],
+        "level": "Architecture",
+        "logo": {
+          "component": "MCPLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "copilot-sdk",
+        "name": "GitHub Copilot SDK",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Agentic operations & CLI orchestration",
+        "projectContext": "Powers 20+ domain-specific AI agents calling 250+ integrated telemetry and inventory tools.",
+        "connections": [
+          "mcp",
+          "azure-openai",
+          "csharp"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "BotFrameworkLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "azure-openai",
+        "name": "Azure OpenAI SDK",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Enterprise reasoning & embeddings",
+        "projectContext": "Backbone model layer for incident root-cause triage, natural-language querying, and semantic retrieval.",
+        "connections": [
+          "rag",
+          "foundry",
+          "functions"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "OpenAILogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "rag",
+        "name": "Hybrid RAG & HNSW Indexing",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Multi-strategy semantic retrieval pipeline",
+        "projectContext": "Combined direct search, autonomous reasoning, and query-rewriting to cut troubleshooting time 80% for 200+ users.",
+        "connections": [
+          "azure-openai",
+          "kql",
+          "vector-db"
+        ],
+        "level": "Architecture",
+        "logo": {
+          "component": "RAGLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "vector-db",
+        "name": "Vector Databases",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Embeddings storage & cosine ranking",
+        "projectContext": "High-dimensional indexing powering documentation search and automated classification workflows.",
+        "connections": [
+          "rag",
+          "azure-openai"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "DatabaseLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "foundry",
+        "name": "Azure AI Foundry & Studio",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Agent evaluation, PII redaction & deployment",
+        "projectContext": "Built Foundry agent services for incident root-cause classification with groundedness and F1 scoring.",
+        "connections": [
+          "azure-openai",
+          "container-apps"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "AzureLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "bot-framework",
+        "name": "Bot Framework SDK & Copilot Studio",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Conversational runtime & enterprise bots",
+        "projectContext": "Contributed runtime dialog enhancements, QA automation stability, and enterprise chatbot integrations.",
+        "connections": [
+          "azure-openai",
+          "csharp",
+          "playwright"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "BotFrameworkLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "nlp-transformers",
+        "name": "NLP & Transformers (T5, BERT, TF-IDF)",
+        "category": "agentic",
+        "categoryLabel": "Agentic AI & LLMs",
+        "role": "Question synthesis, cosine ranking & semantic NLP",
+        "projectContext": "Powered IEEE-published AutoQAGen (Google T5, Sense2Vec, BERT scoring) and copyright-approved AutoQA AI offline TF-IDF retrieval.",
+        "connections": [
+          "python",
+          "rag",
+          "vector-db"
+        ],
+        "level": "Architecture",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-cyan-400"
+          }
+        }
+      },
+      {
+        "id": "container-apps",
+        "name": "Azure Container Apps",
+        "category": "cloud",
+        "categoryLabel": "Cloud & Infrastructure",
+        "role": "Dedicated microservice runtime & auto-scaling",
+        "projectContext": "Eliminated 2,640 monthly OOM errors by diagnosing .NET heap caps and migrating services to dedicated auto-scaling compute.",
+        "connections": [
+          "key-vault",
+          "kql",
+          "csharp",
+          "service-bus"
+        ],
+        "level": "Architecture",
+        "logo": {
+          "component": "ContainerAppsLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "key-vault",
+        "name": "Azure Key Vault (Shared Caching)",
+        "category": "cloud",
+        "categoryLabel": "Cloud & Infrastructure",
+        "role": "Shared certificate & secret caching",
+        "projectContext": "Built a 12-hour distributed cache across 3 .NET services, cutting Key Vault calls 35× (2,807 to 79/day) with zero failed lookups.",
+        "connections": [
+          "container-apps",
+          "tls-cert",
+          "csharp"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "KeyVaultLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "kql",
+        "name": "Azure Data Explorer & KQL",
+        "category": "cloud",
+        "categoryLabel": "Cloud & Infrastructure",
+        "role": "Telemetry forensics & log correlation",
+        "projectContext": "Traced OOM failures and 3,441 rejected API calls across 9 workflows to pinpoint root causes and caller-side input defects.",
+        "connections": [
+          "container-apps",
+          "rag",
+          "python"
+        ],
+        "level": "Architecture",
+        "logo": {
+          "component": "KQLLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "functions",
+        "name": "Azure Functions (Serverless)",
+        "category": "cloud",
+        "categoryLabel": "Cloud & Infrastructure",
+        "role": "Event-driven APIs & deployment automation",
+        "projectContext": "Engineered serverless chatbots and reusable deployment modules with RBAC checks and multi-strategy rollbacks.",
+        "connections": [
+          "azure-openai",
+          "service-bus",
+          "csharp"
+        ],
+        "level": "Core",
+        "logo": {
+          "component": "AzureLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "service-bus",
+        "name": "Azure Service Bus & Event Hubs",
+        "category": "cloud",
+        "categoryLabel": "Cloud & Infrastructure",
+        "role": "Async messaging & backlog scaling",
+        "projectContext": "Resolved cloud endpoint overrides (draining 331/334 stuck messages in 90s) and validated 15,708-message queue scale-out.",
+        "connections": [
+          "container-apps",
+          "functions"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-sky-400"
+          }
+        }
+      },
+      {
+        "id": "powershell",
+        "name": "PowerShell & Azure CLI",
+        "category": "cloud",
+        "categoryLabel": "Cloud & Infrastructure",
+        "role": "Automated load-testing & infra scripts",
+        "projectContext": "Authored a 13-phase load suite executing 35,500 workflows with 45 pass/fail verdicts across queue, CPU, and HTTP rules.",
+        "connections": [
+          "container-apps",
+          "service-bus"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "PowerShellLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "firebase-rest",
+        "name": "Firebase & REST APIs",
+        "category": "cloud",
+        "categoryLabel": "Cloud & Infrastructure",
+        "role": "Real-time cloud sync & mobile backend integration",
+        "projectContext": "Backed the Nivesh startup crowdfunding Android app with real-time portfolio sync and milestone feeds.",
+        "connections": [
+          "android-mobile",
+          "sql-server"
+        ],
+        "level": "Core",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-sky-400"
+          }
+        }
+      },
+      {
+        "id": "csharp",
+        "name": "C# / .NET Core",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "Microservices runtime & auth modules",
+        "projectContext": "Built production .NET backend services, shared certificate caching, TLS validation, and QA authentication modules.",
+        "connections": [
+          "container-apps",
+          "dotnet-webapi",
+          "key-vault"
+        ],
+        "level": "Architecture",
+        "logo": {
+          "component": "CSharpLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "python",
+        "name": "Python (FastAPI, Flask, Pandas)",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "NLP pipelines, MCP servers & automation",
+        "projectContext": "Built containerized FastAPI MCP servers, Pandas rostering analytics (95% accuracy), T5 QA generation, and SDK tooling.",
+        "connections": [
+          "azure-openai",
+          "kql",
+          "mcp"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "PythonLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "dotnet-webapi",
+        "name": "ASP.NET Core & Entity Framework",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "REST APIs, JWT auth & data access",
+        "projectContext": "Delivered production Web APIs and microservice architectures (#1 Batch Topper, 94.67% aggregate).",
+        "connections": [
+          "csharp",
+          "sql-server",
+          "owasp"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "DotNetLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "typescript",
+        "name": "TypeScript & React",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "IDE extensions, test benches & web apps",
+        "projectContext": "Built the SnapWright VS Code extension, multi-execution workflow test benches, and interactive React frontends.",
+        "connections": [
+          "python",
+          "mcp",
+          "playwright"
+        ],
+        "level": "Core",
+        "logo": {
+          "component": "TypeScriptLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "sql-server",
+        "name": "MS SQL Server & Relational Design",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "Transactional data & audit stores",
+        "projectContext": "Designed relational schemas, Purview-compliant audit logs, and chatbot quality regression tracking tables.",
+        "connections": [
+          "dotnet-webapi",
+          "purview"
+        ],
+        "level": "Core",
+        "logo": {
+          "component": "DatabaseLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "docker",
+        "name": "Docker Containers",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "Containerized microservices & MCP isolation",
+        "projectContext": "Packaged FastAPI MCP servers and .NET services for reproducible cloud deployments via ACR.",
+        "connections": [
+          "container-apps",
+          "csharp"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "DockerLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "vscode-ast",
+        "name": "VS Code Extensions & AST",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "Developer tooling & TypeScript AST scaffolding",
+        "projectContext": "Built and published the SnapWright VS Code Marketplace extension automating POM generation and singleton PageFactory patterns.",
+        "connections": [
+          "typescript",
+          "playwright"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-emerald-400"
+          }
+        }
+      },
+      {
+        "id": "android-mobile",
+        "name": "Android Java & Material UI",
+        "category": "backend",
+        "categoryLabel": "Languages & Backend Core",
+        "role": "Native mobile interfaces & fintech workflows",
+        "projectContext": "Engineered the open-source Nivesh startup crowdfunding Android application with live pitch and equity tracking.",
+        "connections": [
+          "firebase-rest",
+          "sql-server"
+        ],
+        "level": "Core",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-emerald-400"
+          }
+        }
+      },
+      {
+        "id": "owasp",
+        "name": "OWASP Top 10 & Input Defense",
+        "category": "security",
+        "categoryLabel": "Security, Compliance & QA",
+        "role": "Centralized endpoint validation",
+        "projectContext": "Delivered 100% endpoint compliance across production APIs with strict sanitization and automated scanning.",
+        "connections": [
+          "dotnet-webapi",
+          "container-apps"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "SecurityLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "ssrf",
+        "name": "SSRF Defense & Hardening",
+        "category": "security",
+        "categoryLabel": "Security, Compliance & QA",
+        "role": "Boundary protection for agent tool calls",
+        "projectContext": "Hardened outbound HTTP and tool-calling validation layers against server-side request forgery.",
+        "connections": [
+          "mcp",
+          "owasp"
+        ],
+        "level": "Architecture",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-purple-400"
+          }
+        }
+      },
+      {
+        "id": "tls-cert",
+        "name": "TLS Certificate Authentication",
+        "category": "security",
+        "categoryLabel": "Security, Compliance & QA",
+        "role": "Mutual TLS & internal datacenter auth",
+        "projectContext": "Enforced strict TLS certificate validation across backend services with 16 dedicated unit tests.",
+        "connections": [
+          "key-vault",
+          "csharp",
+          "xunit"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "SecurityLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "ursa-dast",
+        "name": "URSA DAST Scanning",
+        "category": "security",
+        "categoryLabel": "Security, Compliance & QA",
+        "role": "Dynamic vulnerability evaluation",
+        "projectContext": "Automated dynamic security testing across deployed endpoints to verify runtime posture.",
+        "connections": [
+          "owasp",
+          "container-apps"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-purple-400"
+          }
+        }
+      },
+      {
+        "id": "purview",
+        "name": "Microsoft Purview Audit Logging",
+        "category": "security",
+        "categoryLabel": "Security, Compliance & QA",
+        "role": "Compliant enterprise audit telemetry",
+        "projectContext": "Integrated Purview-compliant Azure SQL audit trails for production AI workflows.",
+        "connections": [
+          "sql-server",
+          "container-apps"
+        ],
+        "level": "Core",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-purple-400"
+          }
+        }
+      },
+      {
+        "id": "playwright",
+        "name": "Playwright TypeScript",
+        "category": "security",
+        "categoryLabel": "Security, Compliance & QA",
+        "role": "End-to-end QA automation & POM suites",
+        "projectContext": "Automated 200+ test cases with a singleton PageFactory pattern, lifting smoke coverage from 25% to 85%.",
+        "connections": [
+          "typescript",
+          "bot-framework",
+          "xunit"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "TypeScriptLogo",
+          "props": {
+            "className": "w-4 h-4"
+          }
+        }
+      },
+      {
+        "id": "xunit",
+        "name": "xUnit Automated Testing",
+        "category": "security",
+        "categoryLabel": "Security, Compliance & QA",
+        "role": "Unit & integration test suites",
+        "projectContext": "Authored 33 cloud-endpoint tests (suite: 8,704 passing) and 16 TLS caching validation tests.",
+        "connections": [
+          "csharp",
+          "tls-cert"
+        ],
+        "level": "Production",
+        "logo": {
+          "component": "unknown",
+          "props": {
+            "className": "w-4 h-4 text-purple-400"
+          }
+        }
+      }
+    ]
+  },
+  "knowledgeBase": [
+    {
+      "id": "profile_overview",
+      "title": "Professional Profile & Executive Summary",
+      "category": "role_summary",
+      "source": "altaj-virani_ltm-resume.pdf (Page 1-2)",
+      "keywords": [
+        "altaj",
+        "virani",
+        "azure",
+        "ai",
+        "engineer",
+        "agentic",
+        "summary",
+        "about",
+        "bio",
+        "who",
+        "contact",
+        "email"
+      ],
+      "content": "Altaj A. Virani is an Azure AI Engineer specializing in Agentic AI Platforms, LLM integration, and Enterprise Cloud Systems.\nBased in Mumbai, India.\nContact: altajatwork@gmail.com | Altaj.Virani@LTM.com | +91-730-393-4303.\nSummary: Experienced in Azure AI platform engineering, agentic AI, and engineering enablement, with a focus on improving engineering productivity and cloud reliability. Skilled in developing enterprise AI applications using Azure and Microsoft AI technologies, integrating large language models into practical business and engineering workflows."
+    },
+    {
+      "id": "viki_ai_platform",
+      "title": "Viki-AI: Microsoft Azure Networking Agentic AI Operations Platform",
+      "category": "viki_ai",
+      "source": "Work Description for Viki-AI & altaj-virani_ltm-resume.pdf",
+      "keywords": [
+        "viki",
+        "viki ai",
+        "agentic",
+        "agents",
+        "mcp",
+        "model context protocol",
+        "playbooks",
+        "cli",
+        "copilot",
+        "operations",
+        "network",
+        "azure networking"
+      ],
+      "content": "Viki-AI is the internal AI platform Azure network engineering teams use to investigate incidents and automate operational work, serving datacenter networking, wide-area networking (WAN), optical networks, hardware and firmware, device buildout, datacenter operations, and on-call incident teams.\nEngineers use it in two ways:\n1. Chatting in a web portal or Microsoft Teams with 20+ domain-specific AI agents that call 250+ integrated tools to query live network inventory, device state, telemetry, incidents, and work orders, with role-based permissions and human approval for higher-risk actions.\n2. Running 150+ automated workflows (\"playbooks\") that turn troubleshooting procedures into sequences of data queries, tool calls, and AI steps, started on demand, on a schedule, or automatically when an incident is raised or an email arrives.\nStack: .NET/C# services on Azure Container Apps, GitHub Copilot SDK, Azure OpenAI, Model Context Protocol (MCP), Azure Service Bus, Event Hubs, Storage, Key Vault, Application Insights, and Azure Data Explorer (ADX).\nDelivery track record: 6 merged pull requests across 96 files; 6 completed work items."
+    },
+    {
+      "id": "key_vault_optimization",
+      "title": "Certificate Authentication Fix & 35× Azure Key Vault Call Reduction",
+      "category": "cloud_infrastructure",
+      "source": "Work Description for Viki-AI & altaj-virani-resume.pdf",
+      "keywords": [
+        "key vault",
+        "caching",
+        "memory",
+        "oom",
+        "35x",
+        "cache",
+        "container apps",
+        "tls",
+        "certificates",
+        "overhead",
+        "reliability",
+        "xunit"
+      ],
+      "content": "Certificate Authentication Fix & Key Vault Optimization (C#/.NET, Azure Key Vault, xUnit):\n- Problem: The certificate the backend services use to authenticate to internal network APIs was re-downloaded from Azure Key Vault every ~2 minutes and never released, and production requested a staging certificate that did not exist, failing ~13% of lookups.\n- Solution: Added a shared cache with 12-hour refresh and expiry protection, corrected the lookup, and enforced strict TLS certificate validation across all three backend services with 16 unit tests.\n- Impact: Production Key Vault calls fell 35× (from 2,807 down to 79 per day) and failed lookups dropped to zero."
+    },
+    {
+      "id": "oom_root_cause_scaling",
+      "title": "Production Memory Failures Root-Cause Analysis (2,640 Monthly OOMs Eliminated)",
+      "category": "cloud_infrastructure",
+      "source": "Work Description for Viki-AI & altaj-virani-resume.pdf",
+      "keywords": [
+        "oom",
+        "kql",
+        "application insights",
+        "out of memory",
+        "errors",
+        "azure container apps",
+        "auto scaling",
+        "dedicated compute",
+        "kusto",
+        "adx"
+      ],
+      "content": "Production Memory Failures Investigation (KQL, Azure Data Explorer, Application Insights, .NET):\n- Investigated out-of-memory errors in the workflow-execution service that peaked at 2,640 per 30 days, each losing a workflow in-progress work.\n- Corrected four working assumptions with measured evidence: auto-scaling had never been enabled; the usable limit was the .NET runtime's 768 MB cap (not the 1 GB container); the errors lost work rather than crashing the service; and the suspected network-inventory API was not a cause.\n- Traced the growth to repeated state-storage reads at every workflow step and sized the capacity needed.\n- Result: The platform owner confirmed the analysis and moved the service to dedicated, auto-scaling compute; these errors have stayed at zero since."
+    },
+    {
+      "id": "load_testing_capacity_suite",
+      "title": "13-Phase Auto-Scaling Load Test Suite (35,500 Workflows)",
+      "category": "cloud_infrastructure",
+      "source": "Work Description for Viki-AI & altaj-virani-resume.pdf",
+      "keywords": [
+        "load testing",
+        "capacity",
+        "auto scaling",
+        "powershell",
+        "azure monitor",
+        "35500",
+        "workflows",
+        "stress",
+        "scaling rules",
+        "backlog"
+      ],
+      "content": "Auto-Scaling Test Suite (PowerShell, Azure CLI, Azure Monitor, Azure Service Bus):\n- Built a 13-phase suite that generates load against a deployed environment and checks every auto-scaling rule (scale-out, scale-in, recovery, and safety) with 45 pass/fail verdicts; a full run drives 35,500 workflow executions.\n- Proved queue-, CPU-, and HTTP-based scaling, including a 15,708-message backlog that scaled from one instance to three and drained.\n- Exposed rules that could never fire: memory thresholds set equal to the .NET memory cap, no scaling for high-priority work, and two services that could not scale."
+    },
+    {
+      "id": "test_env_and_telemetry_analysis",
+      "title": "Test-Environment Configuration Fix & Telemetry Correlation",
+      "category": "cloud_infrastructure",
+      "source": "Work Description for Viki-AI",
+      "keywords": [
+        "test environment",
+        "emulator",
+        "service bus",
+        "event hubs",
+        "managed identity",
+        "telemetry",
+        "http 400",
+        "kql"
+      ],
+      "content": "Configuration Fixes & Telemetry Analysis:\n1. Test-Environment Configuration Fix (C#/.NET, Azure Service Bus, Event Hubs, managed identity, xUnit):\n- Found four deployed test environments processed no workflows while reporting healthy: they inherited local-emulator settings, so the workflow engine connected to a queue on localhost.\n- Made configured cloud endpoints take precedence for Service Bus, Event Hubs, and checkpoint storage, fixed a managed-identity setting, and kept it sovereign-cloud compatible with 33 new tests (full suite: 8,704 passing). Proved live by draining 331 of 334 stuck messages in 90 seconds.\n2. Network-State API Failure Analysis (KQL, telemetry correlation):\n- Showed that failures blamed on an unreliable legacy network-state service came from callers: 3,441 rejected HTTP 400 requests in 30 days from one endpoint, traced to 9 workflows (one causing 70%). Reported cause and remediation to platform team."
+    },
+    {
+      "id": "security_governance",
+      "title": "Security, Compliance & Production Quality Scoring",
+      "category": "enterprise_ai",
+      "source": "altaj-virani-resume.pdf (Page 1)",
+      "keywords": [
+        "security",
+        "compliance",
+        "owasp",
+        "ssrf",
+        "purview",
+        "groundedness",
+        "f1",
+        "quality scoring",
+        "azure sql"
+      ],
+      "content": "Security, Governance & AI Evaluation:\n- Achieved 100% compliance across production endpoints via a centralized validation microservice (OWASP Top 10, SSRF defense), automated URSA DAST scanning, and Microsoft Purview-compliant Azure SQL audit logging.\n- Integrated automated AI quality scoring (groundedness, accuracy, F1 score) directly into production chatbots for Azure SQL-backed regression tracking."
+    },
+    {
+      "id": "research_publications",
+      "title": "IEEE Research Publication: Automatic QA Generation using T5 & NLP",
+      "category": "publications",
+      "source": "altaj-virani-resume.pdf (Page 2)",
+      "keywords": [
+        "publication",
+        "ieee",
+        "t5",
+        "nlp",
+        "research",
+        "paper",
+        "autoqa",
+        "question answering",
+        "sense2vec",
+        "distractor generation"
+      ],
+      "content": "Published IEEE Research:\n- Title: 'Automatic Question Answer Generation using T5 and NLP' (IEEE ICSCSS 2023).\n- Abstract & Contribution: Published & presented Question-Answer Generation (QAG) architecture in IEEE ICSCSS proceedings.\n- Combined Google T5 model with NLP techniques (NER, POS tagging, Sense2Vec) for robust automated question synthesis and distractor generation to improve text comprehension efficiency in educational and industrial settings."
+    },
+    {
+      "id": "patents_copyrights",
+      "title": "Government Patent & Copyright: AutoQA AI",
+      "category": "publications",
+      "source": "altaj-virani-resume.pdf (Page 2)",
+      "keywords": [
+        "patent",
+        "copyright",
+        "government of india",
+        "autoqa ai",
+        "intellectual property"
+      ],
+      "content": "Patents & Copyrights:\n- Project: 'AutoQA AI - A Question Answering Application'.\n- Copyright formally approved by the Government of India, recognizing the proprietary methodology for automated document question-answering."
+    },
+    {
+      "id": "notable_projects",
+      "title": "Featured Software Projects: AutoQAGen, AutoQA AI, SnapWright & Nivesh",
+      "category": "projects",
+      "source": "altaj-virani-resume.pdf (Page 2) & Verified Portfolios",
+      "keywords": [
+        "projects",
+        "autoqagen",
+        "autoqa ai",
+        "snapwright",
+        "nivesh",
+        "vs code extension",
+        "android",
+        "crowdfunding",
+        "playwright",
+        "pagefactory",
+        "pom",
+        "offline"
+      ],
+      "content": "Featured Projects:\n1. AutoQAGen (Python, Flask, T5, BERT, NLTK, React):\n- Engineered an NLP pipeline utilizing T5, POS tagging, and NER to generate multi-format QA pairs, exposed via a scalable Flask REST API to a component-driven React frontend.\n- Evaluated and scored generated outputs against SQuAD dataset baselines using an automated BERT evaluation engine.\n\n2. AutoQA AI (Python, Scikit-learn, NLTK, KivyMD):\n- Built a privacy-first, fully offline desktop application querying user-provided text documents without external data transmission (approved copyright by the Government of India).\n- Implemented search mechanism utilizing TF-IDF vectorization and cosine similarity to rank sentence relevance with NLTK preprocessing and Pyttsx3 TTS.\n\n3. SnapWright (TypeScript, VS Code Extension API, Node.js):\n- Architected and published an open-source VS Code extension on the official marketplace (altajvirani.snapwright).\n- Features a singleton-based PageFactory pattern that automates Page Object Model (POM) generation, consolidates imports, and eliminates memory leaks in large test suites.\n- Led the migration of internal Copilot Studio automation frameworks to utilize this extension, improving pipeline execution efficiency.\n\n4. Nivesh (Android Java, REST APIs, Material Design, Firebase):\n- Open-source Android mobile application designed to democratize venture seed capital and crowdfunding.\n- Connects early-stage startup founders with micro-investors and angel backers through transparent equity tracking, real-time fundraising metrics, and milestone dashboards."
+    },
+    {
+      "id": "awards_recognition",
+      "title": "Industry Awards & Recognition at LTM",
+      "category": "awards",
+      "source": "altaj-virani_ltm-resume.pdf (Page 5) & altaj-virani-resume.pdf (Page 2)",
+      "keywords": [
+        "awards",
+        "recognition",
+        "spot award",
+        "hi-five",
+        "super crew",
+        "problem solver",
+        "honors"
+      ],
+      "content": "Awards & Honors at LTM (Microsoft Business Unit):\n1. Problem Solver Badge (Sep 2026): Nominated for contributions to Viki AI, Azure Networking’s agentic operations platform, and internal AI initiatives, earning stakeholder confidence through technical solutions.\n2. Hi-Five Spot Award (Nov 2025): Recognized for consistently exceeding expectations by demonstrating exceptional innovation in developing AI use cases.\n3. Super Crew Spot Award (Aug 2025 / Oct 2025): Awarded along with the team for outstanding efforts in architecting and deploying compliant, enterprise-grade Generative AI and Automation systems that modernized internal operations.\n4. Hi-Five Spot Award (Jul 2025): Commended for leading QA framework stability improvements, system migrations, and independently building automation tools that boosted engineering productivity."
+    },
+    {
+      "id": "education_certifications",
+      "title": "Academic Qualifications & Professional Certifications",
+      "category": "education",
+      "source": "altaj-virani_ltm-resume.pdf (Page 2, 5) & altaj-virani-resume.pdf (Page 1)",
+      "keywords": [
+        "education",
+        "degree",
+        "cgpa",
+        "university of mumbai",
+        "college",
+        "certifications",
+        "ai-900",
+        "azure ai fundamentals"
+      ],
+      "content": "Education & Academic Excellence:\n- Bachelor of Engineering (B.E.) in Computer Engineering: Vidyavardhini's College of Engineering and Technology, University of Mumbai. CGPA: 9.00 / 10.0 (Feb 2021 – May 2023).\n- Engineering Diploma in Computer Engineering: Vidyavardhini's Bhausaheb Vartak Polytechnic. Percentage: 94.00% (Aug 2017 – Nov 2020).\n- High School (SSC): Holy Paradise High School. Percentage: 80.60%.\n- Professional Certifications:\n  1. Microsoft Certified: Azure AI Fundamentals (AI-900)\n  2. Azure Functions Masterclass (Udemy)\n  3. Azure AI Studio / AI Foundry (Udemy)"
+    },
+    {
+      "id": "technical_skills_matrix",
+      "title": "Core Technical Skills & Tooling (AI, Cloud & Languages)",
+      "category": "skills",
+      "source": "altaj-virani-resume.pdf (Page 2)",
+      "keywords": [
+        "skills",
+        "tech stack",
+        "languages",
+        "python",
+        "typescript",
+        "c#",
+        ".net",
+        "azure",
+        "kql",
+        "docker",
+        "fastapi"
+      ],
+      "content": "Core Technical Skills Matrix:\n- Programming Languages: Python, TypeScript, JavaScript, C#, .NET, PowerShell, SQL, KQL (Kusto Query Language), Java.\n- AI & Agentic Systems: Retrieval Augmented Generation (RAG), Model Context Protocol (MCP), Vector Databases & Embeddings, Azure AI Foundry, Azure OpenAI SDK, GitHub Copilot SDK, Copilot Studio, Power Automate, Prompt Engineering, LangChain.\n- Cloud & Infrastructure: Azure Container Apps, Azure Functions, Azure Key Vault, Azure Service Bus, Azure Event Hubs, Azure Data Explorer, Azure CLI, Docker.\n- Backend & Microservices: FastAPI, Flask, Node.js, Express.js, ASP.NET Core, REST APIs.\n- Databases: MS SQL Server, MongoDB, Firebase, Vector Stores."
+    }
+  ],
+  "contact": {
+    "defaultRecipient": "altajatwork@gmail.com",
+    "validation": {
+      "nameMinLength": 2,
+      "emailPattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+      "messageMinLength": 5,
+      "maxLengths": {
+        "name": 120,
+        "email": 160,
+        "subject": 180,
+        "message": 4000
+      }
+    },
+    "deliveryChannels": [
+      "resend",
+      "smtp",
+      "formsubmit",
+      "inbox-queue"
+    ]
+  },
+  "assets": [
+    "1000181295-clean_34605519.png",
+    "altaj-virani-resume_7052121d.pdf",
+    "altaj-virani_ltm-resume_ae17ced8.pdf",
+    "image_1d9d5134.png",
+    "image_1fc0b967.png",
+    "image_c609f1ba.png",
+    "monogram-badge-logo.png",
+    "work-description-for-viki-ai_6031a629.jpeg"
+  ],
+  "chatbot": {
+    "suggestedQueries": [
+      "How did Altaj cut Key Vault calls 35x in Azure Container Apps?",
+      "What is Altaj’s role with Viki AI and Model Context Protocol (MCP)?",
+      "Tell me about his SnapWright VS Code extension",
+      "Explain his Nivesh startup crowdfunding platform",
+      "How did he diagnose and eliminate 2,640 monthly OOM errors?",
+      "Summarize his IEEE research paper on T5 question answering"
+    ],
+    "welcomeMessage": {
+      "content": "Hello! I am Altaj Virani's AI Representative, augmented directly with his verified resume documents (altaj-virani-resume.pdf and altaj-virani_ltm-resume.pdf).\\n\\nAsk me anything about his enterprise agentic AI architectures (Viki AI, MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!",
+      "sources": [
+        "altaj-virani-resume.pdf",
+        "altaj-virani_ltm-resume.pdf"
+      ]
+    },
+    "resetMessage": {
+      "content": "Conversation reset. Ask any question about Altaj Virani's enterprise AI engineering, MCP toolkits, or Azure cloud systems.",
+      "sources": [
+        "altaj-virani-resume.pdf"
+      ]
+    },
+    "fallback": {
+      "intro": "Based on Altaj Virani's verified resume documents:\\n\\n",
+      "sourceDefaults": [
+        "altaj-virani-resume.pdf",
+        "altaj-virani_ltm-resume.pdf"
+      ],
+      "responses": [
+        {
+          "matchTerms": [
+            "snapwright",
+            "vscode",
+            "pagefactory"
+          ],
+          "content": "• **SnapWright**: An open-source Visual Studio Code extension published on the official marketplace (`altajvirani.snapwright`).\\n• **Architecture**: Implements an automated PageFactory and Page Object Model (POM) pattern generator for web test suites, featuring smart class-name detection and import consolidation to eliminate memory leaks.\\n• **Adoption**: Led the migration of internal Copilot Studio automation frameworks to adopt SnapWright, significantly improving pipeline efficiency.\\n\\n[Source: altaj-virani-resume.pdf (Page 2) & VS Code Marketplace]"
+        },
+        {
+          "matchTerms": [
+            "nivesh",
+            "crowdfunding",
+            "startup"
+          ],
+          "content": "• **Nivesh**: An open-source Android mobile application designed to democratize venture seed capital and startup crowdfunding.\\n• **Capabilities**: Connects early-stage startup founders with micro-investors through transparent equity tracking, real-time fundraising metrics, and milestone dashboards.\\n• **Stack**: Built with native Android Java, Material Design UI, REST APIs, and Firebase.\\n\\n[Source: Verified Project Portfolios & GitHub (altajvirani/Nivesh)]"
+        },
+        {
+          "matchTerms": [
+            "key vault",
+            "35x",
+            "cache"
+          ],
+          "content": "• **Azure Key Vault Caching**: Cut calls 35× (from 2,807 down to 79/day) by replacing repeated certificate downloads with a shared 12-hour cache across three .NET services on Azure Container Apps.\\n• **Reliability**: Eliminated ~13% failed lookups and enforced strict TLS validation with 16 unit tests.\\n\\n[Source: altaj-virani-resume.pdf (Page 1)]"
+        },
+        {
+          "matchTerms": [
+            "viki",
+            "mcp",
+            "agent"
+          ],
+          "content": "• **Viki AI Enterprise Platform**: Led cross-team adoption of Microsoft's internal agentic operations platform across Azure Networking tracks.\\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling 20+ specialized agents to call 250+ integrated networking tools.\\n\\n[Source: altaj-virani_ltm-resume.pdf (Page 3)]"
+        },
+        {
+          "matchTerms": [
+            "oom",
+            "memory",
+            "kql"
+          ],
+          "content": "• **Root-Cause Analysis**: Diagnosed 2,640 monthly OOM errors in Azure Container Apps via KQL and Application Insights, uncovering .NET runtime limits (780 MB cap).\\n• **Compute Migration**: Drove migration to dedicated auto-scaling compute, sustaining zero errors thereafter.\\n\\n[Source: altaj-virani-resume.pdf (Page 1)]"
+        },
+        {
+          "matchTerms": [
+            "ieee",
+            "paper",
+            "t5",
+            "publication"
+          ],
+          "content": "• **IEEE ICSCSS (2023) Paper**: 'Automatic Question Answer Generation using T5 and NLP'.\\n• Combines Google's T5 model with Named Entity Recognition, POS tagging, and Sense2Vec for automated question synthesis and distractor generation.\\n\\n[Source: altaj-virani-resume.pdf (Page 2)]"
+        },
+        {
+          "matchTerms": [],
+          "content": "• **Profile**: Azure AI Engineer in Microsoft Business Unit (MSBU).\\n• **Core Strengths**: Model Context Protocol (MCP), Viki AI agent orchestration, Hybrid RAG with HNSW vector indexing (80% troubleshooting acceleration), high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\\n\\n[Source: altaj-virani_ltm-resume.pdf & altaj-virani-resume.pdf]"
+        }
+      ]
+    }
+  },
+  "server": {
+    "routes": [
+      "/api/chat",
+      "/api/contact",
+      "/api/health"
+    ],
+    "defaultPort": 3000,
+    "developmentMode": "NODE_ENV is not production",
+    "productionMode": "NODE_ENV is production"
+  }
+}

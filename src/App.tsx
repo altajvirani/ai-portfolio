@@ -11,8 +11,13 @@ import { ContactSection } from "./components/ContactSection.tsx";
 import { RAGChatbot } from "./components/RAGChatbot.tsx";
 import { Footer } from "./components/Footer.tsx";
 import { Bot } from "lucide-react";
+import { AdminPage } from "./components/AdminPage.tsx";
 
 export default function App() {
+  if (window.location.pathname === "/admin") {
+    return <AdminPage />;
+  }
+
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [chatQuery, setChatQuery] = useState("");
   const [selectedSkillId, setSelectedSkillId] = useState<string>("mcp");
