@@ -92,7 +92,7 @@ export const Hero: React.FC = () => {
                 </div>
 
                 <img
-                  src="/assets/aistudio/1000181295-clean_34605519.png"
+                  src="/assets/1000181295-clean_34605519.png"
                   alt="Altaj Virani Headshot"
                   className="w-full h-full object-cover object-[center_12%] scale-130 transition-transform duration-700 group-hover:scale-135"
                   loading="eager"

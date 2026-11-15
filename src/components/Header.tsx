@@ -26,13 +26,20 @@ export const Header: React.FC = () => {
         {/* Brand */}
         <button
           onClick={() => scrollTo("hero")}
-          className="text-left group cursor-pointer focus:outline-none"
+          className="flex items-center gap-1.5 text-left group cursor-pointer focus:outline-none"
         >
-          <span className="text-base font-extrabold font-display tracking-tight text-white group-hover:text-cyan-400 transition-colors">
-            ALTAJ VIRANI
-          </span>
-          <span className="block text-[10px] font-mono tracking-widest text-slate-400 uppercase">
-            Azure AI Engineer
+          <img
+            src="/assets/monogram-badge-logo.png"
+            alt="Altaj Virani monogram"
+            className="h-9 w-9 object-contain"
+          />
+          <span className="flex flex-col justify-center leading-2 mb-1">
+            <span className="text-base font-extrabold font-display tracking-tight text-white group-hover:text-cyan-400 transition-colors">
+              ALTAJ VIRANI
+            </span>
+            <span className="block text-[10px] font-mono tracking-widest text-slate-400 uppercase">
+              Azure AI Engineer
+            </span>
           </span>
         </button>
 
@@ -58,7 +65,7 @@ export const Header: React.FC = () => {
             className="px-3.5 py-1.5 text-xs font-mono font-medium text-slate-200 hover:text-white bg-slate-900/80 hover:bg-slate-850 border border-slate-700/80 hover:border-cyan-400/50 rounded-lg transition-all flex items-center gap-1.5"
           >
             <Link className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Resume PDF</span>
+            <span>Resume</span>
           </a>
         </div>
 
@@ -68,7 +75,7 @@ export const Header: React.FC = () => {
             href="https://flowcv.com/resume/gg0rtbkh7jul"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Resume PDF"
+            aria-label="Resume"
             className="p-2 text-slate-300 hover:text-white bg-slate-900/80 border border-slate-700/80 rounded-lg"
           >
             <Link className="w-4 h-4 text-cyan-400" />
@@ -107,7 +114,7 @@ export const Header: React.FC = () => {
               className="w-full py-2.5 text-xs font-mono font-medium text-center text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg flex items-center justify-center gap-2"
             >
               <Link className="w-4 h-4 text-cyan-400" />
-              <span>Resume PDF</span>
+              <span>Resume</span>
             </a>
           </div>
         </div>
