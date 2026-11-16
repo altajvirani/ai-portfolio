@@ -4,15 +4,16 @@
 
 @layer base {
   :root {
-    --font-display: 'Syne', sans-serif;
-    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-editorial: 'Fraunces', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #0d131f;
-    color: #f1f5f9;
+    background-color: #F7F4EE;
+    color: #18181B;
     overflow-x: hidden;
   }
 
@@ -25,61 +26,369 @@
   }
 }
 
-/* Liquid Chrome & Retrofuturistic Highlights */
-.chrome-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, #67e8f9 30%, #c084fc 65%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.font-editorial {
+  font-family: var(--font-editorial);
 }
 
-.chrome-gradient-subtle {
-  background: linear-gradient(135deg, #f8fafc 0%, #93c5fd 40%, #c084fc 75%, #f472b6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* =========================================================
+   MODERN TACTILE NEO-SKEUOMORPHISM & PAPER-CRAFT TOKENS
+   Placed inside @layer components so Tailwind position utilities
+   (fixed, sticky, absolute) always win cleanly.
+   ========================================================= */
+@layer components {
+  .skeuo-card {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAF8F3 100%);
+    border: 1px solid #DCD5C9;
+    box-shadow:
+      0 1px 1px rgba(24, 24, 27, 0.04),
+      0 4px 10px -2px rgba(24, 24, 27, 0.05),
+      0 14px 28px -8px rgba(24, 24, 27, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(24, 24, 27, 0.04);
+  }
+
+  .skeuo-card-warm {
+    background: linear-gradient(165deg, #FFFDF7 0%, #FBF5E8 55%, #F5ECD8 100%);
+    border: 1px solid #DFD3BA;
+    box-shadow:
+      0 1px 2px rgba(120, 53, 15, 0.05),
+      0 12px 28px -8px rgba(180, 83, 9, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(180, 83, 9, 0.08);
+  }
+
+  /* Fine SVG Paper Fiber Grain Overlay */
+  .paper-grain {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E");
+  }
+
+  /* Warm Kraft Paper Card Stock */
+  .paper-kraft {
+    background:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23k)' opacity='0.045'/%3E%3C/svg%3E"),
+      linear-gradient(155deg, #F7E8CF 0%, #EED8B5 55%, #E6CCA3 100%);
+    border: 1px solid #D3B483;
+    box-shadow:
+      0 2px 6px rgba(120, 53, 15, 0.1),
+      0 12px 24px -8px rgba(120, 53, 15, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+
+  /* Chromatic Blueprint & Ruled Notebook Grids */
+  .paper-grid-cobalt {
+    background-color: #F4F8FF;
+    background-image:
+      linear-gradient(to right, rgba(37, 99, 235, 0.065) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(37, 99, 235, 0.065) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .paper-grid-mint {
+    background-color: #F2FBF6;
+    background-image:
+      linear-gradient(to right, rgba(5, 150, 105, 0.065) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(5, 150, 105, 0.065) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .paper-grid-violet {
+    background-color: #F7F4FF;
+    background-image:
+      linear-gradient(to right, rgba(124, 58, 237, 0.065) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(124, 58, 237, 0.065) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .paper-lined-amber {
+    background-color: #FFFDF5;
+    background-image: linear-gradient(to bottom, transparent 23px, rgba(217, 119, 6, 0.11) 24px);
+    background-size: 100% 24px;
+  }
+
+  /* Die-Cut Paper Sticker / Cutout Cards */
+  .paper-cutout {
+    border: 3px solid #FFFFFF;
+    box-shadow:
+      0 2px 4px rgba(24, 24, 27, 0.08),
+      0 8px 18px -4px rgba(24, 24, 27, 0.14),
+      0 0 0 1px rgba(214, 206, 192, 0.85);
+  }
+
+  .paper-cutout-sm {
+    border: 2.5px solid #FFFFFF;
+    box-shadow:
+      0 2px 5px rgba(24, 24, 27, 0.09),
+      0 6px 12px -3px rgba(24, 24, 27, 0.12),
+      0 0 0 1px rgba(214, 206, 192, 0.75);
+  }
+
+  /* Translucent Masking Washi Tape Strips */
+  .washi-tape-amber {
+    background: linear-gradient(90deg, rgba(253, 230, 138, 0.88), rgba(252, 211, 77, 0.78), rgba(253, 230, 138, 0.88));
+    border-top: 1px dashed rgba(180, 83, 9, 0.28);
+    border-bottom: 1px dashed rgba(180, 83, 9, 0.28);
+    box-shadow: 0 2px 5px rgba(120, 53, 15, 0.14);
+  }
+
+  .washi-tape-blue {
+    background: linear-gradient(90deg, rgba(191, 219, 254, 0.88), rgba(147, 197, 253, 0.76), rgba(191, 219, 254, 0.88));
+    border-top: 1px dashed rgba(29, 78, 216, 0.25);
+    border-bottom: 1px dashed rgba(29, 78, 216, 0.25);
+    box-shadow: 0 2px 5px rgba(30, 58, 138, 0.14);
+  }
+
+  .washi-tape-mint {
+    background: linear-gradient(90deg, rgba(167, 243, 208, 0.88), rgba(110, 231, 183, 0.76), rgba(167, 243, 208, 0.88));
+    border-top: 1px dashed rgba(4, 120, 87, 0.25);
+    border-bottom: 1px dashed rgba(4, 120, 87, 0.25);
+    box-shadow: 0 2px 5px rgba(6, 78, 59, 0.14);
+  }
+
+  /* Tactile Air-Mail Envelope Edge Accent */
+  .airmail-border {
+    background: repeating-linear-gradient(
+      -45deg,
+      #2563EB 0px,
+      #2563EB 12px,
+      #FAF8F3 12px,
+      #FAF8F3 20px,
+      #F97316 20px,
+      #F97316 32px,
+      #FAF8F3 32px,
+      #FAF8F3 40px
+    );
+  }
+
+  /* Frosted Glassmorphism + Specular Edge Rim */
+  .skeuo-glass {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(250, 248, 243, 0.74) 100%);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.88);
+    box-shadow:
+      0 4px 20px -4px rgba(24, 24, 27, 0.12),
+      0 0 0 1px rgba(220, 213, 201, 0.65),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  }
+
+  .skeuo-well {
+    background: linear-gradient(180deg, #E8E2D7 0%, #EFEAE0 100%);
+    border: 1px solid #D8D0C1;
+    box-shadow:
+      inset 0 2px 5px rgba(24, 24, 27, 0.08),
+      inset 0 1px 1px rgba(24, 24, 27, 0.05),
+      0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  /* Tactile Physical Keycap Cap Style for Shortcut Badges */
+  .keycap-badge {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F0EAE0 100%);
+    border: 1px solid #CFC6B7;
+    border-bottom-width: 2px;
+    box-shadow:
+      0 1px 2px rgba(24, 24, 27, 0.08),
+      inset 0 1px 0 #FFFFFF;
+  }
+
+  /* =========================================================
+     TACTILE MULTI-COLOR 3D KEYCAP BUTTONS
+     ========================================================= */
+
+  .skeuo-btn-dark {
+    background: linear-gradient(180deg, #2D2D31 0%, #161618 100%);
+    color: #FAF8F4;
+    border: 1px solid #09090B;
+    box-shadow:
+      0 2px 4px rgba(20, 20, 19, 0.22),
+      0 6px 14px -3px rgba(20, 20, 19, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.24),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+  }
+  .skeuo-btn-dark:hover {
+    background: linear-gradient(180deg, #38383E 0%, #1C1C1F 100%);
+    box-shadow:
+      0 3px 6px rgba(20, 20, 19, 0.24),
+      0 10px 20px -4px rgba(20, 20, 19, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+  .skeuo-btn-dark:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.55);
+  }
+
+  .skeuo-btn-cobalt {
+    background: linear-gradient(180deg, #4B8DF8 0%, #2563EB 62%, #1E54D6 100%);
+    color: #FFFFFF;
+    border: 1px solid #1D4ED8;
+    box-shadow:
+      0 2px 4px rgba(37, 99, 235, 0.22),
+      0 8px 18px -4px rgba(37, 99, 235, 0.36),
+      inset 0 1px 0 rgba(255, 255, 255, 0.44),
+      inset 0 -1px 0 rgba(29, 78, 216, 0.4);
+  }
+  .skeuo-btn-cobalt:hover {
+    background: linear-gradient(180deg, #5C99FA 0%, #2B6BF0 62%, #1D4ED8 100%);
+    box-shadow:
+      0 4px 10px rgba(37, 99, 235, 0.28),
+      0 12px 24px -4px rgba(37, 99, 235, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  .skeuo-btn-cobalt:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 5px rgba(29, 78, 216, 0.6);
+  }
+
+  .skeuo-btn-tangerine {
+    background: linear-gradient(180deg, #FB923C 0%, #F97316 58%, #EA580C 100%);
+    color: #FFFFFF;
+    border: 1px solid #C2410C;
+    box-shadow:
+      0 2px 4px rgba(234, 88, 12, 0.22),
+      0 8px 18px -4px rgba(234, 88, 12, 0.36),
+      inset 0 1px 0 rgba(255, 255, 255, 0.48),
+      inset 0 -1px 0 rgba(194, 65, 12, 0.45);
+  }
+  .skeuo-btn-tangerine:hover {
+    background: linear-gradient(180deg, #FDBA74 0%, #F97316 58%, #EA580C 100%);
+    box-shadow:
+      0 4px 10px rgba(234, 88, 12, 0.28),
+      0 12px 24px -4px rgba(234, 88, 12, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+  .skeuo-btn-tangerine:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 5px rgba(154, 52, 18, 0.55);
+  }
+
+  .skeuo-btn-mint {
+    background: linear-gradient(180deg, #34D399 0%, #10B981 58%, #059669 100%);
+    color: #FFFFFF;
+    border: 1px solid #047857;
+    box-shadow:
+      0 2px 4px rgba(5, 150, 105, 0.22),
+      0 8px 18px -4px rgba(5, 150, 105, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.48),
+      inset 0 -1px 0 rgba(4, 120, 87, 0.42);
+  }
+  .skeuo-btn-mint:hover {
+    background: linear-gradient(180deg, #4ADE80 0%, #10B981 58%, #059669 100%);
+    box-shadow:
+      0 4px 10px rgba(5, 150, 105, 0.26),
+      0 12px 24px -4px rgba(5, 150, 105, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.52);
+  }
+  .skeuo-btn-mint:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 5px rgba(6, 78, 59, 0.55);
+  }
+
+  .skeuo-btn-violet {
+    background: linear-gradient(180deg, #A78BFA 0%, #7C3AED 58%, #6D28D9 100%);
+    color: #FFFFFF;
+    border: 1px solid #5B21B6;
+    box-shadow:
+      0 2px 4px rgba(124, 58, 237, 0.22),
+      0 8px 18px -4px rgba(124, 58, 237, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -1px 0 rgba(91, 33, 182, 0.42);
+  }
+  .skeuo-btn-violet:hover {
+    background: linear-gradient(180deg, #B794F4 0%, #8B5CF6 58%, #6D28D9 100%);
+  }
+  .skeuo-btn-violet:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 5px rgba(76, 29, 149, 0.55);
+  }
+
+  .skeuo-btn-amber {
+    background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%);
+    color: #78350F;
+    border: 1px solid #F59E0B;
+    box-shadow:
+      0 1px 2px rgba(180, 83, 9, 0.08),
+      0 4px 10px -3px rgba(180, 83, 9, 0.14),
+      inset 0 1px 0 #FFFFFF;
+  }
+  .skeuo-btn-amber:hover {
+    background: linear-gradient(180deg, #FFFBEB 0%, #FDE68A 100%);
+    border-color: #D97706;
+  }
+  .skeuo-btn-amber:active {
+    transform: translateY(1px);
+  }
+
+  .skeuo-btn-ivory {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F5F0E7 100%);
+    color: #18181B;
+    border: 1px solid #D6CEC0;
+    box-shadow:
+      0 1px 2px rgba(24, 24, 27, 0.06),
+      0 4px 10px -3px rgba(24, 24, 27, 0.08),
+      inset 0 1px 0 #FFFFFF,
+      inset 0 -1px 0 rgba(24, 24, 27, 0.04);
+  }
+  .skeuo-btn-ivory:hover {
+    background: linear-gradient(180deg, #FFFFFF 0%, #EFE9DC 100%);
+    border-color: #C2B8A3;
+    box-shadow:
+      0 2px 4px rgba(24, 24, 27, 0.08),
+      0 8px 16px -4px rgba(24, 24, 27, 0.1),
+      inset 0 1px 0 #FFFFFF;
+  }
+  .skeuo-btn-ivory:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(24, 24, 27, 0.14);
+  }
+
+  /* Tactile Specular Glint Sweep — note position is NOT overridden on fixed/absolute/sticky */
+  .skeuo-sheen {
+    overflow: hidden;
+  }
+  .skeuo-sheen:not(.fixed):not(.absolute):not(.sticky) {
+    position: relative;
+  }
+  .skeuo-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      112deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.24) 48%,
+      transparent 74%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .skeuo-sheen:hover::after {
+    transform: translateX(120%);
+  }
+
+  /* Citylines-inspired Halftone Dot Matrix Patterns */
+  .halftone-dots {
+    background-image: radial-gradient(rgba(37, 99, 235, 0.2) 1.35px, transparent 1.35px);
+    background-size: 9px 9px;
+  }
+
+  .halftone-dots-warm {
+    background-image: radial-gradient(rgba(234, 88, 12, 0.22) 1.35px, transparent 1.35px);
+    background-size: 9px 9px;
+  }
+
+  .halftone-paper-grid {
+    background-image: radial-gradient(rgba(24, 24, 27, 0.065) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
 }
 
-.chrome-gradient-cyan {
-  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #818cf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Hide scrollbars cleanly for mobile horizontal snap tracks */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-.chrome-gradient-emerald {
-  background: linear-gradient(135deg, #ffffff 0%, #34d399 50%, #06b6d4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.chrome-border {
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-}
-
-.chrome-border:hover {
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.25);
-}
-
-.chrome-pill-active {
-  background: linear-gradient(180deg, rgba(56, 189, 248, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-/* Subtle retrofuturistic tactile grid */
-.retro-grid {
-  background-image: 
-    linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-.ambient-glow-cyan {
-  background: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.18) 0%, transparent 60%);
-}
-
-.ambient-glow-purple {
-  background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.15) 0%, transparent 60%);
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Infinite Marquee Animation */
@@ -94,4 +403,13 @@
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  .skeuo-sheen::after {
+    transition: none;
+  }
 }

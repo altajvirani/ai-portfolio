@@ -54,3 +54,13 @@ test('Search knowledge correctly finds Nivesh startup crowdfunding platform', as
   assert.equal(results[0].id, 'notable_projects');
   assert.match(results[0].content, /Nivesh/i);
 });
+
+test('Process RAG query answers awards and education topics dynamically without rigging', async () => {
+  const awardsRes = await processRAGQuery('What awards and honors has Altaj won at LTM?');
+  assert.ok(awardsRes.chunks.some((c) => c.id === 'awards_recognition'));
+  assert.match(awardsRes.answer, /Problem Solver Badge|Hi-Five Spot Award/);
+
+  const eduRes = await processRAGQuery('What is Altaj education CGPA and certifications?');
+  assert.ok(eduRes.chunks.some((c) => c.id === 'education_certifications'));
+  assert.match(eduRes.answer, /9\.00|AI-900/);
+});

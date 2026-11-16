@@ -164,7 +164,7 @@ export const TECH_NODES: TechNode[] = [
     projectContext:
       "Powered IEEE-published AutoQAGen (Google T5, Sense2Vec, BERT scoring) and copyright-approved AutoQA AI offline TF-IDF retrieval.",
     connections: ["python", "rag", "vector-db"],
-    logo: <BrainCircuit className="w-4 h-4 text-cyan-400" />,
+    logo: <BrainCircuit className="w-4 h-4 text-blue-600" />,
     level: "Architecture",
   },
 
@@ -250,7 +250,7 @@ export const TECH_NODES: TechNode[] = [
     projectContext:
       "Backed the Nivesh startup crowdfunding Android app with real-time portfolio sync and milestone feeds.",
     connections: ["android-mobile", "sql-server"],
-    logo: <Flame className="w-4 h-4 text-sky-400" />,
+    logo: <Flame className="w-4 h-4 text-sky-600" />,
     level: "Core",
   },
 
@@ -336,7 +336,7 @@ export const TECH_NODES: TechNode[] = [
     projectContext:
       "Built and published the SnapWright VS Code Marketplace extension automating POM generation and singleton PageFactory patterns.",
     connections: ["typescript", "playwright"],
-    logo: <Puzzle className="w-4 h-4 text-emerald-400" />,
+    logo: <Puzzle className="w-4 h-4 text-emerald-600" />,
     level: "Production",
   },
   {
@@ -348,7 +348,7 @@ export const TECH_NODES: TechNode[] = [
     projectContext:
       "Engineered the open-source Nivesh startup crowdfunding Android application with live pitch and equity tracking.",
     connections: ["firebase-rest", "sql-server"],
-    logo: <Smartphone className="w-4 h-4 text-emerald-400" />,
+    logo: <Smartphone className="w-4 h-4 text-emerald-600" />,
     level: "Core",
   },
 
@@ -444,69 +444,76 @@ export function getDomainStyle(cat: string) {
     case "agentic":
       return {
         pillBg:
-          "bg-cyan-500/10 border-cyan-500/30 text-cyan-200 hover:border-cyan-400 hover:bg-cyan-500/20",
+          "bg-gradient-to-b from-white to-[#EEF4FF] border-[#C7D7FE] text-[#1E3A8A] shadow-[0_2px_4px_rgba(37,99,235,0.08),inset_0_1px_0_#FFFFFF] hover:border-[#2563EB]/75 hover:to-[#E0EAFF]",
         selectedBg:
-          "bg-slate-800 border-2 border-white text-white ring-2 ring-cyan-400/80 ring-offset-2 ring-offset-[#0d131f] shadow-[0_0_24px_rgba(56,189,248,0.45)] scale-[1.03]",
+          "bg-gradient-to-b from-[#3B82F6] to-[#2563EB] border-2 border-[#1D4ED8] text-white ring-2 ring-[#2563EB]/30 ring-offset-2 ring-offset-[#FAF8F3] shadow-[0_6px_16px_rgba(37,99,235,0.32),inset_0_1px_0_rgba(255,255,255,0.45)] sm:scale-[1.03]",
         linkedBg:
-          "bg-amber-500/12 border-2 border-dashed border-amber-400/85 text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.2)]",
-        badge: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
-        dot: "bg-cyan-400",
-        layerPanel: "bg-cyan-950/20 border-cyan-500/25",
-        layerTitle: "text-cyan-300",
-        layerTag: "text-cyan-300 bg-cyan-500/10 border border-cyan-500/20",
+          "bg-gradient-to-b from-[#FFFBEB] to-[#FEF3C7] border-2 border-dashed border-[#D97706] text-[#78350F] shadow-[0_3px_10px_rgba(217,119,6,0.16),inset_0_1px_0_#FFFFFF]",
+        badge: "bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]",
+        dot: "bg-[#2563EB]",
+        layerPanel:
+          "paper-grid-cobalt border-[#BFDBFE] shadow-[inset_0_2px_4px_rgba(37,99,235,0.06),0_4px_12px_-4px_rgba(37,99,235,0.08)]",
+        layerTitle: "text-[#1E40AF]",
+        layerTag: "text-[#1D4ED8] bg-white border border-[#C7D7FE] shadow-xs",
       };
     case "cloud":
       return {
         pillBg:
-          "bg-sky-500/10 border-sky-500/30 text-sky-200 hover:border-sky-400 hover:bg-sky-500/20",
+          "bg-gradient-to-b from-white to-[#EFF9FF] border-[#BAE6FD] text-[#0C4A6E] shadow-[0_2px_4px_rgba(2,132,199,0.08),inset_0_1px_0_#FFFFFF] hover:border-[#0284C7]/75 hover:to-[#E0F2FE]",
         selectedBg:
-          "bg-slate-800 border-2 border-white text-white ring-2 ring-sky-400/80 ring-offset-2 ring-offset-[#0d131f] shadow-[0_0_24px_rgba(14,165,233,0.45)] scale-[1.03]",
+          "bg-gradient-to-b from-[#0EA5E9] to-[#0284C7] border-2 border-[#0369A1] text-white ring-2 ring-[#0284C7]/30 ring-offset-2 ring-offset-[#FAF8F3] shadow-[0_6px_16px_rgba(2,132,199,0.3),inset_0_1px_0_rgba(255,255,255,0.45)] sm:scale-[1.03]",
         linkedBg:
-          "bg-amber-500/12 border-2 border-dashed border-amber-400/85 text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.2)]",
-        badge: "bg-sky-500/20 text-sky-300 border-sky-500/30",
-        dot: "bg-sky-400",
-        layerPanel: "bg-sky-950/20 border-sky-500/25",
-        layerTitle: "text-sky-300",
-        layerTag: "text-sky-300 bg-sky-500/10 border border-sky-500/20",
+          "bg-gradient-to-b from-[#FFFBEB] to-[#FEF3C7] border-2 border-dashed border-[#D97706] text-[#78350F] shadow-[0_3px_10px_rgba(217,119,6,0.16),inset_0_1px_0_#FFFFFF]",
+        badge: "bg-[#F0F9FF] text-[#0369A1] border-[#BAE6FD]",
+        dot: "bg-[#0284C7]",
+        layerPanel:
+          "bg-[#EDF8FD] paper-grid-cobalt border-[#BAE6FD] shadow-[inset_0_2px_4px_rgba(2,132,199,0.06),0_4px_12px_-4px_rgba(2,132,199,0.08)]",
+        layerTitle: "text-[#075985]",
+        layerTag: "text-[#0369A1] bg-white border border-[#BAE6FD] shadow-xs",
       };
     case "backend":
       return {
         pillBg:
-          "bg-emerald-500/10 border-emerald-500/30 text-emerald-200 hover:border-emerald-400 hover:bg-emerald-500/20",
+          "bg-gradient-to-b from-white to-[#ECFDF5] border-[#A7F3D0] text-[#064E3B] shadow-[0_2px_4px_rgba(5,150,105,0.08),inset_0_1px_0_#FFFFFF] hover:border-[#059669]/75 hover:to-[#D1FAE5]",
         selectedBg:
-          "bg-slate-800 border-2 border-white text-white ring-2 ring-emerald-400/80 ring-offset-2 ring-offset-[#0d131f] shadow-[0_0_24px_rgba(16,185,129,0.45)] scale-[1.03]",
+          "bg-gradient-to-b from-[#10B981] to-[#059669] border-2 border-[#047857] text-white ring-2 ring-[#059669]/30 ring-offset-2 ring-offset-[#FAF8F3] shadow-[0_6px_16px_rgba(5,150,105,0.3),inset_0_1px_0_rgba(255,255,255,0.45)] sm:scale-[1.03]",
         linkedBg:
-          "bg-amber-500/12 border-2 border-dashed border-amber-400/85 text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.2)]",
-        badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-        dot: "bg-emerald-400",
-        layerPanel: "bg-emerald-950/20 border-emerald-500/25",
-        layerTitle: "text-emerald-300",
-        layerTag: "text-emerald-300 bg-emerald-500/10 border border-emerald-500/20",
+          "bg-gradient-to-b from-[#FFFBEB] to-[#FEF3C7] border-2 border-dashed border-[#D97706] text-[#78350F] shadow-[0_3px_10px_rgba(217,119,6,0.16),inset_0_1px_0_#FFFFFF]",
+        badge: "bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]",
+        dot: "bg-[#059669]",
+        layerPanel:
+          "paper-grid-mint border-[#A7F3D0] shadow-[inset_0_2px_4px_rgba(5,150,105,0.06),0_4px_12px_-4px_rgba(5,150,105,0.08)]",
+        layerTitle: "text-[#065F46]",
+        layerTag: "text-[#047857] bg-white border border-[#A7F3D0] shadow-xs",
       };
     case "security":
       return {
         pillBg:
-          "bg-purple-500/10 border-purple-500/30 text-purple-200 hover:border-purple-400 hover:bg-purple-500/20",
+          "bg-gradient-to-b from-white to-[#F5F3FF] border-[#DDD6FE] text-[#4C1D95] shadow-[0_2px_4px_rgba(124,58,237,0.08),inset_0_1px_0_#FFFFFF] hover:border-[#7C3AED]/75 hover:to-[#EDE9FE]",
         selectedBg:
-          "bg-slate-800 border-2 border-white text-white ring-2 ring-purple-400/80 ring-offset-2 ring-offset-[#0d131f] shadow-[0_0_24px_rgba(168,85,247,0.45)] scale-[1.03]",
+          "bg-gradient-to-b from-[#8B5CF6] to-[#7C3AED] border-2 border-[#6D28D9] text-white ring-2 ring-[#7C3AED]/30 ring-offset-2 ring-offset-[#FAF8F3] shadow-[0_6px_16px_rgba(124,58,237,0.3),inset_0_1px_0_rgba(255,255,255,0.45)] sm:scale-[1.03]",
         linkedBg:
-          "bg-amber-500/12 border-2 border-dashed border-amber-400/85 text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.2)]",
-        badge: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-        dot: "bg-purple-400",
-        layerPanel: "bg-purple-950/20 border-purple-500/25",
-        layerTitle: "text-purple-300",
-        layerTag: "text-purple-300 bg-purple-500/10 border border-purple-500/20",
+          "bg-gradient-to-b from-[#FFFBEB] to-[#FEF3C7] border-2 border-dashed border-[#D97706] text-[#78350F] shadow-[0_3px_10px_rgba(217,119,6,0.16),inset_0_1px_0_#FFFFFF]",
+        badge: "bg-[#F5F3FF] text-[#6D28D9] border-[#DDD6FE]",
+        dot: "bg-[#7C3AED]",
+        layerPanel:
+          "paper-grid-violet border-[#DDD6FE] shadow-[inset_0_2px_4px_rgba(124,58,237,0.06),0_4px_12px_-4px_rgba(124,58,237,0.08)]",
+        layerTitle: "text-[#5B21B6]",
+        layerTag: "text-[#6D28D9] bg-white border border-[#DDD6FE] shadow-xs",
       };
     default:
       return {
-        pillBg: "bg-slate-800/80 border-slate-700 text-slate-200",
-        selectedBg: "bg-slate-800 border-2 border-white text-white",
-        linkedBg: "bg-amber-500/12 border-2 border-dashed border-amber-400/85 text-amber-100",
-        badge: "bg-white/10 text-white border-white/20",
-        dot: "bg-white",
-        layerPanel: "bg-slate-900/40 border-slate-800",
-        layerTitle: "text-white",
-        layerTag: "text-slate-300 bg-slate-800",
+        pillBg:
+          "bg-gradient-to-b from-white to-[#F4EFE6] border-[#D9D2C5] text-[#18181B]",
+        selectedBg:
+          "bg-gradient-to-b from-[#27272A] to-[#141413] border-2 border-[#09090B] text-white",
+        linkedBg:
+          "bg-gradient-to-b from-[#FFFBEB] to-[#FEF3C7] border-2 border-dashed border-[#D97706] text-[#78350F]",
+        badge: "bg-[#EDE8DF] text-[#18181B] border-[#D9D2C5]",
+        dot: "bg-[#18181B]",
+        layerPanel: "bg-[#F2EFE8] border-[#DFD9CE]",
+        layerTitle: "text-[#18181B]",
+        layerTag: "text-[#3F3F46] bg-white border border-[#DFD9CE]",
       };
   }
 }

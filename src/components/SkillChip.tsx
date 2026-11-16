@@ -23,21 +23,21 @@ export const SkillChip: React.FC<SkillChipProps> = ({
 
   const popupContent = (
     <div className="space-y-1.5">
-      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5">
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-white truncate">
+      <div className="flex items-center justify-between gap-2 border-b border-[#E5DFD5] pb-1.5">
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#18181B] truncate">
           <span className="shrink-0">{node.logo}</span>
           <span className="truncate">{node.shortName || node.name}</span>
         </span>
-        <span className="text-[10px] font-mono text-cyan-300 shrink-0">
+        <span className="text-[10px] font-mono font-semibold text-[#2563EB] shrink-0">
           {node.level}
         </span>
       </div>
-      <p className="text-[11px] text-slate-300 leading-snug font-sans">
+      <p className="text-[11px] text-[#3F3F46] leading-snug font-sans">
         {node.role}
       </p>
-      <div className="text-[10px] font-mono text-slate-400 flex items-center justify-between pt-0.5">
+      <div className="text-[10px] font-mono text-[#71717A] flex items-center justify-between pt-0.5">
         <span>{node.categoryLabel}</span>
-        <span className="text-cyan-300">Inspect ↗</span>
+        <span className="text-[#2563EB] font-semibold">Inspect ↗</span>
       </div>
     </div>
   );
@@ -47,7 +47,7 @@ export const SkillChip: React.FC<SkillChipProps> = ({
       <motion.button
         type="button"
         whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.97 }}
+        whileTap={{ scale: 0.97, y: 1 }}
         transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => {
           if (stopPropagation) e.stopPropagation();
@@ -61,7 +61,7 @@ export const SkillChip: React.FC<SkillChipProps> = ({
       >
         <span className="shrink-0">{node.logo}</span>
         <span className="font-semibold leading-snug">{node.name}</span>
-        <ArrowUpRight className="w-3 h-3 shrink-0 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        <ArrowUpRight className="w-3 h-3 shrink-0 opacity-55 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
       </motion.button>
     </HoverPopup>
   );

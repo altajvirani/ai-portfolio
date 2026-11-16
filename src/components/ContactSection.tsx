@@ -10,10 +10,13 @@ import {
   AlertCircle,
   Loader2,
   ExternalLink,
+  Copy,
+  Check,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { SOCIAL_LINKS } from "../data/portfolioData.ts";
 import { HoverPopup } from "./HoverPopup.tsx";
+import { InteractiveEmphasis, MagneticTitle } from "./InteractiveText.tsx";
 
 const XIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -50,8 +53,44 @@ export const ContactSection: React.FC = () => {
   });
   const [isSending, setIsSending] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const [submissionResult, setSubmissionResult] =
     useState<ContactSubmissionResult | null>(null);
+
+  const handleCopyEmail = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    let copied = false;
+
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(SOCIAL_LINKS.email);
+        copied = true;
+      } catch {
+        copied = false;
+      }
+    }
+
+    if (!copied) {
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = SOCIAL_LINKS.email;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.pointerEvents = "none";
+        document.body.appendChild(textarea);
+        textarea.select();
+        copied = document.execCommand("copy");
+        document.body.removeChild(textarea);
+      } catch {
+        copied = false;
+      }
+    }
+
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 1800);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,67 +132,98 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="scroll-mt-16 py-20 relative bg-[#0d131f]">
-      <div className="max-w-6xl mx-auto px-5 sm:px-6 space-y-10">
+    <section
+      id="contact"
+      className="scroll-mt-16 py-16 sm:py-20 relative bg-[#F7F4EE] paper-grain"
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-10">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-semibold mb-2 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="text-xs font-mono uppercase tracking-wider text-[#2563EB] font-bold mb-2 flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
               <span>Get in Touch</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
-              Contact & Connections
-            </h2>
+            <MagneticTitle>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-[#18181B] tracking-tight">
+                Contact &amp;{" "}
+                <InteractiveEmphasis tone="mint" className="text-[#047857]">
+                  Connections
+                </InteractiveEmphasis>
+              </h2>
+            </MagneticTitle>
           </div>
-          <p className="text-sm text-slate-300 max-w-sm">
+          <p className="text-sm text-[#52525B] max-w-sm leading-relaxed">
             Reach out for collaborations, engineering inquiries, or technical
             discussions.
           </p>
         </div>
 
         {/* 2-Column Contact Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left Column: Direct Info & Social Profiles (5 cols) */}
-          <div className="lg:col-span-5 p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800 space-y-6 shadow-xl flex flex-col justify-between">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+          {/* Left Column: Textured Direct Info & Brand-Tinted Social Keycaps */}
+          <div className="lg:col-span-5 p-5 sm:p-8 rounded-2xl paper-cutout paper-grid-cobalt border-[#BFDBFE] space-y-6 flex flex-col justify-between">
             <div className="space-y-5">
               <div>
-                <h3 className="text-lg font-bold font-display text-white mb-1.5">
+                <h3 className="text-lg font-bold font-display text-[#18181B] mb-1.5">
                   Direct Channels
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                <p className="text-xs text-[#3F3F46] leading-relaxed font-sans">
                   Email directly or connect across developer networks and
                   messaging.
                 </p>
               </div>
 
               <div className="space-y-3">
-                <a
-                  href={`mailto:${SOCIAL_LINKS.email}`}
-                  className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-cyan-400/50 hover:bg-slate-900 transition-all group cursor-pointer"
-                >
-                  <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 group-hover:bg-cyan-500/30">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
-                      Email
-                    </span>
-                    <span className="text-xs font-mono text-slate-200 group-hover:text-white">
-                      {SOCIAL_LINKS.email}
-                    </span>
-                  </div>
-                </a>
+                <div className="flex items-center justify-between gap-2 p-3 rounded-xl bg-white paper-cutout-sm group">
+                  <a
+                    href={`mailto:${SOCIAL_LINKS.email}`}
+                    className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer"
+                  >
+                    <div className="p-2 rounded-lg bg-[#EFF6FF] border border-[#93C5FD] text-[#2563EB] shrink-0">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-[#52525B] block font-bold">
+                        Email
+                      </span>
+                      <span className="text-xs font-mono font-bold text-[#18181B] group-hover:text-[#2563EB] truncate block">
+                        {SOCIAL_LINKS.email}
+                      </span>
+                    </div>
+                  </a>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
-                  <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400">
+                  <motion.button
+                    type="button"
+                    whileTap={{ scale: 0.94 }}
+                    onClick={handleCopyEmail}
+                    aria-label="Copy email address"
+                    className="min-h-[34px] px-2.5 py-1 rounded-lg skeuo-btn-cobalt text-[11px] font-mono font-bold text-white flex items-center gap-1 cursor-pointer shrink-0 transition-colors"
+                  >
+                    {copiedEmail ? (
+                      <>
+                        <Check className="w-3 h-3 text-[#86EFAC]" />
+                        <span>Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+
+                {/* Warm Kraft Paper Location Stamp Tile */}
+                <div className="flex items-center gap-3 p-3.5 rounded-xl paper-kraft">
+                  <div className="p-2 rounded-lg bg-white border border-[#C9A673] text-[#D97706] shadow-xs">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#78350F] block font-bold">
                       Location
                     </span>
-                    <span className="text-xs font-mono text-slate-200">
+                    <span className="text-xs font-mono font-bold text-[#4A2E12]">
                       {SOCIAL_LINKS.location}
                     </span>
                   </div>
@@ -163,108 +233,102 @@ export const ContactSection: React.FC = () => {
 
             {/* Social Grid (Instagram & WhatsApp side by side) */}
             <div className="pt-2">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-3 font-semibold">
-                Socials & Code
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#1E3A8A] block mb-3 font-bold">
+                Socials &amp; Code
               </span>
               <div className="grid grid-cols-2 gap-2.5">
-                <motion.a
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.97 }}
+                <a
                   href={SOCIAL_LINKS.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-cyan-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-cyan-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
+                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#BFDBFE] hover:bg-[#EFF6FF] hover:border-[#2563EB] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
                 >
-                  <Linkedin className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <Linkedin className="w-4 h-4 text-[#2563EB] shrink-0" />
                   <span className="truncate">LinkedIn</span>
-                </motion.a>
-                <motion.a
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.97 }}
+                </a>
+                <a
                   href={SOCIAL_LINKS.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-colors cursor-pointer min-w-0"
+                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#D4CEC3] hover:bg-[#F4F4F5] hover:border-[#18181B] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
                 >
-                  <Github className="w-4 h-4 text-slate-400 shrink-0" />
+                  <Github className="w-4 h-4 text-[#18181B] shrink-0" />
                   <span className="truncate">GitHub</span>
-                </motion.a>
-                <motion.a
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.97 }}
+                </a>
+                <a
                   href={SOCIAL_LINKS.stackoverflow}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-orange-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-orange-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
+                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#FED7AA] hover:bg-[#FFF7ED] hover:border-[#EA580C] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
                 >
-                  <StackOverflowIcon className="w-4 h-4 text-orange-400 shrink-0" />
+                  <StackOverflowIcon className="w-4 h-4 text-[#EA580C] shrink-0" />
                   <span className="truncate">Stack Overflow</span>
-                </motion.a>
-                <motion.a
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.97 }}
+                </a>
+                <a
                   href={SOCIAL_LINKS.x}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-600 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-colors cursor-pointer min-w-0"
+                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#D4CEC3] hover:bg-[#F4F4F5] hover:border-[#18181B] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
                 >
-                  <XIcon className="w-4 h-4 text-slate-300 shrink-0" />
+                  <XIcon className="w-4 h-4 text-[#18181B] shrink-0" />
                   <span className="truncate">X (Twitter)</span>
-                </motion.a>
-                <motion.a
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.97 }}
+                </a>
+                <a
                   href={SOCIAL_LINKS.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-pink-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-pink-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
+                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#FBCFE8] hover:bg-[#FDF2F8] hover:border-[#DB2777] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
                 >
-                  <Instagram className="w-4 h-4 text-pink-400 shrink-0" />
+                  <Instagram className="w-4 h-4 text-[#DB2777] shrink-0" />
                   <span className="truncate">Instagram</span>
-                </motion.a>
+                </a>
                 <HoverPopup
                   align="right"
                   className="w-full"
                   content={
                     <div className="space-y-1 text-xs font-mono">
-                      <div className="font-semibold text-emerald-300">
+                      <div className="font-bold text-[#16A34A]">
                         Direct WhatsApp Chat
                       </div>
-                      <p className="text-[11px] text-slate-300 font-sans">
+                      <p className="text-[11px] text-[#52525B] font-sans">
                         Opens +91 73039 34303 in WhatsApp.
                       </p>
                     </div>
                   }
                 >
-                  <motion.a
-                    whileHover={{ y: -2 }}
-                    whileTap={{ scale: 0.97 }}
+                  <a
                     href={SOCIAL_LINKS.whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 text-[11px] sm:text-xs font-mono text-slate-300 hover:text-emerald-300 flex items-center gap-2 transition-colors cursor-pointer min-w-0"
+                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-[#ECFDF5] border border-[#6EE7B7] hover:bg-[#D1FAE5] hover:border-[#059669] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#065F46] flex items-center gap-2 min-w-0 transition-colors"
                   >
-                    <WhatsAppIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <WhatsAppIcon className="w-4 h-4 text-[#059669] shrink-0" />
                     <span className="truncate">WhatsApp</span>
-                  </motion.a>
+                  </a>
                 </HoverPopup>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Interactive Contact Form (7 cols) */}
-          <div className="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800 shadow-xl flex flex-col">
+          {/* Right Column: Air-Mail Stationery Tactile Contact Form */}
+          <div className="lg:col-span-7 p-5 sm:p-8 pt-7 rounded-2xl paper-cutout bg-[#FFFDF9] flex flex-col relative overflow-hidden">
+            {/* Air-Mail Striped Top Envelope Trim */}
+            <div
+              aria-hidden="true"
+              className="absolute top-0 inset-x-0 h-2.5 airmail-border"
+            />
+
             {submissionResult ? (
               <div className="my-auto py-8 text-center space-y-4">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center mx-auto text-emerald-400">
+                <div className="w-12 h-12 rounded-full bg-[#DCFCE7] border border-[#86EFAC] flex items-center justify-center mx-auto text-[#16A34A] shadow-xs">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold font-display text-white">
+                <h3 className="text-xl font-bold font-display text-[#18181B]">
                   {submissionResult.delivered
                     ? "Email Sent Successfully"
                     : "Message Prepared"}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#52525B] max-w-md mx-auto leading-relaxed">
                   {submissionResult.message}
                 </p>
 
@@ -274,16 +338,16 @@ export const ContactSection: React.FC = () => {
                       href={submissionResult.gmailUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-xs font-mono text-cyan-200 inline-flex items-center gap-1.5 transition-colors"
+                      className="min-h-[42px] px-4 py-2 rounded-xl skeuo-btn-cobalt text-xs font-mono font-bold inline-flex items-center gap-1.5"
                     >
                       <span>Send via Gmail</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                     <a
                       href={submissionResult.mailtoUrl}
-                      className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 inline-flex items-center gap-1.5 transition-colors"
+                      className="min-h-[42px] px-4 py-2 rounded-xl skeuo-btn-ivory text-xs font-mono font-semibold inline-flex items-center gap-1.5"
                     >
-                      <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                      <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
                       <span>Open Mail App</span>
                     </a>
                   </div>
@@ -301,7 +365,7 @@ export const ContactSection: React.FC = () => {
                         message: "",
                       });
                     }}
-                    className="mt-2 px-4 py-2 text-xs font-mono text-cyan-300 hover:text-white bg-slate-800 border border-slate-700 rounded-lg cursor-pointer transition-colors"
+                    className="mt-2 min-h-[40px] px-4 py-2 text-xs font-mono font-semibold skeuo-btn-ivory rounded-xl cursor-pointer"
                   >
                     Send another message
                   </button>
@@ -310,14 +374,14 @@ export const ContactSection: React.FC = () => {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="space-y-4 h-full flex flex-col"
+                className="space-y-4 h-full flex flex-col pt-1"
               >
                 {errorMsg && (
                   <div
                     role="alert"
-                    className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/40 text-xs font-mono text-rose-200 flex items-center gap-2"
+                    className="p-3 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-xs font-mono text-[#B91C1C] flex items-center gap-2"
                   >
-                    <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <AlertCircle className="w-4 h-4 text-[#DC2626] shrink-0" />
                     <span>{errorMsg}</span>
                   </div>
                 )}
@@ -326,7 +390,7 @@ export const ContactSection: React.FC = () => {
                   <div className="space-y-1.5">
                     <label
                       htmlFor="contact-name"
-                      className="text-[11px] font-mono text-slate-300 font-semibold block"
+                      className="text-[11px] font-mono text-[#3F3F46] font-bold block"
                     >
                       Your Name *
                     </label>
@@ -339,13 +403,13 @@ export const ContactSection: React.FC = () => {
                         setFormData({ ...formData, name: e.target.value })
                       }
                       placeholder="e.g. Alex Rivera"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-cyan-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500 transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#FBF8F1] border border-[#D8D0C1] shadow-[inset_0_2px_4px_rgba(24,24,27,0.06)] focus:bg-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 focus:outline-none text-xs font-mono text-[#18181B] placeholder-[#71717A] transition-all"
                     />
                   </div>
                   <div className="space-y-1.5">
                     <label
                       htmlFor="contact-email"
-                      className="text-[11px] font-mono text-slate-300 font-semibold block"
+                      className="text-[11px] font-mono text-[#3F3F46] font-bold block"
                     >
                       Email Address *
                     </label>
@@ -358,7 +422,7 @@ export const ContactSection: React.FC = () => {
                         setFormData({ ...formData, email: e.target.value })
                       }
                       placeholder="name@company.com"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-cyan-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500 transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#FBF8F1] border border-[#D8D0C1] shadow-[inset_0_2px_4px_rgba(24,24,27,0.06)] focus:bg-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 focus:outline-none text-xs font-mono text-[#18181B] placeholder-[#71717A] transition-all"
                     />
                   </div>
                 </div>
@@ -366,7 +430,7 @@ export const ContactSection: React.FC = () => {
                 <div className="space-y-1.5">
                   <label
                     htmlFor="contact-subject"
-                    className="text-[11px] font-mono text-slate-300 font-semibold block"
+                    className="text-[11px] font-mono text-[#3F3F46] font-bold block"
                   >
                     Subject
                   </label>
@@ -378,14 +442,14 @@ export const ContactSection: React.FC = () => {
                       setFormData({ ...formData, subject: e.target.value })
                     }
                     placeholder="Engineering Collaboration / Inquiry"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-cyan-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500 transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FBF8F1] border border-[#D8D0C1] shadow-[inset_0_2px_4px_rgba(24,24,27,0.06)] focus:bg-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 focus:outline-none text-xs font-mono text-[#18181B] placeholder-[#71717A] transition-all"
                   />
                 </div>
 
                 <div className="space-y-1.5 grow flex flex-col">
                   <label
                     htmlFor="contact-message"
-                    className="text-[11px] font-mono text-slate-300 font-semibold block"
+                    className="text-[11px] font-mono text-[#3F3F46] font-bold block"
                   >
                     Message *
                   </label>
@@ -398,14 +462,16 @@ export const ContactSection: React.FC = () => {
                       setFormData({ ...formData, message: e.target.value })
                     }
                     placeholder="Write your note or question here..."
-                    className="w-full grow min-h-[120px] px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-cyan-400 focus:outline-none text-xs font-mono text-white placeholder-slate-500 resize-none transition-colors"
+                    className="w-full grow min-h-[120px] px-3.5 py-2.5 rounded-xl bg-[#FBF8F1] border border-[#D8D0C1] shadow-[inset_0_2px_4px_rgba(24,24,27,0.06)] focus:bg-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 focus:outline-none text-xs font-mono text-[#18181B] placeholder-[#71717A] resize-none transition-all"
                   />
                 </div>
 
-                <button
+                <motion.button
                   type="submit"
                   disabled={isSending}
-                  className="w-full py-3 rounded-xl bg-white hover:bg-slate-100 disabled:opacity-60 text-slate-950 font-mono font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full min-h-[46px] py-3 rounded-xl skeuo-btn-cobalt skeuo-sheen disabled:opacity-60 font-mono font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isSending ? (
                     <>
@@ -414,11 +480,11 @@ export const ContactSection: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Send className="w-3.5 h-3.5" />
+                      <Send className="w-3.5 h-3.5 text-white" />
                       <span>Send Message</span>
                     </>
                   )}
-                </button>
+                </motion.button>
               </form>
             )}
           </div>

@@ -37,11 +37,11 @@ export const HoverPopup: React.FC<HoverPopupProps> = ({
         {open && (
           <motion.div
             role="tooltip"
-            initial={{ opacity: 0, y: 6, scale: 0.96 }}
+            initial={{ opacity: 0, y: 8, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.97 }}
-            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-            className={`hidden md:block pointer-events-none absolute bottom-full mb-2.5 z-50 w-64 p-3 rounded-xl bg-slate-900/95 backdrop-blur-md border border-slate-700/90 shadow-[0_12px_32px_rgba(0,0,0,0.65)] text-left ${alignClasses}`}
+            exit={{ opacity: 0, y: 4, scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 460, damping: 28 }}
+            className={`hidden md:block pointer-events-none absolute bottom-full mb-2.5 z-50 w-64 p-3 rounded-xl skeuo-glass text-left ${alignClasses}`}
           >
             {content}
           </motion.div>

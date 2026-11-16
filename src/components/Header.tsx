@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Link as LinkIcon } from "lucide-react";
+import { Menu, X, Link as LinkIcon, Command } from "lucide-react";
+import { motion, useScroll, useSpring, AnimatePresence } from "motion/react";
 import { computeActiveSections } from "../utils/portfolioHelpers.ts";
 
 const SECTION_IDS = [
@@ -19,9 +20,20 @@ const NAV_LINKS = [
   { label: "Contact", id: "contact" },
 ];
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  onOpenShortcuts?: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ onOpenShortcuts }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSections, setActiveSections] = useState<string[]>(["hero"]);
+
+  const { scrollYProgress } = useScroll();
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 240,
+    damping: 32,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     let rafId = 0;
@@ -74,67 +86,85 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-[#0d131f]/90 border-b border-slate-800/80 transition-colors">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
+    <header className="sticky top-0 z-40 backdrop-blur-xl backdrop-saturate-150 bg-[#F7F4EE]/84 border-b border-[#DCD5C9] shadow-[0_4px_20px_rgba(24,24,27,0.05),inset_0_1px_0_rgba(255,255,255,0.9)] transition-colors">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4 sm:gap-6">
         {/* Brand Zone */}
         <button
+          type="button"
           onClick={() => scrollTo("hero")}
-          className="flex items-center gap-2 text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg shrink-0"
+          className="flex items-center gap-2.5 text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] rounded-xl shrink-0"
         >
           <img
             src="/assets/monogram-badge.png"
             alt="Altaj Virani monogram"
-            className="h-9 w-9 object-contain shrink-0"
+            className="h-9 w-9 object-contain shrink-0 drop-shadow-sm transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3"
           />
           <span className="flex flex-col justify-center leading-tight">
-            <span className="text-base font-extrabold font-display tracking-tight text-white group-hover:text-cyan-400 transition-colors whitespace-nowrap">
+            <span className="text-base font-extrabold font-display tracking-tight text-[#18181B] group-hover:text-[#2563EB] transition-colors whitespace-nowrap">
               ALTAJ VIRANI
             </span>
-            <span className="block text-[10px] font-mono tracking-widest text-slate-400 uppercase whitespace-nowrap">
+            <span className="block text-[10px] font-mono tracking-widest text-[#52525B] uppercase whitespace-nowrap">
               Azure AI Engineer
             </span>
           </span>
         </button>
 
-        {/* Desktop Navigation */}
-        <nav aria-label="Primary navigation" className="hidden md:flex items-center gap-5">
+        {/* Desktop Navigation inside recessed hardware tray */}
+        <nav
+          aria-label="Primary navigation"
+          className="hidden md:flex items-center gap-1.5 p-1 rounded-2xl skeuo-well"
+        >
           {NAV_LINKS.map((link) => {
             const isActive = activeSections.includes(link.id);
             return (
-              <button
+              <motion.button
                 key={link.id}
+                type="button"
+                whileHover={{ y: -1 }}
+                whileTap={{ y: 1, scale: 0.98 }}
+                transition={{ duration: 0.12 }}
                 onClick={() => scrollTo(link.id)}
                 aria-current={isActive ? "page" : undefined}
                 data-active={isActive ? "true" : "false"}
-                className={`relative px-2.5 py-1.5 text-xs font-mono tracking-wide transition-all cursor-pointer whitespace-nowrap shrink-0 rounded-lg ${
+                className={`relative px-3.5 py-1.5 text-xs font-mono tracking-wide transition-all cursor-pointer whitespace-nowrap shrink-0 rounded-xl ${
                   isActive
-                    ? "text-cyan-300 font-semibold bg-cyan-500/10"
-                    : "text-slate-300 hover:text-white hover:bg-slate-800/50"
+                    ? "skeuo-btn-cobalt text-white font-semibold"
+                    : "text-[#52525B] hover:text-[#18181B] hover:bg-white/75"
                 }`}
               >
                 <span>{link.label}</span>
-                {isActive && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]"
-                  />
-                )}
-              </button>
+              </motion.button>
             );
           })}
         </nav>
 
-        {/* Desktop Primary Action: Resume */}
-        <div className="hidden md:flex items-center gap-3 shrink-0">
-          <a
+        {/* Desktop Right Actions: Shortcuts + Resume */}
+        <div className="hidden md:flex items-center gap-2 shrink-0">
+          {onOpenShortcuts && (
+            <motion.button
+              type="button"
+              whileHover={{ y: -1 }}
+              whileTap={{ y: 1, scale: 0.97 }}
+              onClick={onOpenShortcuts}
+              title="Open Quick Shortcuts (⌘K / Ctrl+K)"
+              aria-label="Open Quick Shortcuts"
+              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-2 text-[11px] font-mono font-bold skeuo-btn-ivory rounded-xl text-[#3F3F46] hover:text-[#2563EB] cursor-pointer"
+            >
+              <Command className="w-3.5 h-3.5 text-[#2563EB]" />
+              <span>K</span>
+            </motion.button>
+          )}
+          <motion.a
+            whileHover={{ y: -1 }}
+            whileTap={{ y: 1, scale: 0.98 }}
             href="https://flowcv.com/resume/gg0rtbkh7jul"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 text-xs font-mono font-medium text-slate-200 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400/50 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0"
+            className="px-4 py-2 text-xs font-mono font-semibold skeuo-btn-ivory skeuo-sheen rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
-            <LinkIcon className="w-3.5 h-3.5 text-cyan-400" />
+            <LinkIcon className="w-3.5 h-3.5 text-[#2563EB]" />
             <span>Resume</span>
-          </a>
+          </motion.a>
         </div>
 
         {/* Mobile Controls */}
@@ -144,15 +174,16 @@ export const Header: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Resume"
-            className="p-2.5 text-slate-300 hover:text-white bg-slate-900/80 border border-slate-700/80 rounded-lg"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center skeuo-btn-ivory rounded-xl text-[#18181B]"
           >
-            <LinkIcon className="w-4 h-4 text-cyan-400" />
+            <LinkIcon className="w-4 h-4 text-[#2563EB]" />
           </a>
           <button
+            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
-            className="p-2.5 text-slate-300 hover:text-white bg-slate-900/80 border border-slate-700/80 rounded-lg cursor-pointer"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center skeuo-btn-ivory rounded-xl text-[#18181B] cursor-pointer"
           >
             {mobileMenuOpen ? (
               <X className="w-5 h-5" />
@@ -163,48 +194,75 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <nav
-          aria-label="Mobile navigation"
-          className="md:hidden border-b border-slate-800 bg-[#0d131f]/98 px-6 py-4 space-y-2 animate-fadeIn"
-        >
-          {NAV_LINKS.map((link) => {
-            const isActive = activeSections.includes(link.id);
-            return (
-              <button
-                key={link.id}
-                onClick={() => scrollTo(link.id)}
-                aria-current={isActive ? "page" : undefined}
-                data-active={isActive ? "true" : "false"}
-                className={`w-full text-left py-2.5 px-3 text-sm font-mono rounded-lg transition-all flex items-center justify-between cursor-pointer border ${
-                  isActive
-                    ? "bg-cyan-500/15 border-cyan-400/50 text-cyan-200 font-semibold shadow-[0_0_12px_rgba(56,189,248,0.15)]"
-                    : "border-transparent border-b-slate-800/60 text-slate-300 hover:text-cyan-300 hover:bg-slate-900/60"
-                }`}
+      {/* Hairline Cobalt Scroll Reading Gauge */}
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: smoothProgress, originX: 0 }}
+        className="h-[2px] w-full bg-gradient-to-r from-[#2563EB] via-[#0EA5E9] to-[#10B981]"
+      />
+
+      {/* Frosted Mobile Drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            aria-label="Mobile navigation"
+            className="md:hidden border-b border-[#DCD5C9] bg-[#FAF8F3]/95 backdrop-blur-xl px-4 py-4 space-y-2 shadow-lg"
+          >
+            {NAV_LINKS.map((link) => {
+              const isActive = activeSections.includes(link.id);
+              return (
+                <button
+                  key={link.id}
+                  type="button"
+                  onClick={() => scrollTo(link.id)}
+                  aria-current={isActive ? "page" : undefined}
+                  data-active={isActive ? "true" : "false"}
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 text-sm font-mono rounded-xl transition-all flex items-center justify-between cursor-pointer ${
+                    isActive
+                      ? "skeuo-btn-cobalt text-white font-semibold"
+                      : "skeuo-btn-ivory text-[#3F3F46]"
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  {isActive && (
+                    <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/20 text-white font-bold">
+                      Active
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+            <div className="pt-2 grid grid-cols-2 gap-2">
+              {onOpenShortcuts && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenShortcuts();
+                  }}
+                  className="min-h-[44px] py-2.5 text-xs font-mono font-semibold text-center skeuo-btn-ivory rounded-xl flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Command className="w-3.5 h-3.5 text-[#2563EB]" />
+                  <span>Shortcuts</span>
+                </button>
+              )}
+              <a
+                href="https://flowcv.com/resume/gg0rtbkh7jul"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="min-h-[44px] py-2.5 text-xs font-mono font-semibold text-center skeuo-btn-dark skeuo-sheen rounded-xl flex items-center justify-center gap-2"
               >
-                <span>{link.label}</span>
-                {isActive && (
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-300">
-                    Active
-                  </span>
-                )}
-              </button>
-            );
-          })}
-          <div className="pt-2">
-            <a
-              href="https://flowcv.com/resume/gg0rtbkh7jul"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-2.5 text-xs font-mono font-medium text-center text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg flex items-center justify-center gap-2"
-            >
-              <LinkIcon className="w-4 h-4 text-cyan-400" />
-              <span>Resume</span>
-            </a>
-          </div>
-        </nav>
-      )}
+                <LinkIcon className="w-4 h-4 text-[#93C5FD]" />
+                <span>Resume</span>
+              </a>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
