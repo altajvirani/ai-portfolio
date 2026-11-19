@@ -139,6 +139,15 @@ export async function processRAGQuery(
   history: Array<{ role: 'user' | 'model'; text: string }> = [],
   conversationId?: string,
 ): Promise<RAGResponse> {
+  if (!query || query.length > 4000) {
+    throw new Error("Invalid chat query.");
+  }
+  const boundedHistory = history
+    .slice(-6)
+    .map((message) => ({
+      role: message.role,
+      text: message.text.slice(0, 4000),
+    }));
   const relevantChunks = searchKnowledge(query, 3);
   const sources = Array.from(new Set(relevantChunks.map((c) => c.source)));
 
@@ -160,7 +169,7 @@ export async function processRAGQuery(
       });
 
       const memory = conversationId ? await getChatMemory(conversationId) : { summary: "", recentMessages: [] };
-      const recentHistory = history.slice(-6);
+      const recentHistory = boundedHistory;
       const systemInstruction = `You are Altaj Virani's AI Twin representative.
 Speak confidently, concisely, and in the first person only when answering as Altaj.
 Ground every factual claim in the supplied resume File Search results.
@@ -222,13 +231,22 @@ Please formulate a helpful, grounded response:`;
         const needsSummary = nextRecent.length >= 6;
         let summary = memory.summary;
         if (needsSummary) {
-          const summaryResponse = await ai.models.generateContent({
+          const summaryPromise = ai.models.generateContent({
             model: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
             contents: `Summarize this portfolio chat in 3 concise sentences. Preserve user interests, important follow-up topics, and unanswered questions.\n\nPrevious summary: ${memory.summary || "None"}\n\nConversation:\n${nextRecent.map((message) => `${message.role}: ${message.text}`).join('\n')}`,
             config: {
               thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
             },
           });
+          const summaryTimeout = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error("Gemini summary call exceeded timeout")), 3500)
+          );
+          let summaryResponse: Awaited<typeof summaryPromise>;
+          try {
+            summaryResponse = await Promise.race([summaryPromise, summaryTimeout]);
+          } catch {
+            summaryResponse = { text: undefined } as Awaited<typeof summaryPromise>;
+          }
           summary = (summaryResponse.text || summary).slice(0, 4000);
         }
         await saveChatMemory(conversationId, {

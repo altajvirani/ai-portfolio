@@ -1,19 +1,54 @@
 import { normalizeConversationId } from "./chatMemory.ts";
 import { processRAGQuery } from "./ragEngine.ts";
+import { createHash } from "node:crypto";
+import { checkChatRateLimit } from "./chatRateLimit.ts";
 
-function jsonResponse(body: unknown, status = 200) {
+function jsonResponse(body: unknown, status = 200, extraHeaders?: Record<string, string>) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "Content-Type": "application/json",
       "Cache-Control": "no-store",
       "X-Content-Type-Options": "nosniff",
+      ...extraHeaders,
     },
   });
 }
 
 export async function handleChatRequest(request: Request) {
   if (request.method !== "POST") return jsonResponse({ error: "Method not allowed." }, 405);
+  const origin = request.headers.get("origin");
+  const expectedOrigin = (process.env.APP_URL || new URL(request.url).origin).replace(/\/$/, "");
+  if (origin && origin.replace(/\/$/, "") !== expectedOrigin) {
+    return jsonResponse({ error: "Chat requests must originate from this portfolio." }, 403);
+  }
+  const referer = request.headers.get("referer");
+  if (!origin && !referer) {
+    return jsonResponse({ error: "Chat requests must originate from this portfolio." }, 403);
+  }
+  if (!origin && referer) {
+    try {
+      if (new URL(referer).origin !== expectedOrigin) {
+        return jsonResponse({ error: "Chat requests must originate from this portfolio." }, 403);
+      }
+    } catch {
+      return jsonResponse({ error: "Invalid request origin." }, 403);
+    }
+  }
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const ip = forwardedFor?.split(",")[0]?.trim()
+    || request.headers.get("x-real-ip")
+    || request.headers.get("cf-connecting-ip")
+    || "unknown";
+  const ipKey = createHash("sha256").update(ip).digest("hex");
+  const limit = await checkChatRateLimit(ipKey);
+  if (!limit.allowed) {
+    return jsonResponse(
+      { error: "Usage limit reached. Please try again later." },
+      429,
+      { "Retry-After": String(limit.retryAfterSeconds) },
+    );
+  }
   let payload: { message?: unknown; history?: unknown; conversationId?: unknown };
   try {
     payload = await request.json() as typeof payload;
