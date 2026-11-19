@@ -46,12 +46,12 @@ export function searchKnowledge(query: string, topK = 4): KnowledgeChunk[] {
     }
 
     // Specific domain intent boosts
-    if (queryLower.includes('viki') && chunk.id === 'viki_ai_platform') score += 40;
-    if ((queryLower.includes('mcp') || queryLower.includes('model context protocol')) && (chunk.id === 'viki_ai_platform' || chunk.id === 'enterprise_ai_applications')) score += 35;
+    if ((queryLower.includes('agentic') || queryLower.includes('operations platform')) && chunk.id === 'agentic_ai_platform') score += 40;
+    if ((queryLower.includes('mcp') || queryLower.includes('model context protocol')) && (chunk.id === 'agentic_ai_platform' || chunk.id === 'enterprise_ai_applications')) score += 35;
     if ((queryLower.includes('key vault') || queryLower.includes('cache') || queryLower.includes('35x')) && chunk.id === 'key_vault_optimization') score += 40;
     if ((queryLower.includes('oom') || queryLower.includes('memory') || queryLower.includes('crash')) && chunk.id === 'oom_root_cause_scaling') score += 40;
     if ((queryLower.includes('load') || queryLower.includes('scale') || queryLower.includes('capacity')) && chunk.id === 'load_testing_capacity_suite') score += 35;
-    if ((queryLower.includes('owasp') || queryLower.includes('ssrf') || queryLower.includes('security') || queryLower.includes('purview') || queryLower.includes('dast')) && chunk.id === 'security_governance') score += 42;
+    if ((queryLower.includes('owasp') || queryLower.includes('ssrf') || queryLower.includes('security') || queryLower.includes('dast') || queryLower.includes('compliance')) && chunk.id === 'security_governance') score += 42;
     if ((queryLower.includes('ieee') || queryLower.includes('paper') || queryLower.includes('publication') || queryLower.includes('research')) && chunk.id === 'research_publications') score += 45;
     if ((queryLower.includes('copyright') || queryLower.includes('patent') || queryLower.includes('autoqa ai') || queryLower.includes('offline')) && (chunk.id === 'patents_copyrights' || chunk.id === 'notable_projects')) score += 42;
     if ((queryLower.includes('snapwright') || queryLower.includes('vscode') || queryLower.includes('extension') || queryLower.includes('pagefactory') || queryLower.includes('pom')) && chunk.id === 'notable_projects') score += 45;
@@ -159,13 +159,12 @@ export async function processRAGQuery(
 
       const systemInstruction = `You are Altaj Virani's official AI Twin representative. You speak as Altaj (or on behalf of Altaj) in a confident, articulate, highly technical, and concise voice.
 Your knowledge is grounded strictly in Altaj's verified resume documents:
-- altaj-virani-resume.pdf
-- altaj-virani_ltm-resume.pdf
+- resume-altaj-virani.pdf
 
 CORE PRINCIPLES:
-1. Cover Altaj's real work across Azure Network Engineering (Viki-AI, MCP toolkits, 250+ domain tools), Microsoft Power Apps & Copilot Studio QA/SDK engineering, cloud reliability (35x Key Vault cache optimization, zero-OOM compute, 35,500 load-test workflows), OWASP/SSRF security, IEEE ICSCSS 2023 publication, Govt. of India copyright (AutoQA AI), SnapWright VS Code extension, Nivesh crowdfunding app, awards, and education cleanly.
+1. Cover Altaj's real work across Azure AI and agentic platform engineering (MCP toolkits and domain tools), Microsoft Power Platform QA/SDK engineering, cloud reliability (35x Key Vault cache optimization, zero-OOM compute, 35,500 load-test workflows), OWASP/SSRF security, IEEE ICSCSS 2023 publication, Govt. of India copyright (AutoQA AI), SnapWright VS Code extension, Nivesh crowdfunding app, awards, and education cleanly.
 2. Answer directly based on the provided context and conversation history.
-3. Cite quantitative metrics accurately and conclude with natural source attribution (e.g., [Source: altaj-virani_ltm-resume.pdf]).`;
+3. Cite quantitative metrics accurately and conclude with natural source attribution (e.g., [Source: resume-altaj-virani.pdf]).`;
 
       const prompt = `Context knowledge retrieved from Altaj Virani's verified resumes:
 ${contextText}

@@ -1,7 +1,7 @@
 export interface KnowledgeChunk {
   id: string;
   title: string;
-  category: 'role_summary' | 'viki_ai' | 'cloud_infrastructure' | 'enterprise_ai' | 'projects' | 'publications' | 'awards' | 'education' | 'skills';
+  category: 'role_summary' | 'agentic_ai' | 'cloud_infrastructure' | 'enterprise_ai' | 'projects' | 'publications' | 'awards' | 'education' | 'skills';
   source: string;
   content: string;
   keywords: string[];
@@ -12,31 +12,28 @@ export const KNOWLEDGE_STORE: KnowledgeChunk[] = [
     id: 'profile_overview',
     title: 'Professional Profile & Executive Summary',
     category: 'role_summary',
-    source: 'resume-altaj-virani-ltm.pdf (Page 1-2)',
+    source: 'resume-altaj-virani.pdf (Page 1)',
     keywords: ['altaj', 'virani', 'azure', 'ai', 'engineer', 'agentic', 'summary', 'about', 'bio', 'who', 'contact', 'email'],
     content: `Altaj A. Virani is an Azure AI Engineer specializing in Agentic AI Platforms, LLM integration, and Enterprise Cloud Systems.
 Based in Mumbai, India.
-Contact: altajatwork@gmail.com | Altaj.Virani@LTM.com | +91-730-393-4303.
+Contact: altajatwork@gmail.com | +91-730-393-4303.
 Summary: Experienced in Azure AI platform engineering, agentic AI, and engineering enablement, with a focus on improving engineering productivity and cloud reliability. Skilled in developing enterprise AI applications using Azure and Microsoft AI technologies, integrating large language models into practical business and engineering workflows.`
   },
   {
-    id: 'viki_ai_platform',
-    title: 'Viki-AI: Microsoft Azure Networking Agentic AI Operations Platform',
-    category: 'viki_ai',
-    source: 'Work Description for Viki-AI & resume-altaj-virani-ltm.pdf',
-    keywords: ['viki', 'viki ai', 'agentic', 'agents', 'mcp', 'model context protocol', 'playbooks', 'cli', 'copilot', 'operations', 'network', 'azure networking'],
-    content: `Viki-AI is the internal AI platform Azure network engineering teams use to investigate incidents and automate operational work, serving datacenter networking, wide-area networking (WAN), optical networks, hardware and firmware, device buildout, datacenter operations, and on-call incident teams.
-Engineers use it in two ways:
-1. Chatting in a web portal or Microsoft Teams with 20+ domain-specific AI agents that call 250+ integrated tools to query live network inventory, device state, telemetry, incidents, and work orders, with role-based permissions and human approval for higher-risk actions.
-2. Running 150+ automated workflows ("playbooks") that turn troubleshooting procedures into sequences of data queries, tool calls, and AI steps, started on demand, on a schedule, or automatically when an incident is raised or an email arrives.
-Stack: .NET/C# services on Azure Container Apps, GitHub Copilot SDK, Azure OpenAI, Model Context Protocol (MCP), Azure Service Bus, Event Hubs, Storage, Key Vault, Application Insights, and Azure Data Explorer (ADX).
-Delivery track record: 6 merged pull requests across 96 files; 6 completed work items.`
+    id: 'agentic_ai_platform',
+    title: 'Enterprise Agentic AI Operations & Engineering Enablement',
+    category: 'agentic_ai',
+    source: 'resume-altaj-virani.pdf (Page 1)',
+    keywords: ['agentic', 'agents', 'mcp', 'model context protocol', 'playbooks', 'cli', 'copilot', 'operations', 'network', 'azure networking'],
+    content: `Altaj led cross-team adoption of an enterprise agentic AI operations platform across engineering tracks, partnering with technical leads and on-call teams to co-build automated playbooks, domain agents, skills, and Copilot CLI plugins through Model Context Protocol toolkits.
+The work supported cloud network operations with domain-specific AI agents, integrated operational tools, and automated incident workflows.
+Core technologies included .NET/C# services on Azure Container Apps, GitHub Copilot SDK, Azure OpenAI, Model Context Protocol (MCP), Azure Service Bus, Event Hubs, Key Vault, Application Insights, and Azure Data Explorer.`
   },
   {
     id: 'key_vault_optimization',
     title: 'Certificate Authentication Fix & 35× Azure Key Vault Call Reduction',
     category: 'cloud_infrastructure',
-    source: 'Work Description for Viki-AI & resume-altaj-virani.pdf',
+    source: 'resume-altaj-virani.pdf (Page 1)',
     keywords: ['key vault', 'caching', 'memory', 'oom', '35x', 'cache', 'container apps', 'tls', 'certificates', 'overhead', 'reliability', 'xunit'],
     content: `Certificate Authentication Fix & Key Vault Optimization (C#/.NET, Azure Key Vault, xUnit):
 - Problem: The certificate the backend services use to authenticate to internal network APIs was re-downloaded from Azure Key Vault every ~2 minutes and never released, and production requested a staging certificate that did not exist, failing ~13% of lookups.
@@ -47,7 +44,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'oom_root_cause_scaling',
     title: 'Production Memory Failures Root-Cause Analysis (2,640 Monthly OOMs Eliminated)',
     category: 'cloud_infrastructure',
-    source: 'Work Description for Viki-AI & resume-altaj-virani.pdf',
+    source: 'resume-altaj-virani.pdf (Page 1)',
     keywords: ['oom', 'kql', 'application insights', 'out of memory', 'errors', 'azure container apps', 'auto scaling', 'dedicated compute', 'kusto', 'adx'],
     content: `Production Memory Failures Investigation (KQL, Azure Data Explorer, Application Insights, .NET):
 - Investigated out-of-memory errors in the workflow-execution service that peaked at 2,640 per 30 days, each losing a workflow in-progress work.
@@ -59,7 +56,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'load_testing_capacity_suite',
     title: '13-Phase Auto-Scaling Load Test Suite (35,500 Workflows)',
     category: 'cloud_infrastructure',
-    source: 'Work Description for Viki-AI & resume-altaj-virani.pdf',
+    source: 'resume-altaj-virani.pdf (Page 1)',
     keywords: ['load testing', 'capacity', 'auto scaling', 'powershell', 'azure monitor', '35500', 'workflows', 'stress', 'scaling rules', 'backlog'],
     content: `Auto-Scaling Test Suite (PowerShell, Azure CLI, Azure Monitor, Azure Service Bus):
 - Built a 13-phase suite that generates load against a deployed environment and checks every auto-scaling rule (scale-out, scale-in, recovery, and safety) with 45 pass/fail verdicts; a full run drives 35,500 workflow executions.
@@ -70,7 +67,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'test_env_and_telemetry_analysis',
     title: 'Test-Environment Configuration Fix & Telemetry Correlation',
     category: 'cloud_infrastructure',
-    source: 'Work Description for Viki-AI',
+    source: 'resume-altaj-virani.pdf (Page 1)',
     keywords: ['test environment', 'emulator', 'service bus', 'event hubs', 'managed identity', 'telemetry', 'http 400', 'kql'],
     content: `Configuration Fixes & Telemetry Analysis:
 1. Test-Environment Configuration Fix (C#/.NET, Azure Service Bus, Event Hubs, managed identity, xUnit):
@@ -84,9 +81,9 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     title: 'Security, Compliance & Production Quality Scoring',
     category: 'enterprise_ai',
     source: 'resume-altaj-virani.pdf (Page 1)',
-    keywords: ['security', 'compliance', 'owasp', 'ssrf', 'purview', 'groundedness', 'f1', 'quality scoring', 'azure sql'],
+    keywords: ['security', 'compliance', 'owasp', 'ssrf', 'groundedness', 'f1', 'quality scoring', 'azure sql'],
     content: `Security, Governance & AI Evaluation:
-- Achieved 100% compliance across production endpoints via a centralized validation microservice (OWASP Top 10, SSRF defense), automated URSA DAST scanning, and Microsoft Purview-compliant Azure SQL audit logging.
+- Achieved 100% compliance across production endpoints via centralized validation (OWASP Top 10, SSRF defense), automated dynamic security scanning, and Azure SQL audit logging.
 - Integrated automated AI quality scoring (groundedness, accuracy, F1 score) directly into production chatbots for Azure SQL-backed regression tracking.`
   },
   {
@@ -136,12 +133,12 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
   },
   {
     id: 'awards_recognition',
-    title: 'Industry Awards & Recognition at LTM',
+    title: 'Industry Awards & Recognition',
     category: 'awards',
-    source: 'resume-altaj-virani-ltm.pdf (Page 5) & resume-altaj-virani.pdf (Page 2)',
+    source: 'resume-altaj-virani.pdf (Page 2)',
     keywords: ['awards', 'recognition', 'spot award', 'hi-five', 'super crew', 'problem solver', 'honors'],
-    content: `Awards & Honors at LTM (Microsoft Business Unit):
-1. Problem Solver Badge (Sep 2026): Nominated for contributions to Viki AI, Azure Networking’s agentic operations platform, and internal AI initiatives, earning stakeholder confidence through technical solutions.
+    content: `Awards & Honors:
+1. Problem Solver Badge (Sep 2026): Nominated for contributions to agentic operations tooling and enterprise AI initiatives, earning stakeholder confidence through technical solutions.
 2. Hi-Five Spot Award (Nov 2025): Recognized for consistently exceeding expectations by demonstrating exceptional innovation in developing AI use cases.
 3. Super Crew Spot Award (Aug 2025 / Oct 2025): Awarded along with the team for outstanding efforts in architecting and deploying compliant, enterprise-grade Generative AI and Automation systems that modernized internal operations.
 4. Hi-Five Spot Award (Jul 2025): Commended for leading QA framework stability improvements, system migrations, and independently building automation tools that boosted engineering productivity.`
@@ -150,7 +147,7 @@ Delivery track record: 6 merged pull requests across 96 files; 6 completed work 
     id: 'education_certifications',
     title: 'Academic Qualifications & Professional Certifications',
     category: 'education',
-    source: 'resume-altaj-virani-ltm.pdf (Page 2, 5) & resume-altaj-virani.pdf (Page 1)',
+    source: 'resume-altaj-virani.pdf (Page 1)',
     keywords: ['education', 'degree', 'cgpa', 'university of mumbai', 'college', 'certifications', 'ai-900', 'azure ai fundamentals'],
     content: `Education & Academic Excellence:
 - Bachelor of Engineering (B.E.) in Computer Engineering: Vidyavardhini's College of Engineering and Technology, University of Mumbai. CGPA: 9.00 / 10.0 (Feb 2021 – May 2023).

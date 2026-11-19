@@ -133,7 +133,7 @@ export const AwardsEducation: React.FC = () => {
                   Technical Training Distinction
                 </div>
                 <h4 className="text-sm sm:text-base font-bold font-display text-[#18181B] leading-snug">
-                  #1 Batch Topper · Orchard Training Program
+                  #1 Batch Topper · Graduate Training Program
                 </h4>
                 <p className="text-xs text-[#4A2E12] truncate">
                   Full-Stack .NET &amp; Cloud Microservices · LTM

@@ -21,8 +21,8 @@ interface RAGChatbotProps {
 
 const SUGGESTED_QUERIES = [
   "How did Altaj cut Key Vault calls 35x?",
-  "What is Altaj’s role with Viki AI and MCP?",
-  "What awards has Altaj won at LTM?",
+  "What is Altaj’s role with agentic AI and MCP?",
+  "What awards has Altaj won?",
   "Tell me about SnapWright VS Code extension",
   "Summarize his IEEE research and AutoQA AI",
   "What is his education & Azure certification stack?",
@@ -37,8 +37,8 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
     {
       id: "welcome",
       role: "assistant",
-      content: `Hi! I am Altaj Virani's AI Twin, grounded directly in his verified resume documents (altaj-virani-resume.pdf & altaj-virani_ltm-resume.pdf).\n\nAsk me anything about Viki-AI & Model Context Protocol (MCP), Azure Container Apps optimization, SnapWright, Nivesh, IEEE research, awards, or engineering experience.`,
-      sources: ["altaj-virani-resume.pdf", "altaj-virani_ltm-resume.pdf"],
+      content: `Hi! I am Altaj Virani's AI Twin, grounded directly in his verified public resume (resume-altaj-virani.pdf).\n\nAsk me anything about enterprise agentic AI, Model Context Protocol (MCP), Azure Container Apps optimization, SnapWright, Nivesh, IEEE research, awards, or engineering experience.`,
+      sources: ["resume-altaj-virani.pdf"],
       timestamp: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -215,7 +215,6 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
             </div>
             <div className="text-[11px] text-[#52525B] font-mono truncate">
               Sources: <span className="text-[#2563EB] font-semibold">altaj-virani-resume.pdf</span> &amp;{" "}
-              <span className="text-[#7C3AED] font-semibold">ltm-resume.pdf</span>
             </div>
           </div>
         </div>
@@ -364,7 +363,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about Altaj's experience, Viki-AI, MCP, awards..."
+          placeholder="Ask about Altaj's experience, agentic AI, MCP, awards..."
           disabled={isLoading}
           className="flex-1 min-w-0 skeuo-well rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-[#18181B] placeholder-[#71717A] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
         />

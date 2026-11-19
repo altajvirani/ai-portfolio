@@ -16,10 +16,9 @@
       "monogram": "/assets/monogram-badge.png",
       "openToWorkBanner": "/assets/open-to-work-banner.png",
       "resume": "/assets/resume-altaj-virani.pdf",
-      "longTermResume": "/assets/resume-altaj-virani-ltm.pdf",
       "powerAppsOverview": "/assets/power-apps-engineering-overview.png",
       "azureNetworkingOverview": "/assets/power-apps-and-azure-networking-overview.png",
-      "vikiAiWorkDescription": "/assets/viki-ai-work-description.jpeg"
+      "workOverview": "/assets/power-apps-and-azure-networking-overview.png"
     }
   },
   "portfolio": {
@@ -54,12 +53,12 @@
         "organization": "LTM",
         "businessUnit": "Microsoft Business Unit (MSBU)",
         "location": "Mumbai, IN",
-        "projectName": "Azure Network Engineering · Viki-AI",
+        "projectName": "Azure Network Engineering · AI Platform Enablement",
         "role": "Software Engineer",
         "period": "Jun 2025 – Present",
         "yearLabel": "2025 – Present",
         "monthLabel": "Jun 2025",
-        "summary": "Core contributor to Viki-AI, an internal agentic AI operations platform supporting global cloud network infrastructure, reliability, and incident response.",
+        "summary": "Contributed to an enterprise agentic AI operations platform supporting cloud network infrastructure, reliability, and incident response.",
         "keyContributions": [
           {
             "area": "Agentic AI & Platform Enablement",
@@ -74,7 +73,7 @@
             "points": [
               "Cut Key Vault calls 35× (2,807 to 79/day) via a 12-hour shared .NET cache with strict TLS validation and 16 tests.",
               "Eliminated 2,640 monthly OOM errors via KQL diagnostics and migration to dedicated auto-scaling compute.",
-              "Validated auto-scaling across 35,500 load-test workflows; enforced 100% OWASP Top 10, SSRF, URSA DAST, and Purview compliance."
+              "Validated auto-scaling across 35,500 load-test workflows; enforced 100% OWASP Top 10, SSRF, automated security scanning, and compliance controls."
             ]
           }
         ],
@@ -128,7 +127,7 @@
       {
         "id": "graduate-engineer-trainee",
         "organization": "LTM",
-        "businessUnit": "Orchard Training Program",
+        "businessUnit": "Graduate Training Program",
         "location": "Mumbai, IN",
         "projectName": "Full-Stack .NET & Cloud Microservices Track",
         "role": "Graduate Engineer Trainee",
@@ -338,7 +337,7 @@
         "organization": "LTM · MSBU",
         "date": "Sep 2026",
         "category": "Technical Problem Solving",
-        "reason": "Nominated for contributions to Viki-AI, agentic operations tooling, and resolving complex platform challenges.",
+        "reason": "Nominated for contributions to agentic operations tooling and resolving complex platform challenges.",
         "impactHighlight": "Agentic Operations & Stakeholder Trust",
         "accentColor": "amber"
       },
@@ -848,10 +847,10 @@
         "category": "backend",
         "categoryLabel": "Languages & Backend Core",
         "role": "Transactional data & audit stores",
-        "projectContext": "Designed relational schemas, Purview-compliant audit logs, and chatbot quality regression tracking tables.",
+        "projectContext": "Designed relational schemas, compliant audit logs, and chatbot quality regression tracking tables.",
         "connections": [
           "dotnet-webapi",
-          "purview"
+          "audit-logging"
         ],
         "level": "Core",
         "logo": {
@@ -977,8 +976,8 @@
         }
       },
       {
-        "id": "ursa-dast",
-        "name": "URSA DAST Scanning",
+        "id": "dast",
+        "name": "Dynamic Application Security Testing",
         "category": "security",
         "categoryLabel": "Security, Compliance & QA",
         "role": "Dynamic vulnerability evaluation",
@@ -996,12 +995,12 @@
         }
       },
       {
-        "id": "purview",
-        "name": "Microsoft Purview Audit Logging",
+        "id": "audit-logging",
+        "name": "Enterprise Audit Logging",
         "category": "security",
         "categoryLabel": "Security, Compliance & QA",
         "role": "Compliant enterprise audit telemetry",
-        "projectContext": "Integrated Purview-compliant Azure SQL audit trails for production AI workflows.",
+        "projectContext": "Integrated Azure SQL audit trails and compliance controls for production AI workflows.",
         "connections": [
           "sql-server",
           "container-apps"
@@ -1060,7 +1059,7 @@
       "id": "profile_overview",
       "title": "Professional Profile & Executive Summary",
       "category": "role_summary",
-      "source": "resume-altaj-virani-ltm.pdf (Page 1-2)",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "altaj",
         "virani",
@@ -1075,16 +1074,14 @@
         "contact",
         "email"
       ],
-      "content": "Altaj A. Virani is an Azure AI Engineer specializing in Agentic AI Platforms, LLM integration, and Enterprise Cloud Systems.\nBased in Mumbai, India.\nContact: altajatwork@gmail.com | Altaj.Virani@LTM.com | +91-730-393-4303.\nSummary: Experienced in Azure AI platform engineering, agentic AI, and engineering enablement, with a focus on improving engineering productivity and cloud reliability. Skilled in developing enterprise AI applications using Azure and Microsoft AI technologies, integrating large language models into practical business and engineering workflows."
+      "content": "Altaj Virani is a Software Engineer specializing in Azure AI, agentic AI platforms, LLM integration, and enterprise cloud systems.\nBased in Mumbai, India.\nContact: altajatwork@gmail.com | +91-730-393-4303.\nSummary: Experienced in AI platform engineering and engineering enablement, with a focus on improving productivity and cloud reliability."
     },
     {
-      "id": "viki_ai_platform",
-      "title": "Viki-AI: Microsoft Azure Networking Agentic AI Operations Platform",
-      "category": "viki_ai",
-      "source": "Work Description for Viki-AI & resume-altaj-virani-ltm.pdf",
+      "id": "agentic_ai_platform",
+      "title": "Enterprise Agentic AI Operations & Engineering Enablement",
+      "category": "agentic_ai",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
-        "viki",
-        "viki ai",
         "agentic",
         "agents",
         "mcp",
@@ -1096,13 +1093,13 @@
         "network",
         "azure networking"
       ],
-      "content": "Viki-AI is the internal AI platform Azure network engineering teams use to investigate incidents and automate operational work, serving datacenter networking, wide-area networking (WAN), optical networks, hardware and firmware, device buildout, datacenter operations, and on-call incident teams.\nEngineers use it in two ways:\n1. Chatting in a web portal or Microsoft Teams with 20+ domain-specific AI agents that call 250+ integrated tools to query live network inventory, device state, telemetry, incidents, and work orders, with role-based permissions and human approval for higher-risk actions.\n2. Running 150+ automated workflows (\"playbooks\") that turn troubleshooting procedures into sequences of data queries, tool calls, and AI steps, started on demand, on a schedule, or automatically when an incident is raised or an email arrives.\nStack: .NET/C# services on Azure Container Apps, GitHub Copilot SDK, Azure OpenAI, Model Context Protocol (MCP), Azure Service Bus, Event Hubs, Storage, Key Vault, Application Insights, and Azure Data Explorer (ADX).\nDelivery track record: 6 merged pull requests across 96 files; 6 completed work items."
+      "content": "Altaj led cross-team adoption of an enterprise agentic AI operations platform across engineering tracks, partnering with technical leads and on-call teams to co-build automated playbooks, domain agents, skills, and Copilot CLI plugins through Model Context Protocol toolkits.\nThe work supported cloud network operations with domain-specific AI agents, integrated operational tools, and automated incident workflows.\nCore technologies included .NET/C# services on Azure Container Apps, GitHub Copilot SDK, Azure OpenAI, Model Context Protocol (MCP), Azure Service Bus, Event Hubs, Key Vault, Application Insights, and Azure Data Explorer."
     },
     {
       "id": "key_vault_optimization",
       "title": "Certificate Authentication Fix & 35× Azure Key Vault Call Reduction",
       "category": "cloud_infrastructure",
-      "source": "Work Description for Viki-AI & resume-altaj-virani.pdf",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "key vault",
         "caching",
@@ -1123,7 +1120,7 @@
       "id": "oom_root_cause_scaling",
       "title": "Production Memory Failures Root-Cause Analysis (2,640 Monthly OOMs Eliminated)",
       "category": "cloud_infrastructure",
-      "source": "Work Description for Viki-AI & resume-altaj-virani.pdf",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "oom",
         "kql",
@@ -1142,7 +1139,7 @@
       "id": "load_testing_capacity_suite",
       "title": "13-Phase Auto-Scaling Load Test Suite (35,500 Workflows)",
       "category": "cloud_infrastructure",
-      "source": "Work Description for Viki-AI & resume-altaj-virani.pdf",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "load testing",
         "capacity",
@@ -1161,7 +1158,7 @@
       "id": "test_env_and_telemetry_analysis",
       "title": "Test-Environment Configuration Fix & Telemetry Correlation",
       "category": "cloud_infrastructure",
-      "source": "Work Description for Viki-AI",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "test environment",
         "emulator",
@@ -1184,13 +1181,12 @@
         "compliance",
         "owasp",
         "ssrf",
-        "purview",
         "groundedness",
         "f1",
         "quality scoring",
         "azure sql"
       ],
-      "content": "Security, Governance & AI Evaluation:\n- Achieved 100% compliance across production endpoints via a centralized validation microservice (OWASP Top 10, SSRF defense), automated URSA DAST scanning, and Microsoft Purview-compliant Azure SQL audit logging.\n- Integrated automated AI quality scoring (groundedness, accuracy, F1 score) directly into production chatbots for Azure SQL-backed regression tracking."
+      "content": "Security, Governance & AI Evaluation:\n- Achieved 100% compliance across production endpoints via centralized validation (OWASP Top 10, SSRF defense), automated dynamic security scanning, and Azure SQL audit logging.\n- Integrated automated AI quality scoring (groundedness, accuracy, F1 score) directly into production chatbots for Azure SQL-backed regression tracking."
     },
     {
       "id": "research_publications",
@@ -1248,9 +1244,9 @@
     },
     {
       "id": "awards_recognition",
-      "title": "Industry Awards & Recognition at LTM",
+      "title": "Industry Awards & Recognition",
       "category": "awards",
-      "source": "resume-altaj-virani-ltm.pdf (Page 5) & resume-altaj-virani.pdf (Page 2)",
+      "source": "resume-altaj-virani.pdf (Page 2)",
       "keywords": [
         "awards",
         "recognition",
@@ -1260,13 +1256,13 @@
         "problem solver",
         "honors"
       ],
-      "content": "Awards & Honors at LTM (Microsoft Business Unit):\n1. Problem Solver Badge (Sep 2026): Nominated for contributions to Viki AI, Azure Networking’s agentic operations platform, and internal AI initiatives, earning stakeholder confidence through technical solutions.\n2. Hi-Five Spot Award (Nov 2025): Recognized for consistently exceeding expectations by demonstrating exceptional innovation in developing AI use cases.\n3. Super Crew Spot Award (Aug 2025 / Oct 2025): Awarded along with the team for outstanding efforts in architecting and deploying compliant, enterprise-grade Generative AI and Automation systems that modernized internal operations.\n4. Hi-Five Spot Award (Jul 2025): Commended for leading QA framework stability improvements, system migrations, and independently building automation tools that boosted engineering productivity."
+      "content": "Awards & Honors:\n1. Problem Solver Badge (Sep 2026): Nominated for contributions to agentic operations tooling and enterprise AI initiatives, earning stakeholder confidence through technical solutions.\n2. Hi-Five Spot Award (Nov 2025): Recognized for consistently exceeding expectations by demonstrating exceptional innovation in developing AI use cases.\n3. Super Crew Spot Award (Aug 2025 / Oct 2025): Awarded along with the team for outstanding efforts in architecting and deploying compliant, enterprise-grade Generative AI and Automation systems that modernized internal operations.\n4. Hi-Five Spot Award (Jul 2025): Commended for leading QA framework stability improvements, system migrations, and independently building automation tools that boosted engineering productivity."
     },
     {
       "id": "education_certifications",
       "title": "Academic Qualifications & Professional Certifications",
       "category": "education",
-      "source": "resume-altaj-virani-ltm.pdf (Page 2, 5) & resume-altaj-virani.pdf (Page 1)",
+      "source": "resume-altaj-virani.pdf (Page 1)",
       "keywords": [
         "education",
         "degree",
@@ -1324,7 +1320,6 @@
     "altaj-virani-profile.png",
     "monogram-badge.png",
     "resume-altaj-virani.pdf",
-    "resume-altaj-virani-ltm.pdf",
     "project-autoqa-ai.jpg",
     "project-autoqagen.jpg",
     "project-nivesh.jpg",
@@ -1332,22 +1327,21 @@
     "power-apps-engineering-overview.png",
     "power-apps-and-azure-networking-overview.png",
     "open-to-work-banner.png",
-    "viki-ai-work-description.jpeg"
+    "power-apps-and-azure-networking-overview.png"
   ],
   "chatbot": {
     "suggestedQueries": [
       "How did Altaj cut Key Vault calls 35x in Azure Container Apps?",
-      "What is Altaj’s role with Viki AI and Model Context Protocol (MCP)?",
+      "What is Altaj’s role with enterprise agentic AI and Model Context Protocol (MCP)?",
       "Tell me about his SnapWright VS Code extension",
       "Explain his Nivesh startup crowdfunding platform",
       "How did he diagnose and eliminate 2,640 monthly OOM errors?",
       "Summarize his IEEE research paper on T5 question answering"
     ],
     "welcomeMessage": {
-      "content": "Hello! I am Altaj Virani's AI Representative, augmented directly with his verified resume documents (resume-altaj-virani.pdf and resume-altaj-virani-ltm.pdf).\\n\\nAsk me anything about his enterprise agentic AI architectures (Viki AI, MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!",
+      "content": "Hello! I am Altaj Virani's AI Representative, augmented directly with his verified public resume (resume-altaj-virani.pdf).\\n\\nAsk me anything about his enterprise agentic AI architectures (MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!",
       "sources": [
-        "resume-altaj-virani.pdf",
-        "resume-altaj-virani-ltm.pdf"
+        "resume-altaj-virani.pdf"
       ]
     },
     "resetMessage": {
@@ -1359,8 +1353,7 @@
     "fallback": {
       "intro": "Based on Altaj Virani's verified resume documents:\\n\\n",
       "sourceDefaults": [
-        "resume-altaj-virani.pdf",
-        "resume-altaj-virani-ltm.pdf"
+        "resume-altaj-virani.pdf"
       ],
       "responses": [
         {
@@ -1389,11 +1382,10 @@
         },
         {
           "matchTerms": [
-            "viki",
             "mcp",
             "agent"
           ],
-          "content": "• **Viki AI Enterprise Platform**: Led cross-team adoption of Microsoft's internal agentic operations platform across Azure Networking tracks.\\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling 20+ specialized agents to call 250+ integrated networking tools.\\n\\n[Source: resume-altaj-virani-ltm.pdf (Page 3)]"
+          "content": "• **Enterprise Agentic AI Platform**: Led cross-team adoption of an enterprise agentic operations platform across engineering tracks.\\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling specialized agents to call integrated operational tools.\\n\\n[Source: resume-altaj-virani.pdf (Page 1)]"
         },
         {
           "matchTerms": [
@@ -1414,7 +1406,7 @@
         },
         {
           "matchTerms": [],
-          "content": "• **Profile**: Azure AI Engineer in Microsoft Business Unit (MSBU).\\n• **Core Strengths**: Model Context Protocol (MCP), Viki AI agent orchestration, Hybrid RAG with HNSW vector indexing (80% troubleshooting acceleration), high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\\n\\n[Source: resume-altaj-virani-ltm.pdf & resume-altaj-virani.pdf]"
+          "content": "• **Profile**: Software Engineer focused on Azure AI and agentic systems.\\n• **Core Strengths**: Model Context Protocol (MCP), enterprise agent orchestration, hybrid RAG, high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\\n\\n[Source: resume-altaj-virani.pdf]"
         }
       ]
     }

@@ -154,7 +154,7 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSkill }) => {
                     </div>
                     <p className="text-[11px] text-[#3F3F46] font-sans">
                       Architecting multi-agent automation, developer workflows,
-                      and reliable cloud services at LTM.
+                      and reliable cloud services.
                     </p>
                   </div>
                 }

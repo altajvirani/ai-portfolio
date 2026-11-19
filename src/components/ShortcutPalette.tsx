@@ -128,7 +128,7 @@ export const ShortcutPalette: React.FC<ShortcutPaletteProps> = ({
       {
         id: "nav-experience",
         label: "Go to Work Experience",
-        hint: "Viki-AI, Power Apps & Orchard milestones",
+        hint: "AI platform, Power Apps & training milestones",
         group: "Sections",
         shortcutKeys: ["2"],
         icon: <Briefcase className="w-4 h-4 text-[#2563EB]" />,

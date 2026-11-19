@@ -6,7 +6,7 @@ import { KNOWLEDGE_STORE } from './knowledgeStore.ts';
 test('Knowledge store contains all critical resume sections', () => {
   assert.ok(KNOWLEDGE_STORE.length >= 10, 'Knowledge store should have at least 10 detailed chunks');
   const ids = KNOWLEDGE_STORE.map((c) => c.id);
-  assert.ok(ids.includes('viki_ai_platform'));
+  assert.ok(ids.includes('agentic_ai_platform'));
   assert.ok(ids.includes('key_vault_optimization'));
   assert.ok(ids.includes('oom_root_cause_scaling'));
   assert.ok(ids.includes('research_publications'));
@@ -20,10 +20,10 @@ test('Search knowledge correctly prioritizes Key Vault optimization', () => {
   assert.match(results[0].content, /35×|35x/);
 });
 
-test('Search knowledge correctly finds Model Context Protocol (MCP) in Viki AI', () => {
-  const results = searchKnowledge('What is Altaj experience with MCP and Viki AI?', 2);
+test('Search knowledge correctly finds Model Context Protocol (MCP) in agentic AI work', () => {
+  const results = searchKnowledge('What is Altaj experience with MCP and agentic AI?', 2);
   assert.ok(results.length > 0);
-  assert.equal(results[0].id, 'viki_ai_platform');
+  assert.equal(results[0].id, 'agentic_ai_platform');
   assert.match(results[0].content, /Model Context Protocol/i);
 });
 
@@ -56,7 +56,7 @@ test('Search knowledge correctly finds Nivesh startup crowdfunding platform', as
 });
 
 test('Process RAG query answers awards and education topics dynamically without rigging', async () => {
-  const awardsRes = await processRAGQuery('What awards and honors has Altaj won at LTM?');
+  const awardsRes = await processRAGQuery('What awards and honors has Altaj won?');
   assert.ok(awardsRes.chunks.some((c) => c.id === 'awards_recognition'));
   assert.match(awardsRes.answer, /Problem Solver Badge|Hi-Five Spot Award/);
 

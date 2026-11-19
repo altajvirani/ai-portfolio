@@ -310,8 +310,8 @@ export const TECH_NODES: TechNode[] = [
     categoryLabel: "Languages & Backend Core",
     role: "Transactional data & audit stores",
     projectContext:
-      "Designed relational schemas, Purview-compliant audit logs, and chatbot quality regression tracking tables.",
-    connections: ["dotnet-webapi", "purview"],
+      "Designed relational schemas, compliant audit logs, and chatbot quality regression tracking tables.",
+    connections: ["dotnet-webapi", "audit-logging"],
     logo: <DatabaseLogo className="w-4 h-4" />,
     level: "Core",
   },
@@ -390,8 +390,8 @@ export const TECH_NODES: TechNode[] = [
     level: "Production",
   },
   {
-    id: "ursa-dast",
-    name: "URSA DAST Scanning",
+    id: "dast",
+    name: "Dynamic Application Security Testing",
     category: "security",
     categoryLabel: "Security, Compliance & QA",
     role: "Dynamic vulnerability evaluation",
@@ -402,13 +402,13 @@ export const TECH_NODES: TechNode[] = [
     level: "Production",
   },
   {
-    id: "purview",
-    name: "Microsoft Purview Audit Logging",
+    id: "audit-logging",
+    name: "Enterprise Audit Logging",
     category: "security",
     categoryLabel: "Security, Compliance & QA",
     role: "Compliant enterprise audit telemetry",
     projectContext:
-      "Integrated Purview-compliant Azure SQL audit trails for production AI workflows.",
+      "Integrated Azure SQL audit trails and compliance controls for production AI workflows.",
     connections: ["sql-server", "container-apps"],
     logo: <ShieldCheck className="w-4 h-4 text-purple-400" />,
     level: "Core",

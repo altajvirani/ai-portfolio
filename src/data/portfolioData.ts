@@ -38,13 +38,13 @@ export const WORK_EXPERIENCE: WorkProject[] = [
     organization: "LTM",
     businessUnit: "Microsoft Business Unit (MSBU)",
     location: "Mumbai, IN",
-    projectName: "Azure Network Engineering · Viki-AI",
+    projectName: "Azure Network Engineering · AI Platform Enablement",
     role: "Software Engineer",
     period: "Jun 2025 – Present",
     yearLabel: "2025 – Present",
     monthLabel: "Jun 2025",
     summary:
-      "Core contributor to Viki-AI, an internal agentic AI operations platform supporting global cloud network infrastructure, reliability, and incident response.",
+      "Contributed to an enterprise agentic AI operations platform supporting cloud network infrastructure, reliability, and incident response.",
     keyContributions: [
       {
         area: "Agentic AI & Platform Enablement",
@@ -59,7 +59,7 @@ export const WORK_EXPERIENCE: WorkProject[] = [
         points: [
           "Cut Key Vault calls 35× (2,807 to 79/day) via a 12-hour shared .NET cache with strict TLS validation and 16 tests.",
           "Eliminated 2,640 monthly OOM errors via KQL diagnostics and migration to dedicated auto-scaling compute.",
-          "Validated auto-scaling across 35,500 load-test workflows; enforced 100% OWASP Top 10, SSRF, URSA DAST, and Purview compliance.",
+          "Validated auto-scaling across 35,500 load-test workflows; enforced 100% OWASP Top 10, SSRF, automated security scanning, and compliance controls.",
         ],
       },
     ],
@@ -114,7 +114,7 @@ export const WORK_EXPERIENCE: WorkProject[] = [
   {
     id: "graduate-engineer-trainee",
     organization: "LTM",
-    businessUnit: "Orchard Training Program",
+    businessUnit: "Graduate Training Program",
     location: "Mumbai, IN",
     projectName: "Full-Stack .NET & Cloud Microservices Track",
     role: "Graduate Engineer Trainee",
@@ -287,7 +287,7 @@ export const AWARDS_DATA: AwardItem[] = [
     date: "Sep 2026",
     category: "Technical Problem Solving",
     reason:
-      "Nominated for contributions to Viki-AI, agentic operations tooling, and resolving complex platform challenges.",
+      "Nominated for contributions to agentic operations tooling and resolving complex platform challenges.",
     impactHighlight: "Agentic Operations & Stakeholder Trust",
     accentColor: "amber",
   },
