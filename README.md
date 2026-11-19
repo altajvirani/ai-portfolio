@@ -57,7 +57,48 @@ ADMIN_GOOGLE_EMAILS
 APP_URL
 DATABASE_URL
 MCP_GOOGLE_REDIRECT_URI
+GEMINI_API_KEY
+GEMINI_MODEL
+GEMINI_FILE_SEARCH_STORE_NAME
 ```
+
+## Gemini RAG setup
+
+Create a Gemini API key in Google AI Studio, then add it to `.env.local`:
+
+```text
+GEMINI_API_KEY="your-server-side-api-key"
+GEMINI_MODEL="gemini-3.5-flash-lite"
+GEMINI_FILE_SEARCH_STORE_NAME=""
+```
+
+Do not commit the API key or paste it into frontend code. Build the public resume File Search store once:
+
+```bash
+npm run rag:setup
+```
+
+The setup command uploads `public/assets/resume-altaj-virani.pdf` and prints:
+
+```text
+GEMINI_FILE_SEARCH_STORE_NAME=fileSearchStores/...
+```
+
+Add that value to `.env.local`. Then start or restart the application:
+
+```bash
+npm run dev
+```
+
+Verify the configuration at:
+
+```text
+http://localhost:3000/api/health
+```
+
+The response should report `hasGeminiKey: true` and `hasGeminiFileSearchStore: true`.
+
+For Vercel, add `GEMINI_API_KEY`, `GEMINI_MODEL`, and `GEMINI_FILE_SEARCH_STORE_NAME` to the Production environment. Never add the Gemini API key to `VITE_*` variables or frontend JavaScript.
 
 The application callback should be registered as:
 

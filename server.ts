@@ -2,9 +2,9 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import { processRAGQuery } from './src/server/ragEngine.ts';
 import { dispatchContactSubmission } from './src/server/contactHandler.ts';
 import { handleAdminRequest } from './src/server/adminAuth.ts';
+import { handleChatRequest } from './src/server/chatApi.ts';
 
 dotenv.config({ path: '.env.local' });
 dotenv.config();
@@ -63,10 +63,25 @@ async function startServer() {
   // Grounded LLM Chatbot API Endpoint
   app.post('/api/chat', async (req, res) => {
     try {
-      const { message, history } = req.body || {};
-      const result = await processRAGQuery(message || '', history || []);
-      res.setHeader('Content-Type', 'application/json');
-      res.json(result);
+      const protocol = typeof req.headers['x-forwarded-proto'] === 'string'
+        ? req.headers['x-forwarded-proto']
+        : 'http';
+      const host = req.get('host') || `localhost:${port}`;
+      const headers = new Headers();
+      Object.entries(req.headers).forEach(([key, value]) => {
+        if (typeof value === 'string') headers.set(key, value);
+        if (Array.isArray(value)) headers.set(key, value.join(', '));
+      });
+      const result = await handleChatRequest(
+        new Request(`${protocol}://${host}${req.originalUrl}`, {
+          method: req.method,
+          headers,
+          body: JSON.stringify(req.body ?? {}),
+        }),
+      );
+      res.status(result.status);
+      result.headers.forEach((value, key) => res.setHeader(key, value));
+      res.send(await result.text());
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Internal Server Error';
       console.error('Error handling /api/chat:', err);
@@ -91,6 +106,8 @@ async function startServer() {
     res.json({
       status: 'ok',
       hasGeminiKey: !!process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY',
+      hasGeminiFileSearchStore: !!process.env.GEMINI_FILE_SEARCH_STORE_NAME,
+      geminiModel: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
       time: new Date().toISOString()
     });
   });

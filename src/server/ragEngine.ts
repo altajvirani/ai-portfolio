@@ -1,5 +1,6 @@
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 import { KNOWLEDGE_STORE, KnowledgeChunk } from './knowledgeStore.ts';
+import { getChatMemory, saveChatMemory, type ChatHistoryMessage } from './chatMemory.ts';
 
 export interface RAGResponse {
   answer: string;
@@ -135,7 +136,8 @@ export function synthesizeGroundedAnswer(
 
 export async function processRAGQuery(
   query: string,
-  history: Array<{ role: 'user' | 'model'; text: string }> = []
+  history: Array<{ role: 'user' | 'model'; text: string }> = [],
+  conversationId?: string,
 ): Promise<RAGResponse> {
   const relevantChunks = searchKnowledge(query, 3);
   const sources = Array.from(new Set(relevantChunks.map((c) => c.source)));
@@ -157,20 +159,30 @@ export async function processRAGQuery(
         },
       });
 
-      const systemInstruction = `You are Altaj Virani's official AI Twin representative. You speak as Altaj (or on behalf of Altaj) in a confident, articulate, highly technical, and concise voice.
-Your knowledge is grounded strictly in Altaj's verified resume documents:
-- resume-altaj-virani.pdf
+      const memory = conversationId ? await getChatMemory(conversationId) : { summary: "", recentMessages: [] };
+      const recentHistory = history.slice(-6);
+      const systemInstruction = `You are Altaj Virani's AI Twin representative.
+Speak confidently, concisely, and in the first person only when answering as Altaj.
+Ground every factual claim in the supplied resume File Search results.
+Do not invent employers, projects, metrics, dates, or qualifications.
+If the answer is not supported by the retrieved resume evidence, say that it is not available in the supplied portfolio information.
+Do not reveal internal or confidential systems or names.
 
 CORE PRINCIPLES:
-1. Cover Altaj's real work across Azure AI and agentic platform engineering (MCP toolkits and domain tools), Microsoft Power Platform QA/SDK engineering, cloud reliability (35x Key Vault cache optimization, zero-OOM compute, 35,500 load-test workflows), OWASP/SSRF security, IEEE ICSCSS 2023 publication, Govt. of India copyright (AutoQA AI), SnapWright VS Code extension, Nivesh crowdfunding app, awards, and education cleanly.
-2. Answer directly based on the provided context and conversation history.
-3. Cite quantitative metrics accurately and conclude with natural source attribution (e.g., [Source: resume-altaj-virani.pdf]).`;
+1. Use the retrieved PDF passages as the primary source.
+2. Use the concise conversation summary and recent turns for follow-up context.
+3. Cite the resume and include quantitative details only when supported.
+4. End naturally with "[Source: resume-altaj-virani.pdf]" when resume evidence is used.`;
 
-      const prompt = `Context knowledge retrieved from Altaj Virani's verified resumes:
-${contextText}
+      const storeName = process.env.GEMINI_FILE_SEARCH_STORE_NAME;
+      const prompt = `Conversation summary:
+${memory.summary || "No earlier summary."}
 
-Previous conversation:
-${history.map((h) => `${h.role === 'user' ? 'User' : 'Altaj AI Twin'}: ${h.text}`).join('\n')}
+Recent conversation:
+${[...memory.recentMessages, ...recentHistory]
+  .slice(-6)
+  .map((h) => `${h.role === 'user' ? 'User' : 'Altaj AI Twin'}: ${h.text}`)
+  .join('\n')}
 
 User Question:
 ${query}
@@ -178,10 +190,16 @@ ${query}
 Please formulate a helpful, grounded response:`;
 
       const generatePromise = ai.models.generateContent({
-        model: 'gemini-4-hydrogen',
+        model: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
         contents: prompt,
         config: {
           systemInstruction,
+          tools: storeName ? [{
+            fileSearch: {
+              fileSearchStoreNames: [storeName],
+              topK: 6,
+            },
+          }] : undefined,
           thinkingConfig: {
             thinkingLevel: ThinkingLevel.LOW,
           },
@@ -195,6 +213,29 @@ Please formulate a helpful, grounded response:`;
       const response = await Promise.race([generatePromise, timeoutPromise]);
 
       const answerText = response.text || synthesizeGroundedAnswer(query, relevantChunks, sources);
+      if (conversationId) {
+        const nextRecent: ChatHistoryMessage[] = [
+          ...memory.recentMessages,
+          { role: "user" as const, text: query },
+          { role: "model" as const, text: answerText },
+        ].slice(-6);
+        const needsSummary = nextRecent.length >= 6;
+        let summary = memory.summary;
+        if (needsSummary) {
+          const summaryResponse = await ai.models.generateContent({
+            model: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
+            contents: `Summarize this portfolio chat in 3 concise sentences. Preserve user interests, important follow-up topics, and unanswered questions.\n\nPrevious summary: ${memory.summary || "None"}\n\nConversation:\n${nextRecent.map((message) => `${message.role}: ${message.text}`).join('\n')}`,
+            config: {
+              thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+            },
+          });
+          summary = (summaryResponse.text || summary).slice(0, 4000);
+        }
+        await saveChatMemory(conversationId, {
+          summary,
+          recentMessages: needsSummary ? [] : nextRecent,
+        });
+      }
 
       return {
         answer: answerText,

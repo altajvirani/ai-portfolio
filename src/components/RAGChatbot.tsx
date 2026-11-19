@@ -50,6 +50,11 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const conversationIdRef = useRef(
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  );
 
   useEffect(() => {
     if (!isModal || !onCloseModal) return;
@@ -112,6 +117,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         body: JSON.stringify({
           message: query,
           history: historyPayload,
+          conversationId: conversationIdRef.current,
         }),
       });
 
@@ -184,6 +190,10 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
   };
 
   const handleClear = () => {
+    conversationIdRef.current =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     setMessages([
       {
         id: "welcome-reset",
