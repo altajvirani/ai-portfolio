@@ -117,7 +117,7 @@ export default function App() {
             className="pointer-events-auto h-11 px-3 rounded-full paper-cutout-sm skeuo-btn-ivory cursor-pointer flex items-center gap-1.5 text-xs font-mono font-bold text-[#18181B]"
           >
             <Command className="w-3.5 h-3.5 text-[#2563EB]" />
-            <span className="hidden sm:inline">⌘K</span>
+            <span className="hidden sm:inline">K</span>
           </motion.button>
 
           <motion.button
@@ -126,7 +126,7 @@ export default function App() {
             whileTap={{ y: 1, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 420, damping: 24 }}
             onClick={() => setIsChatModalOpen(true)}
-            className="pointer-events-auto h-11 px-4 rounded-full paper-cutout-sm skeuo-btn-cobalt cursor-pointer flex items-center gap-2.5"
+            className="pointer-events-auto h-11 px-[0.6rem] rounded-full paper-cutout-sm skeuo-btn-cobalt cursor-pointer flex items-center gap-2.5"
             aria-label="Open AI Twin Chatbot"
           >
             <span className="p-1.5 rounded-full bg-gradient-to-br from-[#FB923C] to-[#EA580C] shadow-xs flex items-center justify-center">

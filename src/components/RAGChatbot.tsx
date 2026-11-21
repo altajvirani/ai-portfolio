@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { ChatMessage } from "../types.ts";
+import { MarkdownRenderer } from "./MarkdownRenderer.tsx";
 
 interface RAGChatbotProps {
   isModal?: boolean;
@@ -122,7 +123,17 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
       });
 
       if (!res.ok) {
-        throw new Error(`API responded with status ${res.status}`);
+        let errMessage =
+          "The chat service is momentarily unreachable. Please check your connection and try again, or reach out directly via the Contact section below.";
+        try {
+          const errData = await res.json();
+          if (errData?.error) {
+            errMessage = errData.error;
+          }
+        } catch {
+          // ignore
+        }
+        throw new Error(errMessage);
       }
 
       const data = await res.json();
@@ -131,8 +142,8 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         id: `assistant-${Date.now()}`,
         role: "assistant",
         content:
-          data.answer || "No response generated from the knowledge base.",
-        sources: data.sources || ["altaj-virani-resume.pdf"],
+          data.answer || "The AI Twin is momentarily unavailable. Please reach out directly via the Contact section below.",
+        sources: data.sources || ["resume-altaj-virani.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -140,13 +151,16 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch {
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "The chat service is momentarily unreachable. Please check your connection and try again, or reach out directly via the Contact section below.";
       const assistantMessage: ChatMessage = {
         id: `assistant-${Date.now()}`,
         role: "assistant",
-        content:
-          "The chat service is momentarily unreachable. Please check your connection and try again, or reach out directly via the Contact section below.",
-        sources: ["altaj-virani-resume.pdf"],
+        content: errorMessage,
+        sources: ["resume-altaj-virani.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -199,7 +213,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         id: "welcome-reset",
         role: "assistant",
         content: `Conversation reset. Ask any question about Altaj Virani's enterprise AI engineering, MCP toolkits, projects, awards, or Azure cloud systems.`,
-        sources: ["altaj-virani-resume.pdf"],
+        sources: ["resume-altaj-virani.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -224,7 +238,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
               </span>
             </div>
             <div className="text-[11px] text-[#52525B] font-mono truncate">
-              Sources: <span className="text-[#2563EB] font-semibold">altaj-virani-resume.pdf</span> &amp;{" "}
+              Sources: <span className="text-[#2563EB] font-semibold">resume-altaj-virani.pdf</span> (<span className="text-[#047857] font-semibold">Markdown / PDF</span>)
             </div>
           </div>
         </div>
@@ -301,7 +315,11 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
                     : "skeuo-card text-[#27272A]"
                 }`}
               >
-                <div className="whitespace-pre-wrap">{msg.content}</div>
+                {isUser ? (
+                  <div className="whitespace-pre-wrap">{msg.content}</div>
+                ) : (
+                  <MarkdownRenderer content={msg.content} />
+                )}
 
                 {!isUser && (
                   <div className="mt-3 pt-2.5 border-t border-[#E5DFD5] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#52525B]">

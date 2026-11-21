@@ -1,7 +1,3 @@
-import fs from 'fs/promises';
-import path from 'path';
-import nodemailer from 'nodemailer';
-
 export interface ContactPayload {
   name: string;
   email: string;
@@ -24,10 +20,12 @@ export interface ContactSubmissionResponse {
   ok: boolean;
   id: string;
   delivered: boolean;
-  channel: 'resend' | 'smtp' | 'formsubmit' | 'inbox-queue';
+  channel: 'client-direct';
   message: string;
   mailtoUrl: string;
   gmailUrl: string;
+  outlookUrl: string;
+  yahooUrl: string;
   error?: string;
 }
 
@@ -82,15 +80,20 @@ export function buildGmailComposeUrl(
   return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
 }
 
-async function persistSubmissionRecord(record: Record<string, unknown>): Promise<void> {
-  try {
-    const dir = path.join(process.cwd(), 'data');
-    await fs.mkdir(dir, { recursive: true });
-    const file = path.join(dir, 'contact-inquiries.jsonl');
-    await fs.appendFile(file, JSON.stringify(record) + '\n', 'utf-8');
-  } catch (err) {
-    console.warn('Unable to write local inquiry log:', err);
-  }
+export function buildOutlookComposeUrl(
+  recipient: string,
+  data: { name: string; email: string; subject: string; message: string },
+): string {
+  const body = `From: ${data.name} (${data.email})\n\n${data.message}`;
+  return `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(recipient)}&subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
+}
+
+export function buildYahooComposeUrl(
+  recipient: string,
+  data: { name: string; email: string; subject: string; message: string },
+): string {
+  const body = `From: ${data.name} (${data.email})\n\n${data.message}`;
+  return `https://compose.mail.yahoo.com/?to=${encodeURIComponent(recipient)}&subj=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
 }
 
 export async function dispatchContactSubmission(
@@ -107,10 +110,12 @@ export async function dispatchContactSubmission(
         ok: false,
         id: '',
         delivered: false,
-        channel: 'inbox-queue',
+        channel: 'client-direct',
         message: validation.error || 'Invalid form submission.',
         mailtoUrl: `mailto:${recipient}`,
         gmailUrl: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}`,
+        outlookUrl: `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(recipient)}`,
+        yahooUrl: `https://compose.mail.yahoo.com/?to=${encodeURIComponent(recipient)}`,
         error: validation.error,
       },
     };
@@ -120,111 +125,11 @@ export async function dispatchContactSubmission(
   const submissionId = `msg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
   const mailtoUrl = buildMailtoUrl(recipient, data);
   const gmailUrl = buildGmailComposeUrl(recipient, data);
+  const outlookUrl = buildOutlookComposeUrl(recipient, data);
+  const yahooUrl = buildYahooComposeUrl(recipient, data);
 
-  let delivered = false;
-  let channel: ContactSubmissionResponse['channel'] = 'inbox-queue';
-
-  // 1. Try Resend API if configured
-  const resendKey = process.env.RESEND_API_KEY;
-  if (resendKey && resendKey.trim()) {
-    try {
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${resendKey.trim()}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: process.env.RESEND_FROM_EMAIL || 'Portfolio Contact <onboarding@resend.dev>',
-          to: [recipient],
-          reply_to: data.email,
-          subject: `[Portfolio] ${data.subject}`,
-          text: `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`,
-        }),
-        signal: AbortSignal.timeout(6000),
-      });
-      if (res.ok) {
-        delivered = true;
-        channel = 'resend';
-      }
-    } catch (err) {
-      console.warn('Resend relay failed:', err);
-    }
-  }
-
-  // 2. Try SMTP via Nodemailer if configured
-  if (
-    !delivered &&
-    process.env.SMTP_HOST &&
-    process.env.SMTP_USER &&
-    process.env.SMTP_PASS
-  ) {
-    try {
-      const port = Number(process.env.SMTP_PORT || '587');
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port,
-        secure: port === 465,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
-      await transporter.sendMail({
-        from: `"${data.name} via Portfolio" <${process.env.SMTP_USER}>`,
-        to: recipient,
-        replyTo: data.email,
-        subject: `[Portfolio] ${data.subject}`,
-        text: `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`,
-      });
-      delivered = true;
-      channel = 'smtp';
-    } catch (err) {
-      console.warn('SMTP relay failed:', err);
-    }
-  }
-
-  // 3. Try FormSubmit AJAX endpoint if reachable & activated
-  if (!delivered) {
-    try {
-      const referer = originHeader || process.env.APP_URL || 'https://altajvirani.dev';
-      const res = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Origin: referer,
-          Referer: referer,
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          _subject: data.subject,
-          message: data.message,
-          _template: 'table',
-        }),
-        signal: AbortSignal.timeout(4500),
-      });
-      if (res.ok) {
-        const json = (await res.json().catch(() => ({}))) as { success?: string | boolean };
-        if (json.success === true || json.success === 'true') {
-          delivered = true;
-          channel = 'formsubmit';
-        }
-      }
-    } catch {
-      // Offline / restricted sandbox falls back cleanly to persisted queue + direct mail client links
-    }
-  }
-
-  await persistSubmissionRecord({
-    id: submissionId,
-    timestamp: new Date().toISOString(),
-    delivered,
-    channel,
-    recipient,
-    ...data,
-  });
+  const delivered = false;
+  const channel: ContactSubmissionResponse['channel'] = 'client-direct';
 
   return {
     status: 200,
@@ -235,9 +140,11 @@ export async function dispatchContactSubmission(
       channel,
       message: delivered
         ? `Your message has been sent directly to ${recipient}.`
-        : `Your message has been prepared for ${recipient}. Use Send via Gmail or Open Mail App below to deliver it directly.`,
+        : `Your message has been prepared for ${recipient}. Choose your preferred email client below to send it directly from your address.`,
       mailtoUrl,
       gmailUrl,
+      outlookUrl,
+      yahooUrl,
     },
   };
 }

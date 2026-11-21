@@ -43,8 +43,15 @@ export async function handleChatRequest(request: Request) {
   const ipKey = createHash("sha256").update(ip).digest("hex");
   const limit = await checkChatRateLimit(ipKey);
   if (!limit.allowed) {
+    const isGlobal = limit.reason === "global_budget";
     return jsonResponse(
-      { error: "Usage limit reached. Please try again later." },
+      {
+        error: isGlobal
+          ? "The AI Twin has reached its daily showcase budget to protect compute quotas. Please feel free to explore the interactive portfolio sections or reach out directly via the Contact section below!"
+          : "You have reached the temporary chat usage limit. Please wait a moment before sending another message, or reach out directly via the Contact section below.",
+        rateLimited: true,
+        reason: limit.reason,
+      },
       429,
       { "Retry-After": String(limit.retryAfterSeconds) },
     );

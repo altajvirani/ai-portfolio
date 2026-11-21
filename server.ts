@@ -106,7 +106,7 @@ async function startServer() {
     res.json({
       status: 'ok',
       hasGeminiKey: !!process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY',
-      hasGeminiFileSearchStore: !!process.env.GEMINI_FILE_SEARCH_STORE_NAME,
+      resumeMode: 'in-context-markdown',
       geminiModel: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
       time: new Date().toISOString()
     });

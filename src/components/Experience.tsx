@@ -76,6 +76,8 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
   const cardRefs = useRef<Record<string, HTMLElement | null>>({});
   const mobileTrackRef = useRef<HTMLDivElement>(null);
   const mobileTabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const isProgrammaticScrollRef = useRef(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
   const [activeId, setActiveId] = useState<string>(WORK_EXPERIENCE[0].id);
   const [expandedCardId, setExpandedCardId] = useState<string>(
     WORK_EXPERIENCE[0].id,
@@ -95,6 +97,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        if (isProgrammaticScrollRef.current) return;
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
@@ -132,9 +135,48 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
   }, [activeId]);
 
   const scrollToMilestone = (id: string) => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    isProgrammaticScrollRef.current = true;
     setActiveId(id);
     setExpandedCardId(id);
-    cardRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Release programmatic scroll flag after smooth scroll completes
+    scrollTimeoutRef.current = window.setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 850);
+
+    const target =
+      document.getElementById(`exp-${id}`) ||
+      cardRefs.current[id] ||
+      (document.querySelector(`[data-timeline-id="${id}"]`) as HTMLElement | null);
+
+    if (target) {
+      // Primary native smooth scroll honoring CSS scroll-margin-top
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // Fallback: Ensure document scrolling container scrolls if scrollIntoView is constrained
+      const headerOffset = window.innerWidth >= 1024 ? 96 : 124;
+      const rect = target.getBoundingClientRect();
+      const currentScrollTop =
+        window.scrollY ?? document.documentElement.scrollTop ?? document.body.scrollTop ?? 0;
+      const targetTop = rect.top + currentScrollTop - headerOffset;
+
+      setTimeout(() => {
+        const newRect = target.getBoundingClientRect();
+        if (Math.abs(newRect.top - headerOffset) > 30) {
+          window.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior: "smooth",
+          });
+          document.documentElement.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior: "smooth",
+          });
+        }
+      }, 60);
+    }
   };
 
   return (
@@ -183,7 +225,10 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                 type="button"
                 data-mobile-exp-tab={item.id}
                 data-active={isActive ? "true" : "false"}
-                onClick={() => scrollToMilestone(item.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToMilestone(item.id);
+                }}
                 className={`min-h-[38px] px-3 py-1.5 rounded-xl text-[11px] font-mono whitespace-nowrap shrink-0 flex items-center gap-1.5 transition-all cursor-pointer ${
                   isActive
                     ? "skeuo-btn-cobalt skeuo-sheen text-white font-bold"
@@ -243,7 +288,10 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                       whileHover={{ x: 4 }}
                       whileTap={{ scale: 0.98, y: 1 }}
                       transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                      onClick={() => scrollToMilestone(item.id)}
+                      onClick={(e) => {
+                  e.preventDefault();
+                  scrollToMilestone(item.id);
+                }}
                       className={`w-full text-left p-3.5 rounded-xl transition-all cursor-pointer relative ${
                         isActive
                           ? "paper-cutout-sm bg-white text-[#18181B]"
@@ -305,6 +353,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
               return (
                 <motion.article
                   key={item.id}
+                  id={`exp-${item.id}`}
                   data-timeline-id={item.id}
                   ref={(el) => {
                     cardRefs.current[item.id] = el;
@@ -318,7 +367,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                     delay: idx * 0.04,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className={`relative p-5 sm:p-7 rounded-2xl paper-cutout ${theme.cardSurface} transition-all duration-300 space-y-4 sm:space-y-5 ${
+                  className={`scroll-mt-24 sm:scroll-mt-28 relative p-5 sm:p-7 rounded-2xl paper-cutout ${theme.cardSurface} transition-all duration-300 space-y-4 sm:space-y-5 ${
                     isActive ? theme.activeRing : ""
                   }`}
                 >

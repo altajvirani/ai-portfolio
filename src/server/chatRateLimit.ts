@@ -1,15 +1,19 @@
 import { neon } from "@neondatabase/serverless";
 
-type RateLimitResult = {
+export type RateLimitResult = {
   allowed: boolean;
   retryAfterSeconds: number;
+  reason?: "minute_limit" | "day_limit" | "global_budget";
 };
 
 const minuteWindows = new Map<string, { count: number; resetAt: number }>();
 const dayWindows = new Map<string, { count: number; resetAt: number }>();
 
-const CHAT_LIMIT_PER_MINUTE = Number(process.env.CHAT_LIMIT_PER_MINUTE || 8);
-const CHAT_LIMIT_PER_DAY = Number(process.env.CHAT_LIMIT_PER_DAY || 40);
+const CHAT_LIMIT_PER_MINUTE = Number(process.env.CHAT_LIMIT_PER_MINUTE || 15);
+const CHAT_LIMIT_PER_DAY = Number(process.env.CHAT_LIMIT_PER_DAY || 100);
+// Global daily portfolio safety budget (caps total portfolio LLM calls to reserve quota for other AI projects)
+const CHAT_GLOBAL_DAILY_LIMIT = Number(process.env.CHAT_GLOBAL_DAILY_LIMIT || 250);
+const GLOBAL_BUDGET_KEY = "__portfolio_global_safety_budget__";
 const CHAT_WINDOW_MS = 60 * 1000;
 const CHAT_DAY_MS = 24 * 60 * 60 * 1000;
 let schemaPromise: Promise<void> | undefined;
@@ -57,6 +61,33 @@ export async function checkChatRateLimit(key: string): Promise<RateLimitResult> 
     const sql = getSql();
     const minuteReset = new Date(now + CHAT_WINDOW_MS);
     const dayReset = new Date(now + CHAT_DAY_MS);
+
+    // 1. Global Daily Safety Budget: protect overall Google AI Studio quota so other projects are never hampered
+    const globalDayRows = await sql`
+      INSERT INTO chat_rate_limits (key_hash, window_name, count, reset_at)
+      VALUES (${GLOBAL_BUDGET_KEY}, 'day', 1, ${dayReset})
+      ON CONFLICT (key_hash, window_name) DO UPDATE SET
+        count = CASE
+          WHEN chat_rate_limits.reset_at <= NOW() THEN 1
+          ELSE chat_rate_limits.count + 1
+        END,
+        reset_at = CASE
+          WHEN chat_rate_limits.reset_at <= NOW() THEN ${dayReset}
+          ELSE chat_rate_limits.reset_at
+        END
+      RETURNING count, reset_at AS "resetAt"
+    `;
+    const globalDayCount = Number(globalDayRows[0]?.count || 0);
+    const globalDayResetAt = new Date(globalDayRows[0]?.resetAt || dayReset).getTime();
+    if (globalDayCount > CHAT_GLOBAL_DAILY_LIMIT) {
+      return {
+        allowed: false,
+        retryAfterSeconds: secondsUntil(globalDayResetAt),
+        reason: "global_budget",
+      };
+    }
+
+    // 2. Client IP Rate Limits (Minute and Day)
     const minuteRows = await sql`
       INSERT INTO chat_rate_limits (key_hash, window_name, count, reset_at)
       VALUES (${key}, 'minute', 1, ${minuteReset})
@@ -90,14 +121,32 @@ export async function checkChatRateLimit(key: string): Promise<RateLimitResult> 
     const minuteResetAt = new Date(minuteRows[0]?.resetAt || minuteReset).getTime();
     const dayResetAt = new Date(dayRows[0]?.resetAt || dayReset).getTime();
     if (minuteCount > CHAT_LIMIT_PER_MINUTE) {
-      return { allowed: false, retryAfterSeconds: secondsUntil(minuteResetAt) };
+      return { allowed: false, retryAfterSeconds: secondsUntil(minuteResetAt), reason: "minute_limit" };
     }
     if (dayCount > CHAT_LIMIT_PER_DAY) {
-      return { allowed: false, retryAfterSeconds: secondsUntil(dayResetAt) };
+      return { allowed: false, retryAfterSeconds: secondsUntil(dayResetAt), reason: "day_limit" };
     }
     return { allowed: true, retryAfterSeconds: 1 };
   }
 
+  // Local In-Memory Store
+  // 1. Global Daily Safety Budget
+  const globalDay = dayWindows.get(GLOBAL_BUDGET_KEY);
+  if (!globalDay || globalDay.resetAt <= now) {
+    dayWindows.set(GLOBAL_BUDGET_KEY, { count: 1, resetAt: now + CHAT_DAY_MS });
+  } else {
+    globalDay.count += 1;
+  }
+  const activeGlobalDay = dayWindows.get(GLOBAL_BUDGET_KEY);
+  if (activeGlobalDay && activeGlobalDay.count > CHAT_GLOBAL_DAILY_LIMIT) {
+    return {
+      allowed: false,
+      retryAfterSeconds: secondsUntil(activeGlobalDay.resetAt),
+      reason: "global_budget",
+    };
+  }
+
+  // 2. Client IP Rate Limits (Minute and Day)
   const minute = minuteWindows.get(key);
   if (!minute || minute.resetAt <= now) {
     minuteWindows.set(key, { count: 1, resetAt: now + CHAT_WINDOW_MS });
@@ -121,12 +170,14 @@ export async function checkChatRateLimit(key: string): Promise<RateLimitResult> 
     return {
       allowed: false,
       retryAfterSeconds: secondsUntil(activeMinute.resetAt),
+      reason: "minute_limit",
     };
   }
   if (activeDay.count > CHAT_LIMIT_PER_DAY) {
     return {
       allowed: false,
       retryAfterSeconds: secondsUntil(activeDay.resetAt),
+      reason: "day_limit",
     };
   }
 

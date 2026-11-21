@@ -36,12 +36,16 @@ const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
+type EmailClient = "default" | "gmail" | "outlook" | "yahoo";
+
 interface ContactSubmissionResult {
   delivered: boolean;
   channel: string;
   message: string;
   mailtoUrl: string;
   gmailUrl: string;
+  outlookUrl: string;
+  yahooUrl: string;
 }
 
 export const ContactSection: React.FC = () => {
@@ -51,11 +55,27 @@ export const ContactSection: React.FC = () => {
     subject: "",
     message: "",
   });
+  const [selectedClient, setSelectedClient] = useState<EmailClient>("gmail");
   const [isSending, setIsSending] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedDraft, setCopiedDraft] = useState(false);
   const [submissionResult, setSubmissionResult] =
     useState<ContactSubmissionResult | null>(null);
+
+  const getClientUrls = (data: typeof formData) => {
+    const recipient = SOCIAL_LINKS.email;
+    const subject = data.subject.trim() || `Inquiry from ${data.name.trim()} via Portfolio`;
+    const body = `Hi Altaj,\n\n${data.message.trim()}\n\n---\nFrom: ${data.name.trim()} (${data.email.trim()})`;
+
+    return {
+      mailtoUrl: `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+      gmailUrl: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+      outlookUrl: `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(recipient)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+      yahooUrl: `https://compose.mail.yahoo.com/?to=${encodeURIComponent(recipient)}&subj=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+      formattedText: `To: ${recipient}\nSubject: ${subject}\n\n${body}`,
+    };
+  };
 
   const handleCopyEmail = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -92,6 +112,32 @@ export const ContactSection: React.FC = () => {
     setTimeout(() => setCopiedEmail(false), 1800);
   };
 
+  const handleCopyDraft = async (text: string) => {
+    let copied = false;
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } catch {
+        copied = false;
+      }
+    }
+    setCopiedDraft(copied);
+    setTimeout(() => setCopiedDraft(false), 2000);
+  };
+
+  const openEmailClient = (client: EmailClient, urls: ReturnType<typeof getClientUrls>) => {
+    if (client === "gmail") {
+      window.open(urls.gmailUrl, "_blank", "noopener,noreferrer");
+    } else if (client === "outlook") {
+      window.open(urls.outlookUrl, "_blank", "noopener,noreferrer");
+    } else if (client === "yahoo") {
+      window.open(urls.yahooUrl, "_blank", "noopener,noreferrer");
+    } else {
+      window.location.href = urls.mailtoUrl;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -102,33 +148,37 @@ export const ContactSection: React.FC = () => {
     }
 
     setIsSending(true);
+    const urls = getClientUrls(formData);
+
+    // 1. Immediately launch the email composer in the user's chosen client
     try {
-      const res = await fetch("/api/contact", {
+      openEmailClient(selectedClient, urls);
+    } catch {
+      // Fallback handled below
+    }
+
+    // 2. Silently backup/log the inquiry to server in the background
+    try {
+      await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
-        setErrorMsg(data.error || "Failed to submit inquiry. Please try again.");
-        return;
-      }
-
-      setSubmissionResult({
-        delivered: Boolean(data.delivered),
-        channel: data.channel,
-        message: data.message,
-        mailtoUrl: data.mailtoUrl,
-        gmailUrl: data.gmailUrl,
-      });
     } catch {
-      setErrorMsg(
-        "Unable to reach the contact endpoint right now. Please try again or email directly.",
-      );
-    } finally {
-      setIsSending(false);
+      // Non-blocking fire-and-forget
     }
+
+    setSubmissionResult({
+      delivered: false,
+      channel: selectedClient,
+      message: `Your email is prepared for ${SOCIAL_LINKS.email}. Simply review and click Send in your email client to dispatch it directly from your own email address.`,
+      mailtoUrl: urls.mailtoUrl,
+      gmailUrl: urls.gmailUrl,
+      outlookUrl: urls.outlookUrl,
+      yahooUrl: urls.yahooUrl,
+    });
+
+    setIsSending(false);
   };
 
   return (
@@ -324,36 +374,58 @@ export const ContactSection: React.FC = () => {
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold font-display text-[#18181B]">
-                  {submissionResult.delivered
-                    ? "Email Sent Successfully"
-                    : "Message Prepared"}
+                  Opening in {submissionResult.channel === "gmail" ? "Gmail" : submissionResult.channel === "outlook" ? "Outlook" : submissionResult.channel === "yahoo" ? "Yahoo Mail" : "Your Email App"}
                 </h3>
                 <p className="text-xs sm:text-sm text-[#52525B] max-w-md mx-auto leading-relaxed">
                   {submissionResult.message}
                 </p>
 
-                {!submissionResult.delivered && (
-                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                    <a
-                      href={submissionResult.gmailUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="min-h-[42px] px-4 py-2 rounded-xl skeuo-btn-cobalt text-xs font-mono font-bold inline-flex items-center gap-1.5"
-                    >
-                      <span>Send via Gmail</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                    <a
-                      href={submissionResult.mailtoUrl}
-                      className="min-h-[42px] px-4 py-2 rounded-xl skeuo-btn-ivory text-xs font-mono font-semibold inline-flex items-center gap-1.5"
-                    >
-                      <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
-                      <span>Open Mail App</span>
-                    </a>
-                  </div>
-                )}
+                <div className="flex flex-wrap items-center justify-center gap-2.5 pt-3">
+                  <a
+                    href={submissionResult.gmailUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="min-h-[40px] px-3.5 py-2 rounded-xl skeuo-btn-cobalt text-xs font-mono font-bold inline-flex items-center gap-1.5"
+                  >
+                    <span>Open in Gmail</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <a
+                    href={submissionResult.mailtoUrl}
+                    className="min-h-[40px] px-3.5 py-2 rounded-xl skeuo-btn-ivory text-xs font-mono font-semibold inline-flex items-center gap-1.5"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
+                    <span>Default Mail App</span>
+                  </a>
+                  <a
+                    href={submissionResult.outlookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="min-h-[40px] px-3.5 py-2 rounded-xl skeuo-btn-ivory text-xs font-mono font-semibold inline-flex items-center gap-1.5"
+                  >
+                    <span>Outlook Web</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyDraft(getClientUrls(formData).formattedText)}
+                    className="min-h-[40px] px-3.5 py-2 rounded-xl skeuo-btn-ivory text-xs font-mono font-semibold inline-flex items-center gap-1.5 cursor-pointer"
+                  >
+                    {copiedDraft ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-[#16A34A]" />
+                        <span className="text-[#16A34A] font-bold">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-[#52525B]" />
+                        <span>Copy Draft</span>
+                      </>
+                    )}
+                  </button>
+                </div>
 
-                <div>
+                <div className="pt-2">
                   <button
                     type="button"
                     onClick={() => {
@@ -367,7 +439,7 @@ export const ContactSection: React.FC = () => {
                     }}
                     className="mt-2 min-h-[40px] px-4 py-2 text-xs font-mono font-semibold skeuo-btn-ivory rounded-xl cursor-pointer"
                   >
-                    Send another message
+                    Write another message
                   </button>
                 </div>
               </div>
@@ -411,7 +483,7 @@ export const ContactSection: React.FC = () => {
                       htmlFor="contact-email"
                       className="text-[11px] font-mono text-[#3F3F46] font-bold block"
                     >
-                      Email Address *
+                      Your Email Address *
                     </label>
                     <input
                       id="contact-email"
@@ -466,22 +538,76 @@ export const ContactSection: React.FC = () => {
                   />
                 </div>
 
+                {/* Email Client Selector */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono text-[#3F3F46] font-bold">
+                      Send From Your Email Client:
+                    </span>
+                    <span className="text-[10px] font-mono text-[#2563EB]">
+                      Opens pre-filled in your client
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {[
+                      { id: "gmail", label: "Gmail", desc: "Web Browser" },
+                      { id: "default", label: "Default App", desc: "Apple/Windows Mail" },
+                      { id: "outlook", label: "Outlook", desc: "Office 365" },
+                      { id: "yahoo", label: "Yahoo", desc: "Webmail" },
+                    ].map((client) => {
+                      const isSelected = selectedClient === client.id;
+                      return (
+                        <button
+                          key={client.id}
+                          type="button"
+                          onClick={() => setSelectedClient(client.id as EmailClient)}
+                          className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
+                            isSelected
+                              ? "bg-[#EFF6FF] border-[#2563EB] shadow-xs ring-1 ring-[#2563EB]/30 text-[#1E3A8A]"
+                              : "bg-[#FBF8F1] border-[#D8D0C1] text-[#3F3F46] hover:bg-white"
+                          }`}
+                        >
+                          <div className="text-[11px] font-mono font-bold flex items-center justify-between">
+                            <span>{client.label}</span>
+                            {isSelected && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]" />
+                            )}
+                          </div>
+                          <div className="text-[9px] font-mono text-[#71717A] truncate">
+                            {client.desc}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <motion.button
                   type="submit"
                   disabled={isSending}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full min-h-[46px] py-3 rounded-xl skeuo-btn-cobalt skeuo-sheen disabled:opacity-60 font-mono font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full min-h-[46px] py-3 rounded-xl skeuo-btn-cobalt skeuo-sheen disabled:opacity-60 font-mono font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mt-1"
                 >
                   {isSending ? (
                     <>
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>Sending Message...</span>
+                      <span>Opening Email Client...</span>
                     </>
                   ) : (
                     <>
                       <Send className="w-3.5 h-3.5 text-white" />
-                      <span>Send Message</span>
+                      <span>
+                        Compose in{" "}
+                        {selectedClient === "gmail"
+                          ? "Gmail"
+                          : selectedClient === "outlook"
+                            ? "Outlook"
+                            : selectedClient === "yahoo"
+                              ? "Yahoo Mail"
+                              : "Default Mail App"}{" "}
+                        &rarr;
+                      </span>
                     </>
                   )}
                 </motion.button>
