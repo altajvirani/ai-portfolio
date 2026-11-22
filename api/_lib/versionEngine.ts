@@ -430,6 +430,14 @@ export async function createVersion(
 
   updatedLocals.push(newVersionObj);
   await writeLocalVersions(docType, updatedLocals);
+  await recordAuditLog({
+    documentType: docType,
+    action: "CREATE_VERSION",
+    fromVersion: currentActive?.version ?? null,
+    toVersion: nextVersion,
+    performedBy: params.actorEmail,
+    aiSummary: summary,
+  });
 
   cacheInvalidator?.();
 
@@ -505,6 +513,14 @@ export async function switchVersion(
     isActive: v.version === targetVersionNum,
   }));
   await writeLocalVersions(docType, updatedLocals);
+  await recordAuditLog({
+    documentType: docType,
+    action: "SWITCH_ACTIVE",
+    fromVersion: currentActive?.version ?? null,
+    toVersion: targetVersionNum,
+    performedBy: actorEmail,
+    aiSummary,
+  });
 
   cacheInvalidator?.();
 
@@ -565,6 +581,14 @@ export async function deleteVersion(
   const locals = await readLocalVersions(docType);
   const filtered = locals.filter((v) => v.version !== targetVersionNum);
   await writeLocalVersions(docType, filtered);
+  await recordAuditLog({
+    documentType: docType,
+    action: "DELETE_VERSION",
+    fromVersion: targetVersionNum,
+    toVersion: null,
+    performedBy: actorEmail,
+    aiSummary: `Deleted version ${targetVersionNum}`,
+  });
 
   return { success: true, deletedVersion: targetVersionNum };
 }
@@ -602,4 +626,114 @@ export async function compareVersions(
     aiSummary,
     diff,
   };
+}
+
+export interface AuditLogEntry {
+  id?: string | number;
+  documentType: string;
+  action: string;
+  fromVersion?: number | null;
+  toVersion?: number | null;
+  performedBy: string;
+  aiSummary?: string;
+  createdAt?: string;
+}
+
+/**
+ * Persists an operation record to document_audit_log in both Postgres and local fallback.
+ */
+export async function recordAuditLog(entry: {
+  documentType: string;
+  action: string;
+  fromVersion?: number | null;
+  toVersion?: number | null;
+  performedBy: string;
+  aiSummary?: string;
+}): Promise<void> {
+  const summary = entry.aiSummary || "";
+  if (usesRemoteStore()) {
+    try {
+      await ensureSchema();
+      const sql = getSql();
+      await sql`
+        INSERT INTO document_audit_log (
+          document_type, action, from_version, to_version, performed_by, ai_summary
+        ) VALUES (
+          ${entry.documentType},
+          ${entry.action},
+          ${entry.fromVersion ?? null},
+          ${entry.toVersion ?? null},
+          ${entry.performedBy},
+          ${summary}
+        )
+      `;
+    } catch (err) {
+      console.warn("Failed to write remote audit log entry:", err);
+    }
+  }
+
+  try {
+    await mkdir(localStoreDir, { recursive: true });
+    const auditFile = path.join(localStoreDir, "audit.json");
+    let logs: AuditLogEntry[] = [];
+    try {
+      const existing = await readFile(auditFile, "utf-8");
+      logs = JSON.parse(existing) as AuditLogEntry[];
+    } catch {}
+
+    logs.unshift({
+      id: `audit-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      documentType: entry.documentType,
+      action: entry.action,
+      fromVersion: entry.fromVersion ?? null,
+      toVersion: entry.toVersion ?? null,
+      performedBy: entry.performedBy,
+      aiSummary: summary,
+      createdAt: new Date().toISOString(),
+    });
+
+    if (logs.length > 500) logs = logs.slice(0, 500);
+    await writeFile(auditFile, JSON.stringify(logs, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("Failed to write local audit log entry:", err);
+  }
+}
+
+/**
+ * Retrieves the most recent audit log entries.
+ */
+export async function getAuditLogs(limit = 50): Promise<AuditLogEntry[]> {
+  if (usesRemoteStore()) {
+    try {
+      await ensureSchema();
+      const sql = getSql();
+      const rows = await sql`
+        SELECT id, document_type, action, from_version, to_version, performed_by, ai_summary, created_at
+        FROM document_audit_log
+        ORDER BY created_at DESC
+        LIMIT ${limit}
+      `;
+      return rows.map((r) => ({
+        id: String(r.id),
+        documentType: r.document_type,
+        action: r.action,
+        fromVersion: r.from_version,
+        toVersion: r.to_version,
+        performedBy: r.performed_by,
+        aiSummary: r.ai_summary,
+        createdAt: new Date(r.created_at).toISOString(),
+      }));
+    } catch (err) {
+      console.warn("Failed to read remote audit log, falling back to local:", err);
+    }
+  }
+
+  try {
+    const auditFile = path.join(localStoreDir, "audit.json");
+    const data = await readFile(auditFile, "utf-8");
+    const parsed = JSON.parse(data) as AuditLogEntry[];
+    return parsed.slice(0, limit);
+  } catch {
+    return [];
+  }
 }

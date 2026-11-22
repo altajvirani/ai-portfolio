@@ -22,6 +22,8 @@ import {
   deleteVersion,
   compareVersions,
   seedInitialVersionsIfEmpty,
+  getAuditLogs,
+  recordAuditLog,
 } from "./versionEngine.ts";
 import {
   validateFileHeader,
@@ -29,6 +31,12 @@ import {
   convertResumeToMarkdown,
   formatMarkdown,
 } from "./resumeValidator.ts";
+import {
+  evaluateThreatSignatures,
+  extractClientSecurityContext,
+  checkRateLimit,
+  applySecurityHeaders,
+} from "./botProtection.ts";
 
 const ALLOWED_ISSUER = "https://accounts.google.com";
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -134,8 +142,7 @@ function parseCookies(request: Request) {
 function response(body: unknown, status = 200, headers?: HeadersInit) {
   const responseHeaders = new Headers(headers);
   responseHeaders.set("Cache-Control", "no-store");
-  responseHeaders.set("X-Content-Type-Options", "nosniff");
-  responseHeaders.set("Referrer-Policy", "no-referrer");
+  applySecurityHeaders(responseHeaders);
   return new Response(body === undefined ? undefined : JSON.stringify(body), {
     status,
     headers: responseHeaders,
@@ -145,6 +152,7 @@ function response(body: unknown, status = 200, headers?: HeadersInit) {
 function redirect(location: string, cookies: string[] = []) {
   const headers = new Headers({ Location: location, "Cache-Control": "no-store" });
   cookies.forEach((cookie) => headers.append("Set-Cookie", cookie));
+  applySecurityHeaders(headers);
   return new Response(null, { status: 302, headers });
 }
 
@@ -154,14 +162,38 @@ function getOrigin(request: Request) {
 }
 
 function assertMutationOrigin(request: Request) {
+  // Allow direct authenticated programmatic clients (Bearer token or X-Admin-Session)
+  const isBearer = Boolean(
+    request.headers.get("authorization")?.startsWith("Bearer ") || request.headers.get("x-admin-session"),
+  );
+  if (isBearer) return true;
   const origin = request.headers.get("origin");
   return origin === getOrigin(request);
 }
 
-async function requireSession(request: Request) {
-  const token = parseCookies(request).admin_session;
+export async function requireSession(request: Request) {
+  const cookies = parseCookies(request);
+  const bearerToken = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "").trim();
+  const customHeaderToken = request.headers.get("x-admin-session")?.trim();
+  const queryToken = new URL(request.url).searchParams.get("token")?.trim();
+  const token = cookies.admin_session || bearerToken || customHeaderToken || queryToken;
+
   if (!token) return undefined;
-  return getSession(token);
+  const session = await getSession(token);
+  if (!session) return undefined;
+
+  // Strict checking of OAuth allowlist for EVERY operation
+  const allowedEmails = (process.env.ADMIN_GOOGLE_EMAILS || process.env.ALLOWED_ADMIN_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (allowedEmails.length > 0 && !allowedEmails.includes(session.email.toLowerCase())) {
+    console.warn(`[Security Alert] Session email '${session.email}' is unauthorized.`);
+    return undefined;
+  }
+
+  return session;
 }
 
 function base64Url(buffer: ArrayBuffer) {
@@ -230,9 +262,14 @@ async function handleData(request: Request) {
   if (request.method !== "PUT" || !assertMutationOrigin(request)) {
     return response({ error: "Invalid request." }, 400);
   }
-  const csrf = parseCookies(request).admin_csrf;
-  if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
-    return response({ error: "CSRF validation failed." }, 403);
+  const isBearer = Boolean(
+    request.headers.get("authorization")?.startsWith("Bearer ") || request.headers.get("x-admin-session"),
+  );
+  if (!isBearer) {
+    const csrf = parseCookies(request).admin_csrf;
+    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+      return response({ error: "CSRF validation failed." }, 403);
+    }
   }
   const contentLength = Number(request.headers.get("content-length") || 0);
   if (contentLength > 1_600_000) return response({ error: "Request is too large." }, 413);
@@ -249,6 +286,13 @@ async function handleData(request: Request) {
   if (validationError) return response({ error: validationError }, 400);
   const updated = await updateDocument(payload.document, payload.version as number, session);
   if (!updated) return response({ error: "The document changed. Reload before saving." }, 409);
+  await recordAuditLog({
+    documentType: "portfolio",
+    action: "UPDATE_DATASTORE",
+    toVersion: payload.version as number,
+    performedBy: session.email,
+    aiSummary: `Direct datastore update to version ${payload.version}`,
+  });
   return response({ ...updated, actor: { email: session.email } });
 }
 
@@ -315,9 +359,14 @@ async function handleVersionsRequest(request: Request) {
     if (!session) return response({ error: "Authentication required." }, 401);
     if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
 
-    const csrf = parseCookies(request).admin_csrf;
-    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
-      return response({ error: "CSRF validation failed." }, 403);
+    const isBearer = Boolean(
+      request.headers.get("authorization")?.startsWith("Bearer ") || request.headers.get("x-admin-session"),
+    );
+    if (!isBearer) {
+      const csrf = parseCookies(request).admin_csrf;
+      if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+        return response({ error: "CSRF validation failed." }, 403);
+      }
     }
 
     let payload: any;
@@ -376,9 +425,14 @@ async function handleVersionsRequest(request: Request) {
     if (!session) return response({ error: "Authentication required." }, 401);
     if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
 
-    const csrf = parseCookies(request).admin_csrf;
-    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
-      return response({ error: "CSRF validation failed." }, 403);
+    const isBearer = Boolean(
+      request.headers.get("authorization")?.startsWith("Bearer ") || request.headers.get("x-admin-session"),
+    );
+    if (!isBearer) {
+      const csrf = parseCookies(request).admin_csrf;
+      if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+        return response({ error: "CSRF validation failed." }, 403);
+      }
     }
 
     let payload: any;
@@ -468,9 +522,14 @@ async function handleVersionsRequest(request: Request) {
     if (!session) return response({ error: "Authentication required." }, 401);
     if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
 
-    const csrf = parseCookies(request).admin_csrf;
-    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
-      return response({ error: "CSRF validation failed." }, 403);
+    const isBearer = Boolean(
+      request.headers.get("authorization")?.startsWith("Bearer ") || request.headers.get("x-admin-session"),
+    );
+    if (!isBearer) {
+      const csrf = parseCookies(request).admin_csrf;
+      if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+        return response({ error: "CSRF validation failed." }, 403);
+      }
     }
 
     const payload = (await request.json().catch(() => ({}))) as { version?: number };
@@ -510,6 +569,14 @@ async function handleVersionsRequest(request: Request) {
     }
 
     const result = await compareVersions(docType, payload.fromVersion, payload.toVersion);
+    await recordAuditLog({
+      documentType: docType,
+      action: "DIFF_INSPECT",
+      fromVersion: payload.fromVersion,
+      toVersion: payload.toVersion,
+      performedBy: session.email,
+      aiSummary: result.aiSummary,
+    });
     return response(result);
   }
 
@@ -519,9 +586,14 @@ async function handleVersionsRequest(request: Request) {
     if (!session) return response({ error: "Authentication required." }, 401);
     if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
 
-    const csrf = parseCookies(request).admin_csrf;
-    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
-      return response({ error: "CSRF validation failed." }, 403);
+    const isBearer = Boolean(
+      request.headers.get("authorization")?.startsWith("Bearer ") || request.headers.get("x-admin-session"),
+    );
+    if (!isBearer) {
+      const csrf = parseCookies(request).admin_csrf;
+      if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+        return response({ error: "CSRF validation failed." }, 403);
+      }
     }
 
     const versionNum = parseInt(action, 10);
@@ -575,6 +647,17 @@ async function handleVersionsRequest(request: Request) {
 }
 
 export async function handleAdminRequest(request: Request) {
+  // Threat detection & Bot mitigation
+  const threatCheck = evaluateThreatSignatures(request);
+  if (threatCheck.blocked) {
+    return response({ error: "Access Denied by Security Policy.", reason: threatCheck.reason }, 403);
+  }
+  const secCtx = extractClientSecurityContext(request);
+  const rateLimit = checkRateLimit(`admin-${secCtx.clientIp}`, 120, 60_000);
+  if (!rateLimit.allowed) {
+    return response({ error: "Too Many Requests. Please slow down." }, 429, { "Retry-After": "60" });
+  }
+
   const pathname = new URL(request.url).pathname;
   try {
     if (pathname === "/api/auth/google/start" && request.method === "GET") {
@@ -600,6 +683,18 @@ export async function handleAdminRequest(request: Request) {
           return headers;
         })(),
       );
+    }
+    if (pathname === "/api/admin/audit" && request.method === "GET") {
+      const session = await requireSession(request);
+      if (!session) return response({ error: "Authentication required." }, 401);
+      const url = new URL(request.url);
+      const limit = Number(url.searchParams.get("limit")) || 50;
+      const logs = await getAuditLogs(limit);
+      return response({ ok: true, logs });
+    }
+    if (pathname === "/api/mcp" || pathname === "/api/admin/mcp") {
+      const { handleMcpRequest } = await import("./mcpHttpHandler.ts");
+      return await handleMcpRequest(request);
     }
     if (pathname.startsWith("/api/admin/versions")) {
       return await handleVersionsRequest(request);

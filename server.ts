@@ -62,6 +62,7 @@ async function startServer() {
   app.put('/api/admin/data', adminRoute);
   app.all('/api/admin/*', adminRoute);
   app.all('/api/admin', adminRoute);
+  app.all('/api/mcp', adminRoute);
 
   // Grounded LLM Chatbot API Endpoint
   app.post('/api/chat', async (req, res) => {

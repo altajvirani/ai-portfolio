@@ -12,6 +12,7 @@ import {
   LogOut,
   RefreshCw,
   Save,
+  Shield,
   ShieldCheck,
   Sparkles,
   FileText,
@@ -41,6 +42,12 @@ import {
   FileEdit,
 } from "lucide-react";
 import type { DiffResult, SideBySideRow, DiffLine } from "../../api/_lib/diffEngine.ts";
+import {
+  TactileSpinner,
+  SkeuoSkeleton,
+  VersionTimelineSkeleton,
+  AuditLogModal,
+} from "./TactileUI.tsx";
 
 type DocumentType = "resume" | "portfolio";
 
@@ -231,6 +238,27 @@ export const AdminPage: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [email, setEmail] = useState("");
   const [activeTab, setActiveTab] = useState<"resume" | "portfolio">("resume");
+
+  // Security Audit Log State
+  const [auditModalOpen, setAuditModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [isLoadingAuditLogs, setIsLoadingAuditLogs] = useState(false);
+
+  const loadAuditLogs = async () => {
+    setIsLoadingAuditLogs(true);
+    try {
+      const res = await fetch("/api/admin/audit?limit=60", { credentials: "same-origin" });
+      const data = await res.json();
+      if (res.ok && data.logs) {
+        setAuditLogs(data.logs);
+      }
+    } catch (e) {
+      console.warn("Failed to load audit logs:", e);
+    } finally {
+      setIsLoadingAuditLogs(false);
+    }
+  };
 
   // Portfolio Datastore State
   const [editorValue, setEditorValue] = useState("");
@@ -705,9 +733,12 @@ export const AdminPage: React.FC = () => {
   if (authenticated === null) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#F7F4EE] px-5 paper-grain text-[#18181B]">
-        <div className="skeuo-card rounded-2xl px-6 py-5 text-sm font-mono font-bold text-[#475569]">
-          <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#2563EB]" />
-          Checking admin clearance…
+        <div className="skeuo-card rounded-2xl p-8 max-w-sm w-full text-center shadow-lg border border-[#DCD5C9]">
+          <TactileSpinner
+            size="lg"
+            label="Checking Admin Clearance…"
+            sublabel="Verifying OAuth session & authorization tokens"
+          />
         </div>
       </main>
     );
@@ -734,6 +765,16 @@ export const AdminPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                loadAuditLogs();
+                setAuditModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
+            >
+              <Shield size={13} className="text-[#2563EB]" /> Audit Trail
+            </button>
             <a
               href="/"
               className="inline-flex items-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8]"
@@ -1147,7 +1188,9 @@ export const AdminPage: React.FC = () => {
                 </button>
               </div>
 
-              {resumeVersions.length === 0 ? (
+              {isLoadingResumeVersions ? (
+                <VersionTimelineSkeleton />
+              ) : resumeVersions.length === 0 ? (
                 <div className="text-center py-8 text-xs font-mono text-[#71717A]">
                   No versions recorded yet. Save a version above or upload to initialize.
                 </div>
@@ -1502,7 +1545,9 @@ export const AdminPage: React.FC = () => {
                 </button>
               </div>
 
-              {portfolioVersions.length === 0 ? (
+              {isLoadingPortfolioVersions ? (
+                <VersionTimelineSkeleton />
+              ) : portfolioVersions.length === 0 ? (
                 <div className="text-center py-8 text-xs font-mono text-[#71717A]">
                   No versions recorded yet. Save a snapshot above to initialize.
                 </div>
@@ -1714,9 +1759,12 @@ export const AdminPage: React.FC = () => {
             {/* Diff Body Content — VS Code Monaco Diff Engine */}
             <div className="flex-1 min-h-[58vh] max-h-[72vh] w-full bg-[#1E1E1E] overflow-hidden flex flex-col">
               {diffLoading ? (
-                <div className="flex-1 flex items-center justify-center py-20 gap-2 text-[#94A3B8]">
-                  <Loader2 size={18} className="animate-spin text-[#38BDF8]" />
-                  <span>Computing Git diff and AI impact summary...</span>
+                <div className="flex-1 flex flex-col items-center justify-center py-20 gap-3 text-[#94A3B8]">
+                  <TactileSpinner
+                    size="md"
+                    label="Computing Myers LCS Line Diff…"
+                    sublabel="Gemini 2.5 Flash generating 1-line AI executive summary"
+                  />
                 </div>
               ) : !diffData ? (
                 <div className="flex-1 flex items-center justify-center py-20 text-[#71717A]">
@@ -1830,15 +1878,33 @@ export const AdminPage: React.FC = () => {
                 type="button"
                 onClick={confirmSwitchVersion}
                 disabled={isSwitching}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer disabled:opacity-50"
               >
-                {isSwitching ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />}
-                <span>Activate Version v{targetSwitchVersion}</span>
+                {isSwitching ? (
+                  <>
+                    <TactileSpinner size="sm" />
+                    <span>Activating Version v{targetSwitchVersion}…</span>
+                  </>
+                ) : (
+                  <>
+                    <Check size={13} />
+                    <span>Activate Version v{targetSwitchVersion}</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Security Audit Log Modal */}
+      <AuditLogModal
+        isOpen={auditModalOpen}
+        onClose={() => setAuditModalOpen(false)}
+        logs={auditLogs}
+        isLoading={isLoadingAuditLogs}
+        onRefresh={loadAuditLogs}
+      />
     </main>
   );
 };

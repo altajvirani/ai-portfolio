@@ -477,8 +477,43 @@
   animation-play-state: paused;
 }
 
+/* Tactile Skeuomorphic Shimmer & Precision Gyro Animations */
+@keyframes skeuo-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes gyro-cw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gyro-ccw {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.animate-skeuo-shimmer {
+  animation: skeuo-shimmer 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-gyro-cw {
+  animation: gyro-cw 3s linear infinite;
+}
+
+.animate-gyro-ccw {
+  animation: gyro-ccw 2.2s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
+    animation: none;
+  }
+  .animate-skeuo-shimmer {
+    animation: none;
+  }
+  .animate-gyro-cw,
+  .animate-gyro-ccw {
     animation: none;
   }
   .skeuo-sheen::after {
