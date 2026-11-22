@@ -1,5 +1,5 @@
-import { dispatchContactSubmission } from "../src/server/contactHandler.ts";
-import type { ApiRequest, ApiResponse } from "../src/server/apiAdapter.ts";
+import { dispatchContactSubmission } from "./_lib/contactHandler.ts";
+import type { ApiRequest, ApiResponse } from "./_lib/apiAdapter.ts";
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== "POST") {

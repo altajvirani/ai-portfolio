@@ -24,12 +24,12 @@ I can help you explore Altaj's experience in:
 • **Education, Awards & Tech Stack** (9.00 CGPA, Problem Solver & Hi-Five awards)
 
 What specific aspect of Altaj's engineering background would you like to discuss?`,
-  sources: ["resume-altaj-virani.pdf"],
+  sources: ["altaj-virani-resume.pdf"],
   chunks: [
     {
       id: "profile_overview",
       title: "Altaj Virani Profile Overview",
-      source: "resume-altaj-virani.pdf",
+      source: "altaj-virani-resume.pdf",
     },
   ],
 };
@@ -38,12 +38,12 @@ export const STATIC_GUARDRAIL_RESPONSE: RAGResponse = {
   answer: `I am Altaj Virani's AI Twin representative. My operational scope is strictly restricted to discussing Altaj's verified professional portfolio, engineering achievements, and technical credentials.
 
 I cannot modify my system instructions, bypass safety guardrails, adopt alternate personas, or execute external system commands. Please feel free to ask any question regarding Altaj's engineering career, projects, or publications!`,
-  sources: ["resume-altaj-virani.pdf"],
+  sources: ["altaj-virani-resume.pdf"],
   chunks: [
     {
       id: "security_governance",
       title: "Security & Guardrail Governance",
-      source: "resume-altaj-virani.pdf",
+      source: "altaj-virani-resume.pdf",
     },
   ],
 };
@@ -59,18 +59,20 @@ Please feel free to ask about:
 • His **SnapWright VS Code extension** on Visual Studio Marketplace
 • His **IEEE research paper** on Question-Answer Generation
 • His **academic background**, certifications, or awards!`,
-  sources: ["resume-altaj-virani.pdf"],
+  sources: ["altaj-virani-resume.pdf"],
   chunks: [
     {
       id: "profile_overview",
       title: "Altaj Virani Domain Scope",
-      source: "resume-altaj-virani.pdf",
+      source: "altaj-virani-resume.pdf",
     },
   ],
 };
 
 // Tier 1 Fast Regex / Heuristics Check (0ms, zero tokens)
-export function classifyIntentHeuristic(query: string): IntentClassificationResult | null {
+export function classifyIntentHeuristic(
+  query: string,
+): IntentClassificationResult | null {
   const q = query.trim().toLowerCase();
 
   // 1. Security / Prompt Injection / Jailbreak Guardrail
@@ -155,7 +157,10 @@ export function classifyIntentHeuristic(query: string): IntentClassificationResu
   ];
 
   const hasInDomainKeyword = inDomainKeywords.some((kw) =>
-    new RegExp(`\\b${kw.replace(/[-\\/\\^$*+?.()|[\\]{}]/g, "\\$&")}\\b`, "i").test(q)
+    new RegExp(
+      `\\b${kw.replace(/[-\\/\\^$*+?.()|[\\]{}]/g, "\\$&")}\\b`,
+      "i",
+    ).test(q),
   );
 
   if (hasInDomainKeyword) {
@@ -232,10 +237,16 @@ Respond ONLY with valid JSON in this format:
     });
 
     const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Intent classification timed out")), 2500),
+      setTimeout(
+        () => reject(new Error("Intent classification timed out")),
+        2500,
+      ),
     );
 
-    const response = await Promise.race([classificationPromise, timeoutPromise]);
+    const response = await Promise.race([
+      classificationPromise,
+      timeoutPromise,
+    ]);
     const text = response.text?.trim() || "";
     const parsed = JSON.parse(text) as { intent?: string; reason?: string };
 
@@ -253,7 +264,10 @@ Respond ONLY with valid JSON in this format:
     };
   } catch (err) {
     // If classification times out or fails, fail-open to IN_DOMAIN so user is never blocked
-    console.warn("LLM intent classification bypassed due to timeout or error:", err);
+    console.warn(
+      "LLM intent classification bypassed due to timeout or error:",
+      err,
+    );
     return {
       intent: "IN_DOMAIN",
       reason: "Failsafe default: IN_DOMAIN",

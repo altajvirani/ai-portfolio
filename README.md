@@ -9,7 +9,7 @@ The public portfolio is intentionally **not driven by the admin datastore yet**.
 - Public sections import static TypeScript data from [`src/data/portfolioData.ts`](./src/data/portfolioData.ts), [`src/data/skillsData.tsx`](./src/data/skillsData.tsx), and related components.
 - The resume link, UI asset paths, and some presentation references remain in the public components.
 - The admin datastore is an independent editable copy. Changes made through `/admin` or MCP do not change the public portfolio until an explicit future interpolation task is requested.
-- The chatbot uses its separate knowledge source in [`src/server/knowledgeStore.ts`](./src/server/knowledgeStore.ts).
+- The chatbot grounds directly in-context on [`public/assets/altaj-virani-resume.md`](./public/assets/altaj-virani-resume.md) with canonical caching and safety guardrails.
 
 ## Stack
 
@@ -194,13 +194,10 @@ npm run lint      # TypeScript validation
 
 ```text
 api/                    Vercel API handlers
+api/_lib/               Internal backend library, RAG engine & MCP server
 public/assets/          Canonical public assets
 src/components/         React UI components
 src/data/               Static public data and datastore seed
-src/server/adminAuth.ts Google OAuth and protected admin request handling
-src/server/adminStore.ts Local/Neon datastore and session persistence
-src/server/mcpServer.ts Authenticated stdio MCP server
-src/server/knowledgeStore.ts Chatbot knowledge source
 server.ts               Local Express/Vite server
 ```
 

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Check, Copy } from "lucide-react";
 
 interface MarkdownRendererProps {
@@ -6,19 +8,19 @@ interface MarkdownRendererProps {
   className?: string;
 }
 
-export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
-  content,
-  className = "",
-}) => {
-  const [copiedCodeIdx, setCopiedCodeIdx] = useState<number | null>(null);
+const CodeBlock: React.FC<{
+  codeString: string;
+  language?: string;
+}> = ({ codeString, language }) => {
+  const [copied, setCopied] = useState(false);
 
-  const handleCopyCode = async (code: string, idx: number) => {
+  const handleCopy = async () => {
     try {
       if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(code);
+        await navigator.clipboard.writeText(codeString);
       } else {
         const textarea = document.createElement("textarea");
-        textarea.value = code;
+        textarea.value = codeString;
         textarea.style.position = "fixed";
         textarea.style.opacity = "0";
         document.body.appendChild(textarea);
@@ -26,259 +28,157 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
         document.execCommand("copy");
         document.body.removeChild(textarea);
       }
-      setCopiedCodeIdx(idx);
-      setTimeout(() => setCopiedCodeIdx(null), 2000);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     } catch {
       // Ignore copy error
     }
   };
 
-  // Helper to parse inline markdown (bold, code, links, italic)
-  const renderInline = (text: string): React.ReactNode[] => {
-    const tokens: React.ReactNode[] = [];
-    let remaining = text;
-    let keyIdx = 0;
-
-    while (remaining.length > 0) {
-      // 1. Inline code: `code`
-      const codeMatch = remaining.match(/^`([^`]+)`/);
-      if (codeMatch) {
-        tokens.push(
-          <code
-            key={`code-${keyIdx++}`}
-            className="px-1.5 py-0.5 rounded bg-[#E4DCCE] text-[#1E3A8A] font-mono text-[11px] font-semibold"
-          >
-            {codeMatch[1]}
-          </code>,
-        );
-        remaining = remaining.slice(codeMatch[0].length);
-        continue;
-      }
-
-      // 2. Bold text: **bold**
-      const boldMatch = remaining.match(/^\*\*([^*]+)\*\*/);
-      if (boldMatch) {
-        tokens.push(
-          <strong key={`bold-${keyIdx++}`} className="font-bold text-[#18181B]">
-            {boldMatch[1]}
-          </strong>,
-        );
-        remaining = remaining.slice(boldMatch[0].length);
-        continue;
-      }
-
-      // 3. Markdown links: [label](url)
-      const linkMatch = remaining.match(/^\[([^\]]+)\]\(([^)]+)\)/);
-      if (linkMatch) {
-        tokens.push(
-          <a
-            key={`link-${keyIdx++}`}
-            href={linkMatch[2]}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#2563EB] hover:underline font-semibold inline-flex items-center gap-0.5"
-          >
-            {linkMatch[1]}
-          </a>,
-        );
-        remaining = remaining.slice(linkMatch[0].length);
-        continue;
-      }
-
-      // 4. Italic text: *italic* or _italic_
-      const italicMatch = remaining.match(/^(\*|_)([^*_]+)\1/);
-      if (italicMatch) {
-        tokens.push(
-          <em key={`italic-${keyIdx++}`} className="italic">
-            {italicMatch[2]}
-          </em>,
-        );
-        remaining = remaining.slice(italicMatch[0].length);
-        continue;
-      }
-
-      // 5. Normal text character
-      const nextSpecial = remaining.search(/[`*\[_]/);
-      if (nextSpecial === -1) {
-        tokens.push(remaining);
-        break;
-      } else if (nextSpecial === 0) {
-        tokens.push(remaining[0]);
-        remaining = remaining.slice(1);
-      } else {
-        tokens.push(remaining.slice(0, nextSpecial));
-        remaining = remaining.slice(nextSpecial);
-      }
-    }
-
-    return tokens;
-  };
-
-  // Split content into blocks: code blocks vs regular paragraphs/lists
-  const parseBlocks = () => {
-    const blocks: React.ReactNode[] = [];
-    const lines = content.split("\n");
-    let inCodeBlock = false;
-    let codeBuffer: string[] = [];
-    let codeLanguage = "";
-    let blockIdx = 0;
-    let listBuffer: { type: "ul" | "ol"; items: string[] } | null = null;
-
-    const flushList = () => {
-      if (!listBuffer) return;
-      if (listBuffer.type === "ul") {
-        blocks.push(
-          <ul key={`ul-${blockIdx++}`} className="my-2 space-y-1 pl-1">
-            {listBuffer.items.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm">
-                <span className="text-[#2563EB] font-bold select-none mt-0.5 text-xs">
-                  •
-                </span>
-                <span className="flex-1">{renderInline(item)}</span>
-              </li>
-            ))}
-          </ul>,
-        );
-      } else {
-        blocks.push(
-          <ol key={`ol-${blockIdx++}`} className="my-2 space-y-1 pl-4 list-decimal text-xs sm:text-sm">
-            {listBuffer.items.map((item, idx) => (
-              <li key={idx} className="pl-1">
-                {renderInline(item)}
-              </li>
-            ))}
-          </ol>,
-        );
-      }
-      listBuffer = null;
-    };
-
-    const flushCodeBlock = () => {
-      if (!inCodeBlock) return;
-      const codeString = codeBuffer.join("\n");
-      const currentCodeIdx = blockIdx++;
-      blocks.push(
-        <div
-          key={`codeblock-${currentCodeIdx}`}
-          className="my-3 rounded-xl bg-[#1E1E2E] text-[#E2E8F0] border border-[#2D3142] overflow-hidden text-xs font-mono shadow-sm"
+  return (
+    <div className="my-3 rounded-xl bg-[#1E1E2E] text-[#E2E8F0] border border-[#2D3142] overflow-hidden text-xs font-mono shadow-sm">
+      <div className="flex items-center justify-between px-3 py-1.5 bg-[#181825] border-b border-[#2D3142] text-[10px] text-[#A6ADC8]">
+        <span className="font-semibold uppercase tracking-wider">{language || "code"}</span>
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="flex items-center gap-1 text-[#A6ADC8] hover:text-white transition-colors cursor-pointer"
         >
-          <div className="flex items-center justify-between px-3 py-1.5 bg-[#181825] border-b border-[#2D3142] text-[10px] text-[#A6ADC8]">
-            <span>{codeLanguage || "code"}</span>
-            <button
-              type="button"
-              onClick={() => handleCopyCode(codeString, currentCodeIdx)}
-              className="flex items-center gap-1 text-[#A6ADC8] hover:text-white transition-colors cursor-pointer"
+          {copied ? (
+            <>
+              <Check className="w-3 h-3 text-[#A6E3A1]" />
+              <span className="text-[#A6E3A1]">Copied</span>
+            </>
+          ) : (
+            <>
+              <Copy className="w-3 h-3" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
+      <pre className="p-3 overflow-x-auto leading-relaxed">
+        <code>{codeString}</code>
+      </pre>
+    </div>
+  );
+};
+
+export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
+  content,
+  className = "",
+}) => {
+  return (
+    <div className={`markdown-body text-[#27272A] leading-relaxed ${className}`}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          h1: ({ node, ...props }) => (
+            <h1
+              className="text-base font-bold font-display text-[#18181B] mt-3 mb-1.5 border-b border-[#DCD5C9]/60 pb-1"
+              {...props}
+            />
+          ),
+          h2: ({ node, ...props }) => (
+            <h2
+              className="text-sm font-bold font-display text-[#18181B] mt-2.5 mb-1"
+              {...props}
+            />
+          ),
+          h3: ({ node, ...props }) => (
+            <h3
+              className="text-xs sm:text-sm font-bold font-display text-[#18181B] mt-2 mb-1"
+              {...props}
+            />
+          ),
+          h4: ({ node, ...props }) => (
+            <h4
+              className="text-xs font-bold text-[#18181B] mt-1.5 mb-0.5"
+              {...props}
+            />
+          ),
+          p: ({ node, ...props }) => (
+            <p className="my-1.5 leading-relaxed text-xs sm:text-sm text-[#27272A]" {...props} />
+          ),
+          ul: ({ node, ...props }) => (
+            <ul
+              className="list-disc pl-5 my-2 space-y-1 text-xs sm:text-sm text-[#27272A] [&>li::marker]:text-[#2563EB] [&_ul]:list-[circle] [&_ul]:pl-5 [&_ul]:my-1 [&_ul_ul]:list-[square]"
+              {...props}
+            />
+          ),
+          ol: ({ node, ...props }) => (
+            <ol
+              className="list-decimal pl-5 my-2 space-y-1 text-xs sm:text-sm text-[#27272A] [&>li::marker]:text-[#2563EB] [&>li::marker]:font-semibold [&_ol]:pl-5 [&_ol]:my-1"
+              {...props}
+            />
+          ),
+          li: ({ node, ...props }) => (
+            <li className="leading-relaxed pl-0.5 [&>p]:my-0.5" {...props} />
+          ),
+          blockquote: ({ node, ...props }) => (
+            <blockquote
+              className="border-l-2 border-[#2563EB] pl-3 my-2 text-[#52525B] italic bg-[#F4EFE6]/60 py-1 rounded-r text-xs sm:text-sm"
+              {...props}
+            />
+          ),
+          a: ({ node, href, children, ...props }) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#2563EB] hover:underline font-semibold inline-flex items-center gap-0.5"
+              {...props}
             >
-              {copiedCodeIdx === currentCodeIdx ? (
-                <>
-                  <Check className="w-3 h-3 text-[#A6E3A1]" />
-                  <span className="text-[#A6E3A1]">Copied</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3 h-3" />
-                  <span>Copy</span>
-                </>
-              )}
-            </button>
-          </div>
-          <pre className="p-3 overflow-x-auto leading-relaxed">
-            <code>{codeString}</code>
-          </pre>
-        </div>,
-      );
-      codeBuffer = [];
-      inCodeBlock = false;
-      codeLanguage = "";
-    };
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-
-      // Handle Code Block start/end
-      if (line.trim().startsWith("```")) {
-        flushList();
-        if (inCodeBlock) {
-          flushCodeBlock();
-        } else {
-          inCodeBlock = true;
-          codeLanguage = line.trim().slice(3).trim();
-          codeBuffer = [];
-        }
-        continue;
-      }
-
-      if (inCodeBlock) {
-        codeBuffer.push(line);
-        continue;
-      }
-
-      const trimmed = line.trim();
-
-      // Empty line
-      if (!trimmed) {
-        flushList();
-        continue;
-      }
-
-      // Headings: ### or ## or #
-      if (/^#{1,4}\s+/.test(trimmed)) {
-        flushList();
-        const level = trimmed.match(/^#+/)?.[0].length || 3;
-        const text = trimmed.replace(/^#+\s+/, "");
-        const headingClass =
-          level === 1
-            ? "text-base font-bold font-display text-[#18181B] mt-3 mb-1"
-            : level === 2
-              ? "text-sm font-bold font-display text-[#18181B] mt-2.5 mb-1"
-              : "text-xs sm:text-sm font-bold text-[#18181B] mt-2 mb-1";
-        blocks.push(
-          <div key={`h-${blockIdx++}`} className={headingClass}>
-            {renderInline(text)}
-          </div>,
-        );
-        continue;
-      }
-
-      // Unordered list item: - or * or •
-      if (/^[-*•]\s+/.test(trimmed)) {
-        const itemText = trimmed.replace(/^[-*•]\s+/, "");
-        if (!listBuffer || listBuffer.type !== "ul") {
-          flushList();
-          listBuffer = { type: "ul", items: [itemText] };
-        } else {
-          listBuffer.items.push(itemText);
-        }
-        continue;
-      }
-
-      // Ordered list item: 1.
-      if (/^\d+\.\s+/.test(trimmed)) {
-        const itemText = trimmed.replace(/^\d+\.\s+/, "");
-        if (!listBuffer || listBuffer.type !== "ol") {
-          flushList();
-          listBuffer = { type: "ol", items: [itemText] };
-        } else {
-          listBuffer.items.push(itemText);
-        }
-        continue;
-      }
-
-      // Normal paragraph
-      flushList();
-      blocks.push(
-        <p key={`p-${blockIdx++}`} className="my-1.5 leading-relaxed text-xs sm:text-sm">
-          {renderInline(trimmed)}
-        </p>,
-      );
-    }
-
-    flushList();
-    if (inCodeBlock) {
-      flushCodeBlock();
-    }
-    return blocks;
-  };
-
-  return <div className={`markdown-body space-y-1 text-[#27272A] ${className}`}>{parseBlocks()}</div>;
+              {children}
+            </a>
+          ),
+          pre: ({ children }) => {
+            const codeElement = React.Children.toArray(children)[0];
+            if (React.isValidElement(codeElement)) {
+              const codeProps = codeElement.props as {
+                className?: string;
+                children?: React.ReactNode;
+              };
+              const className = codeProps.className || "";
+              const match = /language-(\w+)/.exec(className);
+              const language = match ? match[1] : "";
+              const codeString = String(codeProps.children || "").replace(/\n$/, "");
+              return <CodeBlock codeString={codeString} language={language} />;
+            }
+            return (
+              <pre className="p-3 overflow-x-auto bg-[#1E1E2E] text-[#E2E8F0] rounded-xl my-2 text-xs font-mono">
+                {children}
+              </pre>
+            );
+          },
+          code: ({ node, className, children, ...rest }) => (
+            <code
+              className="px-1.5 py-0.5 rounded bg-[#E4DCCE] text-[#1E3A8A] font-mono text-[11px] font-semibold border border-[#DCD5C9]"
+              {...rest}
+            >
+              {children}
+            </code>
+          ),
+          table: ({ node, ...props }) => (
+            <div className="my-2.5 overflow-x-auto rounded-xl border border-[#DCD5C9] bg-white/70 shadow-sm">
+              <table className="min-w-full divide-y divide-[#DCD5C9] text-xs font-mono" {...props} />
+            </div>
+          ),
+          thead: ({ node, ...props }) => <thead className="bg-[#FAF8F3]" {...props} />,
+          th: ({ node, ...props }) => (
+            <th
+              className="px-3 py-1.5 text-left font-bold text-[#18181B] text-[11px] uppercase tracking-wider"
+              {...props}
+            />
+          ),
+          td: ({ node, ...props }) => (
+            <td className="px-3 py-1.5 text-[#27272A] border-t border-[#E4DCCE]" {...props} />
+          ),
+          hr: ({ node, ...props }) => <hr className="my-3 border-t border-[#DCD5C9]" {...props} />,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
 };

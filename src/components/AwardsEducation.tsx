@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Trophy,
   Award,
@@ -10,6 +10,7 @@ import {
   ExternalLink,
   CheckCircle2,
   FileText,
+  Mail,
   Building2,
   ChevronDown,
 } from "lucide-react";
@@ -21,6 +22,10 @@ import {
 } from "../data/portfolioData.ts";
 import { HoverPopup } from "./HoverPopup.tsx";
 import { InteractiveEmphasis, MagneticTitle } from "./InteractiveText.tsx";
+import {
+  getRandomEduColorThemes,
+  EDU_COLOR_THEMES,
+} from "../utils/portfolioHelpers.ts";
 
 export const AwardsEducation: React.FC = () => {
   const [expandedEduKey, setExpandedEduKey] = useState<string | null>(
@@ -29,6 +34,12 @@ export const AwardsEducation: React.FC = () => {
   const [mobileCredTab, setMobileCredTab] = useState<
     "academic" | "certifications"
   >("academic");
+
+  // Random non-repeating color themes for education cards on mount
+  const eduThemes = useMemo(
+    () => getRandomEduColorThemes(EDUCATION_ITEMS.length),
+    [],
+  );
 
   const getAwardStyles = (accent: "emerald" | "purple" | "cyan" | "amber") => {
     switch (accent) {
@@ -142,7 +153,7 @@ export const AwardsEducation: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2.5 shrink-0">
-              <div className="text-right tabular-nums">
+              <div className="flex items-center sm:flex-col sm:items-end gap-2 sm:gap-0.5 text-right tabular-nums">
                 <span className="block text-sm font-mono font-bold text-[#92400E]">
                   94.67%
                 </span>
@@ -180,7 +191,7 @@ export const AwardsEducation: React.FC = () => {
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="overflow-hidden"
             >
-              <div className="px-4 sm:px-5 pb-4 pt-1 border-t border-[#C9A673]/50 text-xs text-[#27272A] space-y-1.5 font-sans">
+              <div className="px-4 sm:px-5 pb-4 pt-1 border-t border-[#C9A673]/50 text-xs text-[#27272A] space-y-2 font-sans">
                 <p className="flex items-start gap-2 pt-2 leading-relaxed">
                   <span className="text-[#B45309] font-bold shrink-0">▸</span>
                   <span>
@@ -189,6 +200,22 @@ export const AwardsEducation: React.FC = () => {
                     cloud-ready REST APIs.
                   </span>
                 </p>
+                <div className="pt-1.5 flex items-center justify-between gap-3 border-t border-[#C9A673]/30">
+                  <span className="text-[11px] font-mono text-[#78350F] font-semibold truncate">
+                    Congratulatory Email
+                  </span>
+                  <a
+                    href="https://drive.google.com/file/d/1fBUoabJzQtXQoDfhCcA8b1ktTN29CEN3/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#C9A673] hover:border-[#92400E] text-[#92400E] hover:text-[#78350F] text-xs font-mono font-bold shadow-xs hover:shadow transition-all shrink-0 cursor-pointer"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-[#B45309]" />
+                    <span>View Email</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
             </motion.div>
           )}
@@ -200,10 +227,8 @@ export const AwardsEducation: React.FC = () => {
         const rowKey = `edu-${idx}`;
         const isOpen = expandedEduKey === rowKey;
         const progressRatio = (item.percentageValue ?? 85) / 100;
-        const degreeSurface =
-          idx === 0
-            ? "paper-grid-cobalt border-[#BFDBFE]"
-            : "paper-grid-mint border-[#A7F3D0]";
+        const theme =
+          eduThemes[idx] || EDU_COLOR_THEMES[idx % EDU_COLOR_THEMES.length];
 
         return (
           <motion.div
@@ -213,10 +238,10 @@ export const AwardsEducation: React.FC = () => {
             viewport={{ once: true, amount: 0.15 }}
             whileHover={{ y: -2 }}
             transition={{ duration: 0.24, delay: idx * 0.04 }}
-            className={`rounded-2xl paper-cutout ${degreeSurface} transition-all ${
+            className={`rounded-2xl paper-cutout ${theme.surface} transition-all ${
               isOpen
-                ? "ring-2 ring-[#2563EB]/20"
-                : "hover:border-[#2563EB]/50"
+                ? `ring-2 ${theme.ring}`
+                : "hover:shadow-xs"
             }`}
           >
             <div
@@ -239,7 +264,7 @@ export const AwardsEducation: React.FC = () => {
 
                 <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
                   <div className="flex sm:flex-col items-center sm:items-end gap-2 sm:gap-1">
-                    <span className="font-mono text-[#1E40AF] text-xs font-bold tabular-nums px-2.5 py-0.5 rounded-md bg-white border border-[#93C5FD] shadow-xs">
+                    <span className={`font-mono text-xs font-bold tabular-nums px-2.5 py-0.5 rounded-md shadow-xs ${theme.badge}`}>
                       {item.grade}
                     </span>
                     {item.documentUrl && (
@@ -256,7 +281,7 @@ export const AwardsEducation: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1 text-xs font-mono font-bold text-[#6D28D9] hover:underline whitespace-nowrap"
+                          className={`inline-flex items-center gap-1 text-xs font-mono font-bold hover:underline whitespace-nowrap ${theme.transcriptLink}`}
                         >
                           <span>Transcript</span>
                           <ExternalLink className="w-3 h-3" />
@@ -296,7 +321,7 @@ export const AwardsEducation: React.FC = () => {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   style={{ originX: 0 }}
-                  className="h-full w-full rounded-full bg-gradient-to-r from-[#2563EB] via-[#0EA5E9] to-[#10B981]"
+                  className={`h-full w-full rounded-full ${theme.barGradient}`}
                 />
               </div>
             </div>
@@ -318,7 +343,7 @@ export const AwardsEducation: React.FC = () => {
                       >
                         <span
                           aria-hidden="true"
-                          className="text-[#2563EB] font-bold shrink-0 mt-0.5"
+                          className={`${theme.bullet} font-bold shrink-0 mt-0.5`}
                         >
                           ▸
                         </span>
@@ -588,7 +613,7 @@ export const AwardsEducation: React.FC = () => {
                 />
               )}
               <span className="relative z-10">
-                Academic &amp; Rank ({EDUCATION_ITEMS.length + 1})
+                Academic &amp; Rank
               </span>
             </button>
             <button
@@ -608,7 +633,7 @@ export const AwardsEducation: React.FC = () => {
                 />
               )}
               <span className="relative z-10">
-                Certifications ({CERTIFICATION_ITEMS.length})
+                Certifications
               </span>
             </button>
           </div>

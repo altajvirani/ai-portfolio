@@ -1,4 +1,4 @@
-import type { ApiRequest, ApiResponse } from "../src/server/apiAdapter.ts";
+import type { ApiRequest, ApiResponse } from "./_lib/apiAdapter.ts";
 
 export default function handler(_req: ApiRequest, res: ApiResponse) {
   res.setHeader("Content-Type", "application/json");

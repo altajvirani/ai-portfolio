@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "start": "tsx server.ts",
-    "mcp": "tsx src/server/mcpServer.ts",
+    "mcp": "tsx api/_lib/mcpServer.ts",
     "lint": "tsc --noEmit",
     "sync-env": "tsx scripts/syncVercelEnv.ts"
   },
@@ -26,6 +26,8 @@
     "motion": "^12.23.24",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "three": "^0.187.0",
     "vite": "^8.3.0",
     "zod": "^4.6.7"

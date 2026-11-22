@@ -281,57 +281,153 @@ export const ContactSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Social Grid (Instagram & WhatsApp side by side) */}
+            {/* Social Grid (All with rich HoverPopup interactions) */}
             <div className="pt-2">
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#1E3A8A] block mb-3 font-bold">
                 Socials &amp; Code
               </span>
               <div className="grid grid-cols-2 gap-2.5">
-                <a
-                  href={SOCIAL_LINKS.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#BFDBFE] hover:bg-[#EFF6FF] hover:border-[#2563EB] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
+                {/* LinkedIn */}
+                <HoverPopup
+                  align="left"
+                  className="w-full"
+                  content={
+                    <div className="space-y-1 text-xs font-mono">
+                      <div className="font-bold text-[#2563EB]">
+                        Verified LinkedIn Profile
+                      </div>
+                      <p className="text-[11px] text-[#52525B] font-sans">
+                        Connect with Altaj Virani · Endorsements &amp; career network.
+                      </p>
+                    </div>
+                  }
                 >
-                  <Linkedin className="w-4 h-4 text-[#2563EB] shrink-0" />
-                  <span className="truncate">LinkedIn</span>
-                </a>
-                <a
-                  href={SOCIAL_LINKS.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#D4CEC3] hover:bg-[#F4F4F5] hover:border-[#18181B] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
+                  <motion.a
+                    whileHover={{ y: -2, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    href={SOCIAL_LINKS.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-white border border-[#BFDBFE] hover:bg-[#EFF6FF] hover:border-[#2563EB] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-all cursor-pointer"
+                  >
+                    <Linkedin className="w-4 h-4 text-[#2563EB] shrink-0" />
+                    <span className="truncate">LinkedIn</span>
+                  </motion.a>
+                </HoverPopup>
+
+                {/* GitHub */}
+                <HoverPopup
+                  align="right"
+                  className="w-full"
+                  content={
+                    <div className="space-y-1 text-xs font-mono">
+                      <div className="font-bold text-[#18181B]">
+                        GitHub Repositories
+                      </div>
+                      <p className="text-[11px] text-[#52525B] font-sans">
+                        Explore SnapWright, AutoQA AI, Nivesh &amp; open source code.
+                      </p>
+                    </div>
+                  }
                 >
-                  <Github className="w-4 h-4 text-[#18181B] shrink-0" />
-                  <span className="truncate">GitHub</span>
-                </a>
-                <a
-                  href={SOCIAL_LINKS.stackoverflow}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#FED7AA] hover:bg-[#FFF7ED] hover:border-[#EA580C] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
+                  <motion.a
+                    whileHover={{ y: -2, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    href={SOCIAL_LINKS.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-white border border-[#D4CEC3] hover:bg-[#F4F4F5] hover:border-[#18181B] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-all cursor-pointer"
+                  >
+                    <Github className="w-4 h-4 text-[#18181B] shrink-0" />
+                    <span className="truncate">GitHub</span>
+                  </motion.a>
+                </HoverPopup>
+
+                {/* Stack Overflow */}
+                <HoverPopup
+                  align="left"
+                  className="w-full"
+                  content={
+                    <div className="space-y-1 text-xs font-mono">
+                      <div className="font-bold text-[#EA580C]">
+                        Stack Overflow Profile
+                      </div>
+                      <p className="text-[11px] text-[#52525B] font-sans">
+                        Developer community contributions &amp; answers.
+                      </p>
+                    </div>
+                  }
                 >
-                  <StackOverflowIcon className="w-4 h-4 text-[#EA580C] shrink-0" />
-                  <span className="truncate">Stack Overflow</span>
-                </a>
-                <a
-                  href={SOCIAL_LINKS.x}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#D4CEC3] hover:bg-[#F4F4F5] hover:border-[#18181B] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
+                  <motion.a
+                    whileHover={{ y: -2, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    href={SOCIAL_LINKS.stackoverflow}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-white border border-[#FED7AA] hover:bg-[#FFF7ED] hover:border-[#EA580C] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-all cursor-pointer"
+                  >
+                    <StackOverflowIcon className="w-4 h-4 text-[#EA580C] shrink-0" />
+                    <span className="truncate">Stack Overflow</span>
+                  </motion.a>
+                </HoverPopup>
+
+                {/* X (Twitter) */}
+                <HoverPopup
+                  align="right"
+                  className="w-full"
+                  content={
+                    <div className="space-y-1 text-xs font-mono">
+                      <div className="font-bold text-[#18181B]">
+                        X (Twitter) Profile
+                      </div>
+                      <p className="text-[11px] text-[#52525B] font-sans">
+                        Follow @AltajVirani for insights on agentic platforms &amp; cloud systems.
+                      </p>
+                    </div>
+                  }
                 >
-                  <XIcon className="w-4 h-4 text-[#18181B] shrink-0" />
-                  <span className="truncate">X (Twitter)</span>
-                </a>
-                <a
-                  href={SOCIAL_LINKS.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-h-[42px] p-2.5 rounded-xl bg-white border border-[#FBCFE8] hover:bg-[#FDF2F8] hover:border-[#DB2777] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-colors"
+                  <motion.a
+                    whileHover={{ y: -2, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    href={SOCIAL_LINKS.x}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-white border border-[#D4CEC3] hover:bg-[#F4F4F5] hover:border-[#18181B] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-all cursor-pointer"
+                  >
+                    <XIcon className="w-4 h-4 text-[#18181B] shrink-0" />
+                    <span className="truncate">X (Twitter)</span>
+                  </motion.a>
+                </HoverPopup>
+
+                {/* Instagram */}
+                <HoverPopup
+                  align="left"
+                  className="w-full"
+                  content={
+                    <div className="space-y-1 text-xs font-mono">
+                      <div className="font-bold text-[#DB2777]">
+                        Instagram Profile
+                      </div>
+                      <p className="text-[11px] text-[#52525B] font-sans">
+                        Follow @altajvirani for developer milestones &amp; creative projects.
+                      </p>
+                    </div>
+                  }
                 >
-                  <Instagram className="w-4 h-4 text-[#DB2777] shrink-0" />
-                  <span className="truncate">Instagram</span>
-                </a>
+                  <motion.a
+                    whileHover={{ y: -2, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    href={SOCIAL_LINKS.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-white border border-[#FBCFE8] hover:bg-[#FDF2F8] hover:border-[#DB2777] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#18181B] flex items-center gap-2 min-w-0 transition-all cursor-pointer"
+                  >
+                    <Instagram className="w-4 h-4 text-[#DB2777] shrink-0" />
+                    <span className="truncate">Instagram</span>
+                  </motion.a>
+                </HoverPopup>
+
+                {/* WhatsApp */}
                 <HoverPopup
                   align="right"
                   className="w-full"
@@ -341,20 +437,22 @@ export const ContactSection: React.FC = () => {
                         Direct WhatsApp Chat
                       </div>
                       <p className="text-[11px] text-[#52525B] font-sans">
-                        Opens +91 73039 34303 in WhatsApp.
+                        Opens +91 73039 34303 directly in WhatsApp.
                       </p>
                     </div>
                   }
                 >
-                  <a
+                  <motion.a
+                    whileHover={{ y: -2, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
                     href={SOCIAL_LINKS.whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-[#ECFDF5] border border-[#6EE7B7] hover:bg-[#D1FAE5] hover:border-[#059669] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#065F46] flex items-center gap-2 min-w-0 transition-colors"
+                    className="w-full min-h-[42px] p-2.5 rounded-xl bg-[#ECFDF5] border border-[#6EE7B7] hover:bg-[#D1FAE5] hover:border-[#059669] shadow-xs text-[11px] sm:text-xs font-mono font-bold text-[#065F46] flex items-center gap-2 min-w-0 transition-all cursor-pointer"
                   >
                     <WhatsAppIcon className="w-4 h-4 text-[#059669] shrink-0" />
                     <span className="truncate">WhatsApp</span>
-                  </a>
+                  </motion.a>
                 </HoverPopup>
               </div>
             </div>

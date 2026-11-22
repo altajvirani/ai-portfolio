@@ -138,31 +138,17 @@ export const Header: React.FC<HeaderProps> = ({ onOpenShortcuts }) => {
           })}
         </nav>
 
-        {/* Desktop Right Actions: Shortcuts + Resume */}
+        {/* Desktop Right Actions: Resume */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
-          {onOpenShortcuts && (
-            <motion.button
-              type="button"
-              whileHover={{ y: -1 }}
-              whileTap={{ y: 1, scale: 0.97 }}
-              onClick={onOpenShortcuts}
-              title="Open Quick Shortcuts (⌘K / Ctrl+K)"
-              aria-label="Open Quick Shortcuts"
-              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-2 text-[11px] font-mono font-bold skeuo-btn-ivory rounded-xl text-[#3F3F46] hover:text-[#2563EB] cursor-pointer"
-            >
-              <Command className="w-3.5 h-3.5 text-[#2563EB]" />
-              <span>K</span>
-            </motion.button>
-          )}
           <motion.a
             whileHover={{ y: -1 }}
             whileTap={{ y: 1, scale: 0.98 }}
             href="https://flowcv.com/resume/gg0rtbkh7jul"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 text-xs font-mono font-semibold skeuo-btn-ivory skeuo-sheen rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0"
+            className="px-4 py-2 text-xs font-mono font-semibold skeuo-btn-dark skeuo-sheen rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0 text-white"
           >
-            <LinkIcon className="w-3.5 h-3.5 text-[#2563EB]" />
+            <LinkIcon className="w-3.5 h-3.5 text-[#93C5FD]" />
             <span>Resume</span>
           </motion.a>
         </div>
@@ -174,9 +160,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenShortcuts }) => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Resume"
-            className="min-w-[44px] min-h-[44px] flex items-center justify-center skeuo-btn-ivory rounded-xl text-[#18181B]"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center skeuo-btn-dark rounded-xl text-white"
           >
-            <LinkIcon className="w-4 h-4 text-[#2563EB]" />
+            <LinkIcon className="w-4 h-4 text-[#93C5FD]" />
           </a>
           <button
             type="button"
@@ -236,25 +222,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenShortcuts }) => {
                 </button>
               );
             })}
-            <div className="pt-2 grid grid-cols-2 gap-2">
-              {onOpenShortcuts && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenShortcuts();
-                  }}
-                  className="min-h-[44px] py-2.5 text-xs font-mono font-semibold text-center skeuo-btn-ivory rounded-xl flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <Command className="w-3.5 h-3.5 text-[#2563EB]" />
-                  <span>Shortcuts</span>
-                </button>
-              )}
+            <div className="pt-2">
               <a
                 href="https://flowcv.com/resume/gg0rtbkh7jul"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="min-h-[44px] py-2.5 text-xs font-mono font-semibold text-center skeuo-btn-dark skeuo-sheen rounded-xl flex items-center justify-center gap-2"
+                className="w-full min-h-[44px] py-2.5 text-xs font-mono font-semibold text-center skeuo-btn-dark skeuo-sheen rounded-xl flex items-center justify-center gap-2 text-white"
               >
                 <LinkIcon className="w-4 h-4 text-[#93C5FD]" />
                 <span>Resume</span>

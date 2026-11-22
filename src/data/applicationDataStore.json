@@ -3,9 +3,7 @@
     "name": "Altaj Virani | Azure AI & Agentic Systems Portfolio",
     "description": "Portfolio and interactive RAG intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
     "requestFramePermissions": [],
-    "majorCapabilities": [
-      "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-    ]
+    "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
   },
   "site": {
     "title": "Altaj Virani | Azure AI & Agentic Systems Portfolio",
@@ -15,7 +13,7 @@
       "profileImage": "/assets/altaj-virani-profile.png",
       "monogram": "/assets/monogram-badge.png",
       "openToWorkBanner": "/assets/open-to-work-banner.png",
-      "resume": "/assets/resume-altaj-virani.pdf",
+      "resume": "/assets/altaj-virani-resume.pdf",
       "powerAppsOverview": "/assets/power-apps-engineering-overview.png",
       "azureNetworkingOverview": "/assets/power-apps-and-azure-networking-overview.png",
       "workOverview": "/assets/power-apps-and-azure-networking-overview.png"
@@ -175,12 +173,7 @@
           "Flask",
           "React"
         ],
-        "skillIds": [
-          "python",
-          "nlp-transformers",
-          "vector-db",
-          "typescript"
-        ],
+        "skillIds": ["python", "nlp-transformers", "vector-db", "typescript"],
         "slides": [
           {
             "badge": "Architecture",
@@ -219,11 +212,7 @@
           "KivyMD",
           "Pyttsx3"
         ],
-        "skillIds": [
-          "python",
-          "nlp-transformers",
-          "vector-db"
-        ],
+        "skillIds": ["python", "nlp-transformers", "vector-db"],
         "slides": [
           {
             "badge": "Intellectual Property",
@@ -262,11 +251,7 @@
           "AST Parsing",
           "Playwright"
         ],
-        "skillIds": [
-          "typescript",
-          "vscode-ast",
-          "playwright"
-        ],
+        "skillIds": ["typescript", "vscode-ast", "playwright"],
         "slides": [
           {
             "badge": "Marketplace",
@@ -304,11 +289,7 @@
           "REST APIs",
           "Firebase"
         ],
-        "skillIds": [
-          "android-mobile",
-          "firebase-rest",
-          "sql-server"
-        ],
+        "skillIds": ["android-mobile", "firebase-rest", "sql-server"],
         "slides": [
           {
             "badge": "Mobile Fintech",
@@ -472,11 +453,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Standardized tool calling & Copilot CLI plugins",
         "projectContext": "Co-built automated playbooks, domain agents, and containerized MCP servers for enterprise incident operations.",
-        "connections": [
-          "copilot-sdk",
-          "azure-openai",
-          "container-apps"
-        ],
+        "connections": ["copilot-sdk", "azure-openai", "container-apps"],
         "level": "Architecture",
         "logo": {
           "component": "MCPLogo",
@@ -492,11 +469,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Agentic operations & CLI orchestration",
         "projectContext": "Powers 20+ domain-specific AI agents calling 250+ integrated telemetry and inventory tools.",
-        "connections": [
-          "mcp",
-          "azure-openai",
-          "csharp"
-        ],
+        "connections": ["mcp", "azure-openai", "csharp"],
         "level": "Production",
         "logo": {
           "component": "BotFrameworkLogo",
@@ -512,11 +485,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Enterprise reasoning & embeddings",
         "projectContext": "Backbone model layer for incident root-cause triage, natural-language querying, and semantic retrieval.",
-        "connections": [
-          "rag",
-          "foundry",
-          "functions"
-        ],
+        "connections": ["rag", "foundry", "functions"],
         "level": "Production",
         "logo": {
           "component": "OpenAILogo",
@@ -532,11 +501,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Multi-strategy semantic retrieval pipeline",
         "projectContext": "Combined direct search, autonomous reasoning, and query-rewriting to cut troubleshooting time 80% for 200+ users.",
-        "connections": [
-          "azure-openai",
-          "kql",
-          "vector-db"
-        ],
+        "connections": ["azure-openai", "kql", "vector-db"],
         "level": "Architecture",
         "logo": {
           "component": "RAGLogo",
@@ -552,10 +517,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Embeddings storage & cosine ranking",
         "projectContext": "High-dimensional indexing powering documentation search and automated classification workflows.",
-        "connections": [
-          "rag",
-          "azure-openai"
-        ],
+        "connections": ["rag", "azure-openai"],
         "level": "Production",
         "logo": {
           "component": "DatabaseLogo",
@@ -571,10 +533,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Agent evaluation, PII redaction & deployment",
         "projectContext": "Built Foundry agent services for incident root-cause classification with groundedness and F1 scoring.",
-        "connections": [
-          "azure-openai",
-          "container-apps"
-        ],
+        "connections": ["azure-openai", "container-apps"],
         "level": "Production",
         "logo": {
           "component": "AzureLogo",
@@ -590,11 +549,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Conversational runtime & enterprise bots",
         "projectContext": "Contributed runtime dialog enhancements, QA automation stability, and enterprise chatbot integrations.",
-        "connections": [
-          "azure-openai",
-          "csharp",
-          "playwright"
-        ],
+        "connections": ["azure-openai", "csharp", "playwright"],
         "level": "Production",
         "logo": {
           "component": "BotFrameworkLogo",
@@ -610,11 +565,7 @@
         "categoryLabel": "Agentic AI & LLMs",
         "role": "Question synthesis, cosine ranking & semantic NLP",
         "projectContext": "Powered IEEE-published AutoQAGen (Google T5, Sense2Vec, BERT scoring) and copyright-approved AutoQA AI offline TF-IDF retrieval.",
-        "connections": [
-          "python",
-          "rag",
-          "vector-db"
-        ],
+        "connections": ["python", "rag", "vector-db"],
         "level": "Architecture",
         "logo": {
           "component": "unknown",
@@ -630,12 +581,7 @@
         "categoryLabel": "Cloud & Infrastructure",
         "role": "Dedicated microservice runtime & auto-scaling",
         "projectContext": "Eliminated 2,640 monthly OOM errors by diagnosing .NET heap caps and migrating services to dedicated auto-scaling compute.",
-        "connections": [
-          "key-vault",
-          "kql",
-          "csharp",
-          "service-bus"
-        ],
+        "connections": ["key-vault", "kql", "csharp", "service-bus"],
         "level": "Architecture",
         "logo": {
           "component": "ContainerAppsLogo",
@@ -651,11 +597,7 @@
         "categoryLabel": "Cloud & Infrastructure",
         "role": "Shared certificate & secret caching",
         "projectContext": "Built a 12-hour distributed cache across 3 .NET services, cutting Key Vault calls 35× (2,807 to 79/day) with zero failed lookups.",
-        "connections": [
-          "container-apps",
-          "tls-cert",
-          "csharp"
-        ],
+        "connections": ["container-apps", "tls-cert", "csharp"],
         "level": "Production",
         "logo": {
           "component": "KeyVaultLogo",
@@ -671,11 +613,7 @@
         "categoryLabel": "Cloud & Infrastructure",
         "role": "Telemetry forensics & log correlation",
         "projectContext": "Traced OOM failures and 3,441 rejected API calls across 9 workflows to pinpoint root causes and caller-side input defects.",
-        "connections": [
-          "container-apps",
-          "rag",
-          "python"
-        ],
+        "connections": ["container-apps", "rag", "python"],
         "level": "Architecture",
         "logo": {
           "component": "KQLLogo",
@@ -691,11 +629,7 @@
         "categoryLabel": "Cloud & Infrastructure",
         "role": "Event-driven APIs & deployment automation",
         "projectContext": "Engineered serverless chatbots and reusable deployment modules with RBAC checks and multi-strategy rollbacks.",
-        "connections": [
-          "azure-openai",
-          "service-bus",
-          "csharp"
-        ],
+        "connections": ["azure-openai", "service-bus", "csharp"],
         "level": "Core",
         "logo": {
           "component": "AzureLogo",
@@ -711,10 +645,7 @@
         "categoryLabel": "Cloud & Infrastructure",
         "role": "Async messaging & backlog scaling",
         "projectContext": "Resolved cloud endpoint overrides (draining 331/334 stuck messages in 90s) and validated 15,708-message queue scale-out.",
-        "connections": [
-          "container-apps",
-          "functions"
-        ],
+        "connections": ["container-apps", "functions"],
         "level": "Production",
         "logo": {
           "component": "unknown",
@@ -730,10 +661,7 @@
         "categoryLabel": "Cloud & Infrastructure",
         "role": "Automated load-testing & infra scripts",
         "projectContext": "Authored a 13-phase load suite executing 35,500 workflows with 45 pass/fail verdicts across queue, CPU, and HTTP rules.",
-        "connections": [
-          "container-apps",
-          "service-bus"
-        ],
+        "connections": ["container-apps", "service-bus"],
         "level": "Production",
         "logo": {
           "component": "PowerShellLogo",
@@ -749,10 +677,7 @@
         "categoryLabel": "Cloud & Infrastructure",
         "role": "Real-time cloud sync & mobile backend integration",
         "projectContext": "Backed the Nivesh startup crowdfunding Android app with real-time portfolio sync and milestone feeds.",
-        "connections": [
-          "android-mobile",
-          "sql-server"
-        ],
+        "connections": ["android-mobile", "sql-server"],
         "level": "Core",
         "logo": {
           "component": "unknown",
@@ -768,11 +693,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "Microservices runtime & auth modules",
         "projectContext": "Built production .NET backend services, shared certificate caching, TLS validation, and QA authentication modules.",
-        "connections": [
-          "container-apps",
-          "dotnet-webapi",
-          "key-vault"
-        ],
+        "connections": ["container-apps", "dotnet-webapi", "key-vault"],
         "level": "Architecture",
         "logo": {
           "component": "CSharpLogo",
@@ -788,11 +709,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "NLP pipelines, MCP servers & automation",
         "projectContext": "Built containerized FastAPI MCP servers, Pandas rostering analytics (95% accuracy), T5 QA generation, and SDK tooling.",
-        "connections": [
-          "azure-openai",
-          "kql",
-          "mcp"
-        ],
+        "connections": ["azure-openai", "kql", "mcp"],
         "level": "Production",
         "logo": {
           "component": "PythonLogo",
@@ -808,11 +725,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "REST APIs, JWT auth & data access",
         "projectContext": "Delivered production Web APIs and microservice architectures (#1 Batch Topper, 94.67% aggregate).",
-        "connections": [
-          "csharp",
-          "sql-server",
-          "owasp"
-        ],
+        "connections": ["csharp", "sql-server", "owasp"],
         "level": "Production",
         "logo": {
           "component": "DotNetLogo",
@@ -828,11 +741,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "IDE extensions, test benches & web apps",
         "projectContext": "Built the SnapWright VS Code extension, multi-execution workflow test benches, and interactive React frontends.",
-        "connections": [
-          "python",
-          "mcp",
-          "playwright"
-        ],
+        "connections": ["python", "mcp", "playwright"],
         "level": "Core",
         "logo": {
           "component": "TypeScriptLogo",
@@ -848,10 +757,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "Transactional data & audit stores",
         "projectContext": "Designed relational schemas, compliant audit logs, and chatbot quality regression tracking tables.",
-        "connections": [
-          "dotnet-webapi",
-          "audit-logging"
-        ],
+        "connections": ["dotnet-webapi", "audit-logging"],
         "level": "Core",
         "logo": {
           "component": "DatabaseLogo",
@@ -867,10 +773,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "Containerized microservices & MCP isolation",
         "projectContext": "Packaged FastAPI MCP servers and .NET services for reproducible cloud deployments via ACR.",
-        "connections": [
-          "container-apps",
-          "csharp"
-        ],
+        "connections": ["container-apps", "csharp"],
         "level": "Production",
         "logo": {
           "component": "DockerLogo",
@@ -886,10 +789,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "Developer tooling & TypeScript AST scaffolding",
         "projectContext": "Built and published the SnapWright VS Code Marketplace extension automating POM generation and singleton PageFactory patterns.",
-        "connections": [
-          "typescript",
-          "playwright"
-        ],
+        "connections": ["typescript", "playwright"],
         "level": "Production",
         "logo": {
           "component": "unknown",
@@ -905,10 +805,7 @@
         "categoryLabel": "Languages & Backend Core",
         "role": "Native mobile interfaces & fintech workflows",
         "projectContext": "Engineered the open-source Nivesh startup crowdfunding Android application with live pitch and equity tracking.",
-        "connections": [
-          "firebase-rest",
-          "sql-server"
-        ],
+        "connections": ["firebase-rest", "sql-server"],
         "level": "Core",
         "logo": {
           "component": "unknown",
@@ -924,10 +821,7 @@
         "categoryLabel": "Security, Compliance & QA",
         "role": "Centralized endpoint validation",
         "projectContext": "Delivered 100% endpoint compliance across production APIs with strict sanitization and automated scanning.",
-        "connections": [
-          "dotnet-webapi",
-          "container-apps"
-        ],
+        "connections": ["dotnet-webapi", "container-apps"],
         "level": "Production",
         "logo": {
           "component": "SecurityLogo",
@@ -943,10 +837,7 @@
         "categoryLabel": "Security, Compliance & QA",
         "role": "Boundary protection for agent tool calls",
         "projectContext": "Hardened outbound HTTP and tool-calling validation layers against server-side request forgery.",
-        "connections": [
-          "mcp",
-          "owasp"
-        ],
+        "connections": ["mcp", "owasp"],
         "level": "Architecture",
         "logo": {
           "component": "unknown",
@@ -962,11 +853,7 @@
         "categoryLabel": "Security, Compliance & QA",
         "role": "Mutual TLS & internal datacenter auth",
         "projectContext": "Enforced strict TLS certificate validation across backend services with 16 dedicated unit tests.",
-        "connections": [
-          "key-vault",
-          "csharp",
-          "xunit"
-        ],
+        "connections": ["key-vault", "csharp", "xunit"],
         "level": "Production",
         "logo": {
           "component": "SecurityLogo",
@@ -982,10 +869,7 @@
         "categoryLabel": "Security, Compliance & QA",
         "role": "Dynamic vulnerability evaluation",
         "projectContext": "Automated dynamic security testing across deployed endpoints to verify runtime posture.",
-        "connections": [
-          "owasp",
-          "container-apps"
-        ],
+        "connections": ["owasp", "container-apps"],
         "level": "Production",
         "logo": {
           "component": "unknown",
@@ -1001,10 +885,7 @@
         "categoryLabel": "Security, Compliance & QA",
         "role": "Compliant enterprise audit telemetry",
         "projectContext": "Integrated Azure SQL audit trails and compliance controls for production AI workflows.",
-        "connections": [
-          "sql-server",
-          "container-apps"
-        ],
+        "connections": ["sql-server", "container-apps"],
         "level": "Core",
         "logo": {
           "component": "unknown",
@@ -1020,11 +901,7 @@
         "categoryLabel": "Security, Compliance & QA",
         "role": "End-to-end QA automation & POM suites",
         "projectContext": "Automated 200+ test cases with a singleton PageFactory pattern, lifting smoke coverage from 25% to 85%.",
-        "connections": [
-          "typescript",
-          "bot-framework",
-          "xunit"
-        ],
+        "connections": ["typescript", "bot-framework", "xunit"],
         "level": "Production",
         "logo": {
           "component": "TypeScriptLogo",
@@ -1040,10 +917,7 @@
         "categoryLabel": "Security, Compliance & QA",
         "role": "Unit & integration test suites",
         "projectContext": "Authored 33 cloud-endpoint tests (suite: 8,704 passing) and 16 TLS caching validation tests.",
-        "connections": [
-          "csharp",
-          "tls-cert"
-        ],
+        "connections": ["csharp", "tls-cert"],
         "level": "Production",
         "logo": {
           "component": "unknown",
@@ -1059,7 +933,7 @@
       "id": "profile_overview",
       "title": "Professional Profile & Executive Summary",
       "category": "role_summary",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "altaj",
         "virani",
@@ -1080,7 +954,7 @@
       "id": "agentic_ai_platform",
       "title": "Enterprise Agentic AI Operations & Engineering Enablement",
       "category": "agentic_ai",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "agentic",
         "agents",
@@ -1099,7 +973,7 @@
       "id": "key_vault_optimization",
       "title": "Certificate Authentication Fix & 35× Azure Key Vault Call Reduction",
       "category": "cloud_infrastructure",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "key vault",
         "caching",
@@ -1120,7 +994,7 @@
       "id": "oom_root_cause_scaling",
       "title": "Production Memory Failures Root-Cause Analysis (2,640 Monthly OOMs Eliminated)",
       "category": "cloud_infrastructure",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "oom",
         "kql",
@@ -1139,7 +1013,7 @@
       "id": "load_testing_capacity_suite",
       "title": "13-Phase Auto-Scaling Load Test Suite (35,500 Workflows)",
       "category": "cloud_infrastructure",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "load testing",
         "capacity",
@@ -1158,7 +1032,7 @@
       "id": "test_env_and_telemetry_analysis",
       "title": "Test-Environment Configuration Fix & Telemetry Correlation",
       "category": "cloud_infrastructure",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "test environment",
         "emulator",
@@ -1175,7 +1049,7 @@
       "id": "security_governance",
       "title": "Security, Compliance & Production Quality Scoring",
       "category": "enterprise_ai",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "security",
         "compliance",
@@ -1192,7 +1066,7 @@
       "id": "research_publications",
       "title": "IEEE Research Publication: Automatic QA Generation using T5 & NLP",
       "category": "publications",
-      "source": "resume-altaj-virani.pdf (Page 2)",
+      "source": "altaj-virani-resume.pdf (Page 2)",
       "keywords": [
         "publication",
         "ieee",
@@ -1211,7 +1085,7 @@
       "id": "patents_copyrights",
       "title": "Government Patent & Copyright: AutoQA AI",
       "category": "publications",
-      "source": "resume-altaj-virani.pdf (Page 2)",
+      "source": "altaj-virani-resume.pdf (Page 2)",
       "keywords": [
         "patent",
         "copyright",
@@ -1225,7 +1099,7 @@
       "id": "notable_projects",
       "title": "Featured Software Projects: AutoQAGen, AutoQA AI, SnapWright & Nivesh",
       "category": "projects",
-      "source": "resume-altaj-virani.pdf (Page 2) & Verified Portfolios",
+      "source": "altaj-virani-resume.pdf (Page 2) & Verified Portfolios",
       "keywords": [
         "projects",
         "autoqagen",
@@ -1246,7 +1120,7 @@
       "id": "awards_recognition",
       "title": "Industry Awards & Recognition",
       "category": "awards",
-      "source": "resume-altaj-virani.pdf (Page 2)",
+      "source": "altaj-virani-resume.pdf (Page 2)",
       "keywords": [
         "awards",
         "recognition",
@@ -1262,7 +1136,7 @@
       "id": "education_certifications",
       "title": "Academic Qualifications & Professional Certifications",
       "category": "education",
-      "source": "resume-altaj-virani.pdf (Page 1)",
+      "source": "altaj-virani-resume.pdf (Page 1)",
       "keywords": [
         "education",
         "degree",
@@ -1279,7 +1153,7 @@
       "id": "technical_skills_matrix",
       "title": "Core Technical Skills & Tooling (AI, Cloud & Languages)",
       "category": "skills",
-      "source": "resume-altaj-virani.pdf (Page 2)",
+      "source": "altaj-virani-resume.pdf (Page 2)",
       "keywords": [
         "skills",
         "tech stack",
@@ -1309,17 +1183,12 @@
         "message": 4000
       }
     },
-    "deliveryChannels": [
-      "resend",
-      "smtp",
-      "formsubmit",
-      "inbox-queue"
-    ]
+    "deliveryChannels": ["resend", "smtp", "formsubmit", "inbox-queue"]
   },
   "assets": [
     "altaj-virani-profile.png",
     "monogram-badge.png",
-    "resume-altaj-virani.pdf",
+    "altaj-virani-resume.pdf",
     "project-autoqa-ai.jpg",
     "project-autoqagen.jpg",
     "project-nivesh.jpg",
@@ -1339,84 +1208,50 @@
       "Summarize his IEEE research paper on T5 question answering"
     ],
     "welcomeMessage": {
-      "content": "Hello! I am Altaj Virani's AI Representative, augmented directly with his verified public resume (resume-altaj-virani.pdf).\\n\\nAsk me anything about his enterprise agentic AI architectures (MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!",
-      "sources": [
-        "resume-altaj-virani.pdf"
-      ]
+      "content": "Hello! I am Altaj Virani's AI Representative, augmented directly with his verified public resume (altaj-virani-resume.pdf).\\n\\nAsk me anything about his enterprise agentic AI architectures (MCP toolkits), high-scale Azure cloud optimizations (35x Key Vault reduction, zero-OOM compute), his published SnapWright VS Code extension, Nivesh crowdfunding app, or his IEEE publication!",
+      "sources": ["altaj-virani-resume.pdf"]
     },
     "resetMessage": {
       "content": "Conversation reset. Ask any question about Altaj Virani's enterprise AI engineering, MCP toolkits, or Azure cloud systems.",
-      "sources": [
-        "resume-altaj-virani.pdf"
-      ]
+      "sources": ["altaj-virani-resume.pdf"]
     },
     "fallback": {
       "intro": "Based on Altaj Virani's verified resume documents:\\n\\n",
-      "sourceDefaults": [
-        "resume-altaj-virani.pdf"
-      ],
+      "sourceDefaults": ["altaj-virani-resume.pdf"],
       "responses": [
         {
-          "matchTerms": [
-            "snapwright",
-            "vscode",
-            "pagefactory"
-          ],
-          "content": "• **SnapWright**: An open-source Visual Studio Code extension published on the official marketplace (`altajvirani.snapwright`).\\n• **Architecture**: Implements an automated PageFactory and Page Object Model (POM) pattern generator for web test suites, featuring smart class-name detection and import consolidation to eliminate memory leaks.\\n• **Adoption**: Led the migration of internal Copilot Studio automation frameworks to adopt SnapWright, significantly improving pipeline efficiency.\\n\\n[Source: resume-altaj-virani.pdf (Page 2) & VS Code Marketplace]"
+          "matchTerms": ["snapwright", "vscode", "pagefactory"],
+          "content": "• **SnapWright**: An open-source Visual Studio Code extension published on the official marketplace (`altajvirani.snapwright`).\\n• **Architecture**: Implements an automated PageFactory and Page Object Model (POM) pattern generator for web test suites, featuring smart class-name detection and import consolidation to eliminate memory leaks.\\n• **Adoption**: Led the migration of internal Copilot Studio automation frameworks to adopt SnapWright, significantly improving pipeline efficiency."
         },
         {
-          "matchTerms": [
-            "nivesh",
-            "crowdfunding",
-            "startup"
-          ],
-          "content": "• **Nivesh**: An open-source Android mobile application designed to democratize venture seed capital and startup crowdfunding.\\n• **Capabilities**: Connects early-stage startup founders with micro-investors through transparent equity tracking, real-time fundraising metrics, and milestone dashboards.\\n• **Stack**: Built with native Android Java, Material Design UI, REST APIs, and Firebase.\\n\\n[Source: Verified Project Portfolios & GitHub (altajvirani/Nivesh)]"
+          "matchTerms": ["nivesh", "crowdfunding", "startup"],
+          "content": "• **Nivesh**: An open-source Android mobile application designed to democratize venture seed capital and startup crowdfunding.\\n• **Capabilities**: Connects early-stage startup founders with micro-investors through transparent equity tracking, real-time fundraising metrics, and milestone dashboards.\\n• **Stack**: Built with native Android Java, Material Design UI, REST APIs, and Firebase."
         },
         {
-          "matchTerms": [
-            "key vault",
-            "35x",
-            "cache"
-          ],
-          "content": "• **Azure Key Vault Caching**: Cut calls 35× (from 2,807 down to 79/day) by replacing repeated certificate downloads with a shared 12-hour cache across three .NET services on Azure Container Apps.\\n• **Reliability**: Eliminated ~13% failed lookups and enforced strict TLS validation with 16 unit tests.\\n\\n[Source: resume-altaj-virani.pdf (Page 1)]"
+          "matchTerms": ["key vault", "35x", "cache"],
+          "content": "• **Azure Key Vault Caching**: Cut calls 35× (from 2,807 down to 79/day) by replacing repeated certificate downloads with a shared 12-hour cache across three .NET services on Azure Container Apps.\\n• **Reliability**: Eliminated ~13% failed lookups and enforced strict TLS validation with 16 unit tests."
         },
         {
-          "matchTerms": [
-            "mcp",
-            "agent"
-          ],
-          "content": "• **Enterprise Agentic AI Platform**: Led cross-team adoption of an enterprise agentic operations platform across engineering tracks.\\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling specialized agents to call integrated operational tools.\\n\\n[Source: resume-altaj-virani.pdf (Page 1)]"
+          "matchTerms": ["mcp", "agent"],
+          "content": "• **Enterprise Agentic AI Platform**: Led cross-team adoption of an enterprise agentic operations platform across engineering tracks.\\n• **Model Context Protocol (MCP)**: Co-developed custom MCP server toolkits and domain agents enabling specialized agents to call integrated operational tools."
         },
         {
-          "matchTerms": [
-            "oom",
-            "memory",
-            "kql"
-          ],
-          "content": "• **Root-Cause Analysis**: Diagnosed 2,640 monthly OOM errors in Azure Container Apps via KQL and Application Insights, uncovering .NET runtime limits (780 MB cap).\\n• **Compute Migration**: Drove migration to dedicated auto-scaling compute, sustaining zero errors thereafter.\\n\\n[Source: resume-altaj-virani.pdf (Page 1)]"
+          "matchTerms": ["oom", "memory", "kql"],
+          "content": "• **Root-Cause Analysis**: Diagnosed 2,640 monthly OOM errors in Azure Container Apps via KQL and Application Insights, uncovering .NET runtime limits (780 MB cap).\\n• **Compute Migration**: Drove migration to dedicated auto-scaling compute, sustaining zero errors thereafter."
         },
         {
-          "matchTerms": [
-            "ieee",
-            "paper",
-            "t5",
-            "publication"
-          ],
-          "content": "• **IEEE ICSCSS (2023) Paper**: 'Automatic Question Answer Generation using T5 and NLP'.\\n• Combines Google's T5 model with Named Entity Recognition, POS tagging, and Sense2Vec for automated question synthesis and distractor generation.\\n\\n[Source: resume-altaj-virani.pdf (Page 2)]"
+          "matchTerms": ["ieee", "paper", "t5", "publication"],
+          "content": "• **IEEE ICSCSS (2023) Paper**: 'Automatic Question Answer Generation using T5 and NLP'.\\n• Combines Google's T5 model with Named Entity Recognition, POS tagging, and Sense2Vec for automated question synthesis and distractor generation."
         },
         {
           "matchTerms": [],
-          "content": "• **Profile**: Software Engineer focused on Azure AI and agentic systems.\\n• **Core Strengths**: Model Context Protocol (MCP), enterprise agent orchestration, hybrid RAG, high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform.\\n\\n[Source: resume-altaj-virani.pdf]"
+          "content": "• **Profile**: Software Engineer focused on Azure AI and agentic systems.\\n• **Core Strengths**: Model Context Protocol (MCP), enterprise agent orchestration, hybrid RAG, high-scale Azure cloud infrastructure, SnapWright VS Code extension, and Nivesh mobile platform."
         }
       ]
     }
   },
   "server": {
-    "routes": [
-      "/api/chat",
-      "/api/contact",
-      "/api/health"
-    ],
+    "routes": ["/api/chat", "/api/contact", "/api/health"],
     "defaultPort": 3000,
     "developmentMode": "NODE_ENV is not production",
     "productionMode": "NODE_ENV is production"

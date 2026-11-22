@@ -2,9 +2,9 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import { dispatchContactSubmission } from './src/server/contactHandler.ts';
-import { handleAdminRequest } from './src/server/adminAuth.ts';
-import { handleChatRequest } from './src/server/chatApi.ts';
+import { dispatchContactSubmission } from './api/_lib/contactHandler.ts';
+import { handleAdminRequest } from './api/_lib/adminAuth.ts';
+import { handleChatRequest } from './api/_lib/chatApi.ts';
 
 dotenv.config({ path: '.env.local' });
 dotenv.config();

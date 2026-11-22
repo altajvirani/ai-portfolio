@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Cpu,
   Network,
@@ -22,6 +22,9 @@ import {
 import {
   filterSkillNodes,
   resolveActiveNodeForFilter,
+  getRandomTabColorPalette,
+  getTabContrastColors,
+  type TabColorTheme,
 } from "../utils/portfolioHelpers.ts";
 import { HoverPopup } from "./HoverPopup.tsx";
 import { InteractiveEmphasis, MagneticTitle } from "./InteractiveText.tsx";
@@ -50,6 +53,17 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
   const [mobileOpenLayer, setMobileOpenLayer] = useState<SkillDomainId>(
     selectedNode.category,
   );
+
+  // Generate random non-repeating colors for skill tabs on mount
+  const skillTabColors = useMemo(() => {
+    const categories = ["all", "agentic", "cloud", "backend", "security"];
+    const palette = getRandomTabColorPalette(categories.length);
+    const map: Record<string, TabColorTheme> = {};
+    categories.forEach((cat, idx) => {
+      map[cat] = palette[idx % palette.length];
+    });
+    return map;
+  }, []);
 
   useEffect(() => {
     setMobileOpenLayer(selectedNode.category);
@@ -215,13 +229,18 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
             Filter:
           </span>
           {[
-            { id: "all", label: `All (${TECH_NODES.length})`, btnClass: "skeuo-btn-dark" },
-            { id: "agentic", label: "Agentic AI & LLMs", dot: "bg-[#2563EB]", btnClass: "skeuo-btn-cobalt" },
-            { id: "cloud", label: "Cloud & Infrastructure", dot: "bg-[#0284C7]", btnClass: "skeuo-btn-cobalt" },
-            { id: "backend", label: "Languages & Core", dot: "bg-[#059669]", btnClass: "skeuo-btn-mint" },
-            { id: "security", label: "Security & Quality", dot: "bg-[#7C3AED]", btnClass: "skeuo-btn-violet" },
+            { id: "all", label: `All (${TECH_NODES.length})` },
+            { id: "agentic", label: "Agentic AI & LLMs" },
+            { id: "cloud", label: "Cloud & Infrastructure" },
+            { id: "backend", label: "Languages & Core" },
+            { id: "security", label: "Security & Quality" },
           ].map((cat) => {
             const isActive = filterCategory === cat.id;
+            const theme = skillTabColors[cat.id] || {
+              btnClass: "skeuo-btn-cobalt",
+              dot: "bg-[#2563EB]",
+            };
+            const contrast = getTabContrastColors(theme);
             return (
               <button
                 key={cat.id}
@@ -230,7 +249,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                 onClick={() => handleFilterClick(cat.id)}
                 className={`relative min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-mono transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive
-                    ? "text-white font-bold"
+                    ? `${contrast.textColor} font-bold`
                     : "skeuo-btn-ivory text-[#3F3F46]"
                 }`}
               >
@@ -238,16 +257,14 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                   <motion.span
                     layoutId="skills-filter-pill"
                     transition={{ type: "spring", stiffness: 420, damping: 30 }}
-                    className={`absolute inset-0 rounded-xl ${cat.btnClass} -z-0`}
+                    className={`absolute inset-0 rounded-xl ${theme.btnClass} -z-0`}
                   />
                 )}
-                {cat.dot && (
-                  <span
-                    className={`relative z-10 w-2 h-2 rounded-full ${cat.dot} ${
-                      isActive ? "ring-2 ring-white/50 bg-white" : ""
-                    }`}
-                  />
-                )}
+                <span
+                  className={`relative z-10 w-2 h-2 rounded-full transition-colors ${
+                    isActive ? contrast.dotClass : theme.dot
+                  }`}
+                />
                 <span className="relative z-10">{cat.label}</span>
               </button>
             );

@@ -1,11 +1,6 @@
 import React, { useRef } from "react";
 import { ArrowDown, Mail, Layers, Cpu, Compass } from "lucide-react";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "motion/react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { HeroOrigamiCanvas } from "./HeroOrigamiCanvas.tsx";
 import { PaperCutout } from "./PaperCutout.tsx";
 import { InteractiveEmphasis, MagneticTitle } from "./InteractiveText.tsx";
@@ -86,7 +81,7 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSkill }) => {
                 ·
               </span>
               <span className="text-[#475569] font-semibold truncate">
-                Agentic Platforms
+                AI Platforms & Solutions
               </span>
             </motion.div>
 
@@ -113,17 +108,11 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSkill }) => {
 
               <p className="text-xl sm:text-2xl lg:text-[2rem] font-display font-bold tracking-tight leading-[1.24] text-[#27272A] max-w-2xl mx-auto md:mx-0">
                 Building{" "}
-                <InteractiveEmphasis
-                  tone="cobalt"
-                  className="text-[#1D4ED8]"
-                >
+                <InteractiveEmphasis tone="cobalt" className="text-[#1D4ED8]">
                   Intelligent Platforms
                 </InteractiveEmphasis>{" "}
                 &amp;{" "}
-                <InteractiveEmphasis
-                  tone="amber"
-                  className="text-[#B45309]"
-                >
+                <InteractiveEmphasis tone="amber" className="text-[#B45309]">
                   Scalable Cloud
                 </InteractiveEmphasis>{" "}
                 Systems
@@ -340,11 +329,11 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSkill }) => {
                 <div className="flex items-center gap-1.5 min-w-0">
                   <span className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0" />
                   <span className="text-[11px] font-mono font-bold text-[#1E3A8A] truncate">
-                    LTM (MSFT BU) · Mumbai
+                    AI Engineer
                   </span>
                 </div>
                 <span className="px-2 py-0.5 rounded-md bg-white border border-[#93C5FD] text-[10px] font-mono font-bold text-[#2563EB] shadow-xs shrink-0 tabular-nums">
-                  Azure AI
+                  LTM (MSFT BU) · Mumbai
                 </span>
               </div>
             </motion.div>

@@ -3,17 +3,19 @@ import {
   Command,
   Search,
   Bot,
-  Briefcase,
-  BookOpen,
-  Cpu,
-  Trophy,
+  FileText,
   Mail,
   Copy,
   Check,
   ExternalLink,
   X,
-  ArrowUp,
   CornerDownLeft,
+  Code2,
+  Award,
+  ShieldCheck,
+  Sparkles,
+  Zap,
+  Cpu,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { SOCIAL_LINKS } from "../data/portfolioData.ts";
@@ -29,7 +31,11 @@ interface ShortcutAction {
   id: string;
   label: string;
   hint: string;
-  group: "Sections" | "Quick Actions" | "Top Skills";
+  group:
+    | "Primary Actions"
+    | "Featured Work & IP"
+    | "Engineering Deep Dives"
+    | "Direct Channels";
   shortcutKeys: string[];
   icon: React.ReactNode;
   run: () => void;
@@ -79,11 +85,12 @@ export const ShortcutPalette: React.FC<ShortcutPaletteProps> = ({
 
   const actions: ShortcutAction[] = useMemo(
     () => [
+      // 1. Primary Actions
       {
         id: "ask-twin",
-        label: "Ask AI Twin (Resume Assistant)",
-        hint: "Chat grounded in Altaj's resume & projects",
-        group: "Quick Actions",
+        label: "Ask AI Twin (Resume Grounded Assistant)",
+        hint: "Instant answers on Altaj's architecture, tools & metrics",
+        group: "Primary Actions",
         shortcutKeys: ["A"],
         icon: <Bot className="w-4 h-4 text-[#2563EB]" />,
         run: () => {
@@ -92,122 +99,192 @@ export const ShortcutPalette: React.FC<ShortcutPaletteProps> = ({
         },
       },
       {
+        id: "view-resume",
+        label: "View / Download Official Resume (PDF)",
+        hint: "FlowCV verified resume with live credentials",
+        group: "Primary Actions",
+        shortcutKeys: ["R"],
+        icon: <FileText className="w-4 h-4 text-[#EA580C]" />,
+        run: () => {
+          onClose();
+          window.open(
+            "https://flowcv.com/resume/gg0rtbkh7jul",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        },
+      },
+      {
+        id: "send-inquiry",
+        label: "Send Direct Inquiry / Message Altaj",
+        hint: "Jump directly to the interactive inquiry dispatch form",
+        group: "Primary Actions",
+        shortcutKeys: ["I"],
+        icon: <Mail className="w-4 h-4 text-[#059669]" />,
+        run: () => {
+          scrollToSection("contact");
+          setTimeout(() => {
+            document.getElementById("contact-message")?.focus();
+          }, 350);
+        },
+      },
+      {
         id: "copy-email",
-        label: copiedEmail ? "Email Copied!" : "Copy Direct Email",
+        label: copiedEmail
+          ? "Email Copied to Clipboard!"
+          : "Copy Direct Email Address",
         hint: SOCIAL_LINKS.email,
-        group: "Quick Actions",
+        group: "Primary Actions",
         shortcutKeys: ["C"],
         icon: copiedEmail ? (
           <Check className="w-4 h-4 text-[#059669]" />
         ) : (
-          <Copy className="w-4 h-4 text-[#EA580C]" />
+          <Copy className="w-4 h-4 text-[#7C3AED]" />
         ),
         run: () => void handleCopyEmail(),
       },
+
+      // 2. Featured Work & Intellectual Property
       {
-        id: "open-whatsapp",
-        label: "Chat on WhatsApp",
-        hint: "Direct messaging (+91 73039 34303)",
-        group: "Quick Actions",
+        id: "project-snapwright",
+        label: "SnapWright VS Code Extension",
+        hint: "Visual Studio Marketplace: PageFactory POM generator for Playwright",
+        group: "Featured Work & IP",
+        shortcutKeys: ["S"],
+        icon: <Code2 className="w-4 h-4 text-[#2563EB]" />,
+        run: () => {
+          onClose();
+          window.open(
+            "https://marketplace.visualstudio.com/items?itemName=altajvirani.snapwright",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        },
+      },
+      {
+        id: "project-ieee",
+        label: "IEEE NLP Research Publication",
+        hint: "Automatic Question Answer Generation using T5 & NER (IEEE ICSCSS 2023)",
+        group: "Featured Work & IP",
+        shortcutKeys: ["P"],
+        icon: <Award className="w-4 h-4 text-[#D97706]" />,
+        run: () => {
+          onClose();
+          window.open(
+            "https://drive.google.com/file/d/1lef8moQmUvzgtEttF1r9qbtEL74lxP0r/view?usp=sharing",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        },
+      },
+      {
+        id: "project-autoqa",
+        label: "AutoQA AI (Govt of India Copyright)",
+        hint: "Privacy-first offline document QA tool with TF-IDF & cosine ranking",
+        group: "Featured Work & IP",
+        shortcutKeys: ["Q"],
+        icon: <ShieldCheck className="w-4 h-4 text-[#059669]" />,
+        run: () => {
+          onClose();
+          window.open(
+            "https://drive.google.com/file/d/1ae07j8Z6j2pZGD-Qdy74iskDIWAOfpcJ/view",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        },
+      },
+      {
+        id: "project-nivesh",
+        label: "Nivesh Venture Seed & Crowdfunding",
+        hint: "Open-source Android mobile app with transparent milestone tracking",
+        group: "Featured Work & IP",
+        shortcutKeys: ["N"],
+        icon: <Sparkles className="w-4 h-4 text-[#EA580C]" />,
+        run: () => {
+          onClose();
+          window.open(
+            "https://github.com/altajvirani/Nivesh",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        },
+      },
+
+      // 3. Engineering Deep Dives & Milestones
+      {
+        id: "eng-keyvault",
+        label: "Azure Key Vault 35× Call Reduction",
+        hint: "Production incident: 2,807 down to 79 calls/day via shared caching",
+        group: "Engineering Deep Dives",
+        shortcutKeys: ["K"],
+        icon: <Zap className="w-4 h-4 text-[#2563EB]" />,
+        run: () => scrollToSection("exp-ltm-software-engineer-network-ai"),
+      },
+      {
+        id: "eng-oom",
+        label: "Production Memory RCA (2,640 OOMs Eliminated)",
+        hint: "Traced KQL telemetry, resolved runtime limits, dedicated auto-scaling compute",
+        group: "Engineering Deep Dives",
+        shortcutKeys: ["O"],
+        icon: <Cpu className="w-4 h-4 text-[#059669]" />,
+        run: () => scrollToSection("exp-ltm-software-engineer-network-ai"),
+      },
+      {
+        id: "eng-cred-azure",
+        label: "Microsoft Certified: Azure AI Fundamentals (AI-900)",
+        hint: "Official verified credential record on Microsoft Learn",
+        group: "Engineering Deep Dives",
+        shortcutKeys: ["M"],
+        icon: <Award className="w-4 h-4 text-[#7C3AED]" />,
+        run: () => {
+          onClose();
+          window.open(
+            "https://learn.microsoft.com/api/credentials/share/en-in/altajvirani/C0872E8742B2D90?sharingId=48999C5125E08B64",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        },
+      },
+
+      // 4. Direct Channels
+      {
+        id: "social-linkedin",
+        label: "Connect on LinkedIn",
+        hint: "linkedin.com/in/altajvirani (endorsements & network)",
+        group: "Direct Channels",
+        shortcutKeys: ["L"],
+        icon: <ExternalLink className="w-4 h-4 text-[#2563EB]" />,
+        run: () => {
+          onClose();
+          window.open(SOCIAL_LINKS.linkedin, "_blank", "noopener,noreferrer");
+        },
+      },
+      {
+        id: "social-github",
+        label: "Explore GitHub Profile",
+        hint: "github.com/altajvirani (repositories & open source)",
+        group: "Direct Channels",
+        shortcutKeys: ["G"],
+        icon: <ExternalLink className="w-4 h-4 text-[#18181B]" />,
+        run: () => {
+          onClose();
+          window.open(SOCIAL_LINKS.github, "_blank", "noopener,noreferrer");
+        },
+      },
+      {
+        id: "social-whatsapp",
+        label: "Message Directly on WhatsApp",
+        hint: "+91 73039 34303 (opens WhatsApp conversation)",
+        group: "Direct Channels",
         shortcutKeys: ["W"],
-        icon: <ExternalLink className="w-4 h-4 text-[#059669]" />,
+        icon: <ExternalLink className="w-4 h-4 text-[#16A34A]" />,
         run: () => {
           onClose();
           window.open(SOCIAL_LINKS.whatsapp, "_blank", "noopener,noreferrer");
         },
       },
-      {
-        id: "nav-top",
-        label: "Scroll to Top (Hero)",
-        hint: "Back to overview & interactive origami studio",
-        group: "Sections",
-        shortcutKeys: ["1"],
-        icon: <ArrowUp className="w-4 h-4 text-[#2563EB]" />,
-        run: () => scrollToSection("hero"),
-      },
-      {
-        id: "nav-experience",
-        label: "Go to Work Experience",
-        hint: "AI platform, Power Apps & training milestones",
-        group: "Sections",
-        shortcutKeys: ["2"],
-        icon: <Briefcase className="w-4 h-4 text-[#2563EB]" />,
-        run: () => scrollToSection("experience"),
-      },
-      {
-        id: "nav-projects",
-        label: "Go to Featured Projects",
-        hint: "AutoQAGen (IEEE), AutoQA AI, SnapWright, Nivesh",
-        group: "Sections",
-        shortcutKeys: ["3"],
-        icon: <BookOpen className="w-4 h-4 text-[#059669]" />,
-        run: () => scrollToSection("projects"),
-      },
-      {
-        id: "nav-skills",
-        label: "Go to Skills Ecosystem",
-        hint: "Interactive stack & linked dependencies",
-        group: "Sections",
-        shortcutKeys: ["4"],
-        icon: <Cpu className="w-4 h-4 text-[#7C3AED]" />,
-        run: () => scrollToSection("skills"),
-      },
-      {
-        id: "nav-honors",
-        label: "Go to Honors & Credentials",
-        hint: "Spot awards, Problem Solver badge & B.E.",
-        group: "Sections",
-        shortcutKeys: ["5"],
-        icon: <Trophy className="w-4 h-4 text-[#D97706]" />,
-        run: () => scrollToSection("honors"),
-      },
-      {
-        id: "nav-contact",
-        label: "Go to Contact & Connections",
-        hint: "Send inquiry or open developer profiles",
-        group: "Sections",
-        shortcutKeys: ["6"],
-        icon: <Mail className="w-4 h-4 text-[#EA580C]" />,
-        run: () => scrollToSection("contact"),
-      },
-      {
-        id: "skill-mcp",
-        label: "Inspect Skill: Model Context Protocol (MCP)",
-        hint: "Agentic tool calling & CLI plugins",
-        group: "Top Skills",
-        shortcutKeys: ["M"],
-        icon: <Cpu className="w-4 h-4 text-[#2563EB]" />,
-        run: () => {
-          onClose();
-          setTimeout(() => onSelectSkill("mcp"), 80);
-        },
-      },
-      {
-        id: "skill-rag",
-        label: "Inspect Skill: Hybrid RAG & HNSW",
-        hint: "Semantic retrieval pipeline",
-        group: "Top Skills",
-        shortcutKeys: ["R"],
-        icon: <Cpu className="w-4 h-4 text-[#0284C7]" />,
-        run: () => {
-          onClose();
-          setTimeout(() => onSelectSkill("rag"), 80);
-        },
-      },
-      {
-        id: "skill-aca",
-        label: "Inspect Skill: Azure Container Apps",
-        hint: "Microservice runtime & auto-scaling",
-        group: "Top Skills",
-        shortcutKeys: ["K"],
-        icon: <Cpu className="w-4 h-4 text-[#059669]" />,
-        run: () => {
-          onClose();
-          setTimeout(() => onSelectSkill("container-apps"), 80);
-        },
-      },
     ],
-    [copiedEmail, onClose, onOpenChat, onSelectSkill],
+    [copiedEmail, onClose, onOpenChat],
   );
 
   const filtered = useMemo(() => {
@@ -264,7 +341,7 @@ export const ShortcutPalette: React.FC<ShortcutPaletteProps> = ({
         <motion.div
           role="dialog"
           aria-modal="true"
-          aria-label="Quick Navigation & Shortcuts"
+          aria-label="Quick Actions & Shortcuts"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -292,7 +369,7 @@ export const ShortcutPalette: React.FC<ShortcutPaletteProps> = ({
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Jump to section, inspect skill, or run shortcut..."
+                  placeholder="Search actions, projects, resume, incidents, credentials..."
                   className="w-full bg-transparent text-xs sm:text-sm font-mono text-[#18181B] placeholder-[#71717A] focus:outline-none"
                 />
               </div>
@@ -383,8 +460,7 @@ export const ShortcutPalette: React.FC<ShortcutPaletteProps> = ({
                 </span>
               </div>
               <span>
-                Global: <strong className="text-[#2563EB]">⌘K / Ctrl+K</strong> or{" "}
-                <strong className="text-[#2563EB]">1–6</strong>
+                Global: <strong className="text-[#2563EB]">⌘K / Ctrl+K</strong>
               </span>
             </div>
           </motion.div>
@@ -393,3 +469,4 @@ export const ShortcutPalette: React.FC<ShortcutPaletteProps> = ({
     </AnimatePresence>
   );
 };
+

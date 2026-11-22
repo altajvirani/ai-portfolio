@@ -1,35 +1,18 @@
 import React, { useState } from "react";
-import {
-  ArrowUp,
-  Bot,
-  Command,
-  Copy,
-  Check,
-  Stamp,
-  Sparkles,
-} from "lucide-react";
+import { ArrowUp, Stamp, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { SOCIAL_LINKS } from "../data/portfolioData.ts";
 
 interface FooterProps {
   onOpenChat?: () => void;
   onOpenShortcuts?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({
-  onOpenChat,
-  onOpenShortcuts,
-}) => {
+export const Footer: React.FC<FooterProps> = () => {
   const [stamps, setStamps] = useState(0);
   const [justStamped, setJustStamped] = useState(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleStamp = () => {
@@ -38,29 +21,8 @@ export const Footer: React.FC<FooterProps> = ({
     setTimeout(() => setJustStamped(false), 700);
   };
 
-  const handleCopyEmail = async () => {
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(SOCIAL_LINKS.email);
-      } else {
-        throw new Error("fallback");
-      }
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = SOCIAL_LINKS.email;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-    }
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 1800);
-  };
-
   return (
-    <footer className="relative border-t border-[#D8D0C1] bg-[#EFEAE0] paper-grain pt-0 pb-24 sm:pb-20 overflow-hidden">
+    <footer className="relative border-t border-[#D8D0C1] bg-[#EFEAE0] paper-grain pt-0 pb-20 sm:pb-16 overflow-hidden">
       {/* Top Air-Mail Stationery Trim */}
       <div aria-hidden="true" className="h-1.5 w-full airmail-border" />
 
@@ -68,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Top Row: Studio Card + Interactive Action Dock */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
           {/* Identity & Colophon */}
-          <div className="md:col-span-5 space-y-2.5 text-center md:text-left">
+          <div className="md:col-span-7 space-y-2.5 text-center md:text-left">
             <div className="inline-flex items-center gap-2.5">
               <img
                 src="/assets/monogram-badge.png"
@@ -90,57 +52,8 @@ export const Footer: React.FC<FooterProps> = ({
             </p>
           </div>
 
-          {/* Interactive Action Dock */}
-          <div className="md:col-span-7 flex flex-wrap items-center justify-center md:justify-end gap-2.5">
-            {onOpenShortcuts && (
-              <motion.button
-                type="button"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={onOpenShortcuts}
-                className="min-h-[40px] px-3.5 py-2 rounded-xl skeuo-btn-ivory text-xs font-mono font-bold text-[#18181B] inline-flex items-center gap-2 cursor-pointer"
-              >
-                <Command className="w-3.5 h-3.5 text-[#2563EB]" />
-                <span>Shortcuts</span>
-                <kbd className="px-1.5 py-0.5 rounded keycap-badge text-[10px]">
-                  ⌘K
-                </kbd>
-              </motion.button>
-            )}
-
-            {onOpenChat && (
-              <motion.button
-                type="button"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={onOpenChat}
-                className="min-h-[40px] px-3.5 py-2 rounded-xl skeuo-btn-cobalt skeuo-sheen text-xs font-mono font-bold inline-flex items-center gap-1.5 cursor-pointer"
-              >
-                <Bot className="w-3.5 h-3.5" />
-                <span>Ask AI Twin</span>
-              </motion.button>
-            )}
-
-            <motion.button
-              type="button"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={handleCopyEmail}
-              className="min-h-[40px] px-3.5 py-2 rounded-xl skeuo-btn-ivory text-xs font-mono font-semibold text-[#18181B] inline-flex items-center gap-1.5 cursor-pointer"
-            >
-              {copiedEmail ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-[#059669]" />
-                  <span className="text-[#059669]">Email Copied</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span>Copy Email</span>
-                </>
-              )}
-            </motion.button>
-
+          {/* Action Dock (Postage Stamp + Top) */}
+          <div className="md:col-span-5 flex items-center justify-center md:justify-end gap-2.5">
             {/* Tactile Postage Stamp Micro-Interaction */}
             <motion.button
               type="button"
@@ -182,29 +95,11 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        {/* Bottom Strip: Quick Section Pills & Copyright */}
-        <div className="pt-6 border-t border-[#D8D0C1] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center justify-center gap-1.5">
-            {[
-              { id: "experience", label: "Experience" },
-              { id: "projects", label: "Projects" },
-              { id: "skills", label: "Skills" },
-              { id: "honors", label: "Honors" },
-              { id: "contact", label: "Contact" },
-            ].map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => scrollTo(s.id)}
-                className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold text-[#52525B] hover:text-[#18181B] hover:bg-white/75 transition-colors cursor-pointer"
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-
-          <span className="text-xs text-[#52525B] font-mono">
-            © {new Date().getFullYear()} Altaj Virani.
+        {/* Bottom Strip: Copyright */}
+        <div className="pt-6 border-t border-[#D8D0C1] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52525B] font-mono">
+          <span>
+            © {new Date().getFullYear()} Altaj Virani. Grounded in verified
+            engineering experience.
           </span>
         </div>
       </div>

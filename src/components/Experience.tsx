@@ -1,10 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { Briefcase, Building2, Calendar, ChevronDown } from "lucide-react";
 import { motion, useScroll, useSpring, AnimatePresence } from "motion/react";
 import { WORK_EXPERIENCE } from "../data/portfolioData.ts";
 import { TECH_NODES } from "../data/skillsData.tsx";
 import { SkillChip } from "./SkillChip.tsx";
 import { InteractiveEmphasis, MagneticTitle } from "./InteractiveText.tsx";
+import {
+  getRandomTabColorPalette,
+  getTabContrastColors,
+  type TabColorTheme,
+} from "../utils/portfolioHelpers.ts";
 
 interface ExperienceProps {
   onSelectSkill: (skillId: string) => void;
@@ -82,6 +87,16 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
   const [expandedCardId, setExpandedCardId] = useState<string>(
     WORK_EXPERIENCE[0].id,
   );
+
+  // Generate random non-repeating colors for timeline tabs on mount
+  const tabThemes = useMemo(() => {
+    const palette = getRandomTabColorPalette(WORK_EXPERIENCE.length);
+    const map: Record<string, TabColorTheme> = {};
+    WORK_EXPERIENCE.forEach((item, idx) => {
+      map[item.id] = palette[idx % palette.length];
+    });
+    return map;
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: timelineContainerRef,
@@ -215,7 +230,14 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
         >
           {WORK_EXPERIENCE.map((item) => {
             const isActive = item.id === activeId;
-            const theme = getExperienceTheme(item.accentColor);
+            const tabTheme = tabThemes[item.id] || {
+              btnClass: "skeuo-btn-cobalt",
+              dot: "bg-[#2563EB]",
+              text: "text-[#1D4ED8]",
+              marker: "bg-[#2563EB] shadow-[0_0_0_2px_#2563EB]",
+              ring: "ring-[#2563EB]/40",
+            };
+            const contrast = getTabContrastColors(tabTheme);
             return (
               <button
                 key={item.id}
@@ -231,13 +253,13 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                 }}
                 className={`min-h-[38px] px-3 py-1.5 rounded-xl text-[11px] font-mono whitespace-nowrap shrink-0 flex items-center gap-1.5 transition-all cursor-pointer ${
                   isActive
-                    ? "skeuo-btn-cobalt skeuo-sheen text-white font-bold"
+                    ? `${tabTheme.btnClass} skeuo-sheen ${contrast.textColor} font-bold`
                     : "skeuo-btn-ivory text-[#3F3F46]"
                 }`}
               >
                 <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                    isActive ? "bg-white" : theme.dot
+                  className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors ${
+                    isActive ? contrast.dotClass : tabTheme.dot
                   }`}
                 />
                 <span>{item.period.split("–")[0].trim()}</span>
@@ -280,54 +302,60 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
 
                 {WORK_EXPERIENCE.map((item) => {
                   const isActive = item.id === activeId;
-                  const theme = getExperienceTheme(item.accentColor);
+                  const tabTheme = tabThemes[item.id] || {
+                    btnClass: "skeuo-btn-cobalt",
+                    dot: "bg-[#2563EB]",
+                    text: "text-[#1D4ED8]",
+                    marker: "bg-[#2563EB] shadow-[0_0_0_2px_#2563EB]",
+                    ring: "ring-[#2563EB]/40",
+                  };
                   return (
-                    <motion.button
-                      key={item.id}
-                      type="button"
-                      whileHover={{ x: 4 }}
-                      whileTap={{ scale: 0.98, y: 1 }}
-                      transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                      onClick={(e) => {
-                  e.preventDefault();
-                  scrollToMilestone(item.id);
-                }}
-                      className={`w-full text-left p-3.5 rounded-xl transition-all cursor-pointer relative ${
-                        isActive
-                          ? "paper-cutout-sm bg-white text-[#18181B]"
-                          : "bg-white/65 hover:bg-white/90 border border-[#C9A673]/55 text-[#52525B] hover:text-[#18181B]"
-                      }`}
-                    >
+                    <div key={item.id} className="relative">
+                      {/* Anchored timeline pin on rail groove (fixed, never shifts on hover) */}
                       <span
                         aria-hidden="true"
-                        className={`absolute -left-[20px] top-4 w-3 h-3 rounded-full border-2 transition-all ${
+                        className={`absolute -left-[18px] top-4 w-3 h-3 rounded-full border-2 pointer-events-none z-10 transition-colors duration-150 ${
                           isActive
-                            ? `${theme.marker} border-white`
+                            ? `${tabTheme.marker} border-white ring-2 ${tabTheme.ring}`
                             : "bg-[#FAF8F3] border-[#A1A1AA]"
                         }`}
                       />
-                      <div className="flex items-center justify-between gap-2 text-[11px] font-mono tabular-nums">
-                        <span
-                          className={
-                            isActive
-                              ? `${theme.titleText} font-bold`
-                              : "text-[#52525B] font-medium"
-                          }
-                        >
-                          {item.period}
-                        </span>
-                        <span className="text-[#71717A] shrink-0">
-                          {item.organization}
-                        </span>
-                      </div>
-                      <div className="text-xs font-display font-bold mt-1 text-[#18181B]">
-                        {item.projectName}
-                      </div>
-                      <div className="text-[11px] text-[#52525B] mt-0.5">
-                        {item.role}
-                        {item.businessUnit ? ` · ${item.businessUnit}` : ""}
-                      </div>
-                    </motion.button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToMilestone(item.id);
+                        }}
+                        className={`w-full text-left p-3.5 rounded-xl transition-colors duration-150 cursor-pointer relative ${
+                          isActive
+                            ? `paper-cutout-sm bg-white text-[#18181B] ring-2 ${tabTheme.ring}`
+                            : "bg-white/65 hover:bg-white/95 border border-[#C9A673]/55 hover:border-[#C9A673] text-[#52525B] hover:text-[#18181B]"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2 text-[11px] font-mono tabular-nums">
+                          <span
+                            className={
+                              isActive
+                                ? `${tabTheme.text} font-bold`
+                                : "text-[#52525B] font-medium"
+                            }
+                          >
+                            {item.period}
+                          </span>
+                          <span className="text-[#71717A] shrink-0">
+                            {item.organization}
+                          </span>
+                        </div>
+                        <div className="text-xs font-display font-bold mt-1 text-[#18181B]">
+                          {item.projectName}
+                        </div>
+                        <div className="text-[11px] text-[#52525B] mt-0.5">
+                          {item.role}
+                          {item.businessUnit ? ` · ${item.businessUnit}` : ""}
+                        </div>
+                      </button>
+                    </div>
                   );
                 })}
               </div>
@@ -380,7 +408,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
                   {/* Desktop Spine Station Marker */}
                   <div
                     aria-hidden="true"
-                    className={`hidden lg:flex absolute -left-[32px] top-7 w-4 h-4 rounded-full border-2 border-white items-center justify-center transition-all ${
+                    className={`hidden lg:flex absolute -left-[33.5px] top-7 w-4 h-4 rounded-full border-2 border-white items-center justify-center transition-all ${
                       isActive
                         ? `${theme.marker} scale-110`
                         : "bg-[#FAF8F3] border-[#A1A1AA]"

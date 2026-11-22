@@ -36,15 +36,13 @@ class ResponseCacheManager {
 
 - **The Problem:** The certificate used for backend network API authentication was being re-downloaded from Azure Key Vault every ~2 minutes and never released from memory. Additionally, production environments requested a non-existent staging certificate, causing ~13% of lookups to fail completely.
 - **The Solution:** Altaj implemented an in-memory shared cache with a 12-hour refresh interval and proactive expiry protection. He corrected invalid certificate lookups and enforced strict TLS validation across 3 backend services with 16 comprehensive xUnit test suites.
-- **Production Impact:** Key Vault calls dropped **35×**—from 2,807 down to just 79 requests per day. Failed lookups were reduced to **zero (0%)**.
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+- **Production Impact:** Key Vault calls dropped **35×**—from 2,807 down to just 79 requests per day. Failed lookups were reduced to **zero (0%)**.`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "key_vault_optimization",
           title: "Production Incident: Azure Key Vault 35x Call Reduction",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -69,15 +67,14 @@ class ResponseCacheManager {
 - **Cross-Team Adoption:** Led engineering tracks across the business unit to adopt an enterprise agentic AI operations platform, collaborating directly with technical leads and on-call teams.
 - **Model Context Protocol (MCP) Toolkits:** Co-built domain agents, automated playbooks, custom skills, and Copilot CLI plugins powered by Model Context Protocol (**20+ domain agents and 250+ tools**).
 - **Conversational Assistants:** Engineered hybrid RAG chatbots using Azure Functions, Copilot Studio, and HNSW vector indexing—slashing troubleshooting duration by **80% for 200+ engineering users**.
-- **Operational Tooling:** Implemented natural-language on-call rostering (**95% intent accuracy**), automated root-cause triage in Azure AI Foundry with automatic PII redaction, and deployed containerized MCP servers to Azure Container Apps.
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+- **Operational Tooling:** Implemented natural-language on-call rostering (**95% intent accuracy**), automated root-cause triage in Azure AI Foundry with automatic PII redaction, and deployed containerized MCP servers to Azure Container Apps.`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "agentic_ai_platform",
-          title: "Enterprise Agentic AI Operations Platform & Model Context Protocol (MCP)",
-          source: "resume-altaj-virani.pdf",
+          title:
+            "Enterprise Agentic AI Operations Platform & Model Context Protocol (MCP)",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -103,15 +100,13 @@ class ResponseCacheManager {
 - **Hi-Five Spot Award (November 2025):** Recognized for consistently exceeding expectations and demonstrating exceptional innovation in developing AI use cases.
 - **Super Crew Spot Award (August 2025 & October 2025):** Awarded alongside his team for architecting and deploying compliant, enterprise-grade Generative AI and Automation systems.
 - **Hi-Five Spot Award (July 2025):** Commended for leading QA framework stability improvements, system migrations, and independently engineering automation tools that boosted developer productivity.
-- **Government of India Copyright:** Formally granted copyright for his proprietary automated QA methodology (**AutoQA AI**).
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+- **Government of India Copyright:** Formally granted copyright for his proprietary automated QA methodology (**AutoQA AI**).`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "awards_recognition",
           title: "Honors, Awards & Recognition",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -134,15 +129,13 @@ class ResponseCacheManager {
 
 - **Tech Stack:** TypeScript, VS Code Extension API, Node.js, and Playwright.
 - **Core Innovation:** Features an automated singleton-based **PageFactory** pattern that generates clean Page Object Model (POM) classes, standardizes imports, and eliminates memory leaks across large end-to-end test suites.
-- **Internal Adoption:** Altaj led the migration of internal automation frameworks across his business unit to SnapWright, boosting smoke test coverage from 25% to 85% and significantly accelerating pipeline execution.
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+- **Internal Adoption:** Altaj led the migration of internal automation frameworks across his business unit to SnapWright, boosting smoke test coverage from 25% to 85% and significantly accelerating pipeline execution.`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "notable_projects",
           title: "Featured Projects & Open Source",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -170,15 +163,13 @@ class ResponseCacheManager {
 - **AutoQA AI (Government Copyright):**
   - Fully offline, privacy-first desktop QA application built with Python, Scikit-learn, NLTK, and KivyMD.
   - Queries local text documents without transmitting data to external servers using TF-IDF vectorization and cosine similarity.
-  - Formally approved and registered copyright by the **Government of India (Copyright Office)**.
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+  - Formally approved and registered copyright by the **Government of India (Copyright Office)**.`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "research_publications",
           title: "Research Publications & Intellectual Property",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -211,15 +202,13 @@ class ResponseCacheManager {
 - **Certifications:**
   - **Microsoft Certified: Azure AI Fundamentals (AI-900)**
   - Azure Functions Masterclass
-  - Azure AI Studio / Azure AI Foundry
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+  - Azure AI Studio / Azure AI Foundry`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "education_certifications",
           title: "Education & Academic Qualifications",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -244,15 +233,13 @@ class ResponseCacheManager {
 - **Current Role:** Software Engineer at LTM (Microsoft Business Unit), leading cross-team adoption of Agentic AI, MCP toolkits (20+ domain agents, 250+ tools), and Azure cloud optimizations.
 - **Track Record:** Eliminated 2,640 monthly production OOMs via KQL telemetry root-cause analysis and reduced Azure Key Vault calls by 35× (saving 2,700+ requests/day).
 - **Tooling & Projects:** Author of **SnapWright** (VS Code extension on Visual Studio Marketplace), **AutoQA AI** (Government of India copyright), and IEEE-published research author.
-- **Credentials:** B.E. in Computer Engineering (9.00 CGPA) & Microsoft Certified Azure AI Fundamentals (AI-900).
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+- **Credentials:** B.E. in Computer Engineering (9.00 CGPA) & Microsoft Certified Azure AI Fundamentals (AI-900).`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "profile_overview",
           title: "Altaj Virani Profile Overview",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -280,15 +267,13 @@ class ResponseCacheManager {
 - **GitHub:** [github.com/altajvirani](https://github.com/altajvirani)
 - **Location:** Mumbai, India
 
-You can also use the **Send an Inquiry** module in this portfolio to open a pre-filled email directly in Gmail, Outlook, Yahoo, or your default mail client!
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+You can also use the **Send an Inquiry** module in this portfolio to open a pre-filled email directly in Gmail, Outlook, Yahoo, or your default mail client!`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "profile_overview",
           title: "Contact & Verified Profiles",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -320,15 +305,13 @@ You can also use the **Send an Inquiry** module in this portfolio to open a pre-
   - Automated 200+ Playwright TypeScript end-to-end tests using singleton PageFactory, boosting smoke test coverage from 25% to 85%.
   - Built custom VS Code extensions for automated Page Object Model (POM) generation.
 - **Graduate Engineering Trainee (August 2023 – Sept 2024):**
-  - Trained across Azure cloud services, enterprise C#/.NET development, and conversational AI frameworks.
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+  - Trained across Azure cloud services, enterprise C#/.NET development, and conversational AI frameworks.`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "ltm_experience",
           title: "LTM Microsoft Business Unit Work Experience",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -360,15 +343,13 @@ You can also use the **Send an Inquiry** module in this portfolio to open a pre-
 3. **AutoQAGen (Automated Question-Answer Generation Pipeline):**
    - Synthesizes multi-format QA pairs combining Google T5 with Named Entity Recognition (NER) and POS tagging, evaluated against SQuAD baselines with a BERT evaluation engine.
 4. **Nivesh (Crowdfunding & Venture Seed Platform):**
-   - Open-source Android mobile application built with Android Java, Material Design, REST APIs, and Firebase, connecting startup founders with micro-investors and angel backers through real-time fundraising dashboards.
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+   - Open-source Android mobile application built with Android Java, Material Design, REST APIs, and Firebase, connecting startup founders with micro-investors and angel backers through real-time fundraising dashboards.`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "notable_projects",
           title: "Featured Projects & Open Source",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -396,15 +377,13 @@ You can also use the **Send an Inquiry** module in this portfolio to open a pre-
 - **Cloud & Infrastructure:** Azure Container Apps, Azure Functions, Azure Key Vault, Azure Service Bus, Azure Event Hubs, Azure Data Explorer (ADX), Docker, Azure CLI.
 - **Backend & Microservices:** FastAPI, Flask, Node.js, Express.js, ASP.NET Core, REST APIs.
 - **Databases:** MS SQL Server, PostgreSQL (Neon), MongoDB, Firebase, Vector Stores.
-- **Quality, Testing & Security:** OWASP Top 10, SSRF Defense, DAST, Automated Security Scanning, Playwright, xUnit, Azure SQL Audit Logging.
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+- **Quality, Testing & Security:** OWASP Top 10, SSRF Defense, DAST, Automated Security Scanning, Playwright, xUnit, Azure SQL Audit Logging.`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "technical_skills",
           title: "Technical Skills Matrix",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),
@@ -429,15 +408,13 @@ You can also use the **Send an Inquiry** module in this portfolio to open a pre-
 1. **Measurable Production Impact:** Proven track record in eliminating mission-critical reliability bottlenecks—reducing Azure Key Vault calls **35×** and eliminating **2,640 monthly out-of-memory crashes** through meticulous KQL telemetry analysis.
 2. **Pioneering Agentic AI & MCP Leadership:** Hands-on architect of enterprise Model Context Protocol (MCP) ecosystems (**20+ domain agents, 250+ tools**), building autonomous workflows, CLI plugins, and hybrid RAG chatbots that slashed troubleshooting times by 80%.
 3. **End-to-End Technical Rigor:** Author of published developer tooling (**SnapWright** on VS Marketplace), Government of India copyrighted AI software (**AutoQA AI**), and an IEEE-published research paper on NLP Question-Answer Generation.
-4. **Strong Engineering Foundation:** B.E. in Computer Engineering (**9.00 CGPA**), Microsoft Certified Azure AI Fundamentals (AI-900), and recognized with multiple enterprise awards (Problem Solver Badge, Hi-Five Spot Awards, Super Crew Spot Awards).
-
-[Source: resume-altaj-virani.pdf]`,
-      sources: ["resume-altaj-virani.pdf"],
+4. **Strong Engineering Foundation:** B.E. in Computer Engineering (**9.00 CGPA**), Microsoft Certified Azure AI Fundamentals (AI-900), and recognized with multiple enterprise awards (Problem Solver Badge, Hi-Five Spot Awards, Super Crew Spot Awards).`,
+      sources: ["altaj-virani-resume.pdf"],
       chunks: [
         {
           id: "why_hire",
           title: "Why Hire Altaj Virani / Engineering Impact",
-          source: "resume-altaj-virani.pdf",
+          source: "altaj-virani-resume.pdf",
         },
       ],
       timestamp: Date.now(),

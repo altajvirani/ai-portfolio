@@ -38,8 +38,8 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
     {
       id: "welcome",
       role: "assistant",
-      content: `Hi! I am Altaj Virani's AI Twin, grounded directly in his verified public resume (resume-altaj-virani.pdf).\n\nAsk me anything about enterprise agentic AI, Model Context Protocol (MCP), Azure Container Apps optimization, SnapWright, Nivesh, IEEE research, awards, or engineering experience.`,
-      sources: ["resume-altaj-virani.pdf"],
+      content: `Hi! I am Altaj Virani's AI Twin, grounded directly in his verified public resume (altaj-virani-resume.pdf).\n\nAsk me anything about enterprise agentic AI, Model Context Protocol (MCP), Azure Container Apps optimization, SnapWright, Nivesh, IEEE research, awards, or engineering experience.`,
+      sources: ["altaj-virani-resume.pdf"],
       timestamp: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -142,8 +142,9 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         id: `assistant-${Date.now()}`,
         role: "assistant",
         content:
-          data.answer || "The AI Twin is momentarily unavailable. Please reach out directly via the Contact section below.",
-        sources: data.sources || ["resume-altaj-virani.pdf"],
+          data.answer ||
+          "The AI Twin is momentarily unavailable. Please reach out directly via the Contact section below.",
+        sources: data.sources || ["altaj-virani-resume.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -160,7 +161,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         id: `assistant-${Date.now()}`,
         role: "assistant",
         content: errorMessage,
-        sources: ["resume-altaj-virani.pdf"],
+        sources: ["altaj-virani-resume.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -213,7 +214,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         id: "welcome-reset",
         role: "assistant",
         content: `Conversation reset. Ask any question about Altaj Virani's enterprise AI engineering, MCP toolkits, projects, awards, or Azure cloud systems.`,
-        sources: ["resume-altaj-virani.pdf"],
+        sources: ["altaj-virani-resume.pdf"],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -238,7 +239,15 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
               </span>
             </div>
             <div className="text-[11px] text-[#52525B] font-mono truncate">
-              Sources: <span className="text-[#2563EB] font-semibold">resume-altaj-virani.pdf</span> (<span className="text-[#047857] font-semibold">Markdown / PDF</span>)
+              Sources:{" "}
+              <span className="text-[#2563EB] font-semibold">
+                altaj-virani-resume.pdf
+              </span>{" "}
+              (
+              <span className="text-[#047857] font-semibold">
+                Markdown / PDF
+              </span>
+              )
             </div>
           </div>
         </div>
@@ -345,7 +354,9 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
                       {copiedId === msg.id ? (
                         <>
                           <Check className="w-3 h-3 text-[#16A34A]" />
-                          <span className="text-[#16A34A] font-semibold">Copied</span>
+                          <span className="text-[#16A34A] font-semibold">
+                            Copied
+                          </span>
                         </>
                       ) : (
                         <>
@@ -368,9 +379,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
             </div>
             <div className="p-3.5 rounded-xl skeuo-card text-xs font-mono text-[#52525B] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-ping" />
-              <span>
-                Retrieving resume context &amp; composing answer...
-              </span>
+              <span>Retrieving resume context &amp; composing answer...</span>
             </div>
           </div>
         )}
@@ -435,7 +444,10 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
   }
 
   return (
-    <section id="rag-console" className="py-20 border-b border-[#DFD9CE] relative">
+    <section
+      id="rag-console"
+      className="py-20 border-b border-[#DFD9CE] relative"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="h-[600px] w-full">{containerContent}</div>
       </div>
