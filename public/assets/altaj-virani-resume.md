@@ -38,6 +38,7 @@
 - Restored four broken test environments silently processing zero workflows: identified inherited localhost emulator settings, reconfigured cloud endpoint precedence for Azure Service Bus, Event Hubs, and checkpoint storage, corrected ignored managed-identity bindings, and ensured sovereign-cloud compatibility with 33 new unit tests (suite total: 8,704 passing); proven live by draining 331 of 334 stuck messages in 90 seconds.
 - Validated platform capacity for load spikes by building a 13-phase test suite (PowerShell, Azure CLI, Azure Monitor, Azure Service Bus) driving 35,500 workflow executions against Azure Container Apps auto-scaling rules with 45 pass/fail verdicts, proving queue-, CPU-, and HTTP-based scaling while exposing unreachable rules and unscalable services.
 - Enhanced portal workflow test-bench capabilities by engineering concurrent execution tracking for multiple simultaneous runs and adding one-click output copying in debug mode.
+- Built a browser-based visual editor prototype for workflow YAML that needs no install or build: drag-and-drop stages and steps, two-way live YAML sync, multiple workflows in tabs, a change-diff view, and conformance checks that turn each violation into a ready-to-use GitHub Copilot prompt.
 - Authored 27 pages of comprehensive engineering documentation covering system architecture, component maps, workflow-execution internals, environment access, and reproducible KQL investigation runbooks, alongside a vendor engineer operational guide.
 
 #### Enterprise AI Applications & Intelligent Solutions
@@ -82,9 +83,9 @@
   - Architected an open-source VS Code extension featuring a singleton-based page factory pattern that automates POM generation and eliminates memory leaks in large test suites.
   - Significantly improved pipeline execution efficiency by leading the migration of the Microsoft Copilot Studio automation framework to utilize this extension.
 
-- **Visual Workflow Editor Prototype** _(JavaScript, HTML5/CSS3, js-yaml)_
-  - Built a browser-based visual editor for orchestrating agentic workflow YAMLs without local dependencies: featuring drag-and-drop stages/steps, bidirectional live YAML synchronization, multi-tab workflow authoring, change-diff tracking, and conformance validation.
-  - Integrated automated conformance checks that convert validation errors and schema violations into actionable GitHub Copilot prompts for rapid authoring.
+- [**Nivesh**](https://github.com/altajvirani/Nivesh) _(Android Java, XML, Firebase, REST APIs, Material Design)_
+  - Built an open-source Android crowdfunding platform designed to democratize venture seed capital, connecting early-stage startups with micro-investors through transparent equity tracking and milestone dashboards.
+  - Implemented secure authentication, real-time campaign metric tracking, investor pledge processing, and responsive Material Design UI backed by Firebase and REST APIs.
 
 ---
 

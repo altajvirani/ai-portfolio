@@ -2,21 +2,28 @@ import { normalizeConversationId } from "./chatMemory.ts";
 import { processAgentQuery } from "./groundingEngine.ts";
 import { createHash } from "node:crypto";
 import { checkChatRateLimit } from "./chatRateLimit.ts";
+import { evaluateThreatSignatures, applySecurityHeaders } from "./botProtection.ts";
 
 function jsonResponse(body: unknown, status = 200, extraHeaders?: Record<string, string>) {
+  const headers = new Headers({
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+    ...extraHeaders,
+  });
+  applySecurityHeaders(headers);
   return new Response(JSON.stringify(body), {
     status,
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-store",
-      "X-Content-Type-Options": "nosniff",
-      ...extraHeaders,
-    },
+    headers,
   });
 }
 
 export async function handleChatRequest(request: Request) {
   if (request.method !== "POST") return jsonResponse({ error: "Method not allowed." }, 405);
+
+  const threat = evaluateThreatSignatures(request);
+  if (threat.blocked) {
+    return jsonResponse({ error: "Access Denied by Security Policy.", reason: threat.reason }, 403);
+  }
   const origin = request.headers.get("origin");
   const expectedOrigin = (process.env.APP_URL || new URL(request.url).origin).replace(/\/$/, "");
   if (origin && origin.replace(/\/$/, "") !== expectedOrigin) {

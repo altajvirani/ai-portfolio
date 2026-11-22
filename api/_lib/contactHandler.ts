@@ -100,6 +100,34 @@ export async function dispatchContactSubmission(
   payload: unknown,
   originHeader?: string,
 ): Promise<{ status: number; body: ContactSubmissionResponse }> {
+  // Cloudflare Turnstile Bot Verification if configured
+  const rawRecord = payload && typeof payload === 'object' ? (payload as Record<string, unknown>) : {};
+  const turnstileToken =
+    (typeof rawRecord.turnstileToken === 'string' ? rawRecord.turnstileToken : '') ||
+    (typeof rawRecord['cf-turnstile-response'] === 'string' ? rawRecord['cf-turnstile-response'] : '');
+
+  if (process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY && turnstileToken) {
+    const { verifyCloudflareTurnstile } = await import('./botProtection.ts');
+    const verification = await verifyCloudflareTurnstile(turnstileToken);
+    if (!verification.success) {
+      return {
+        status: 403,
+        body: {
+          ok: false,
+          id: '',
+          delivered: false,
+          channel: 'client-direct',
+          message: verification.error || 'Cloudflare bot verification failed. Please try again.',
+          mailtoUrl: '',
+          gmailUrl: '',
+          outlookUrl: '',
+          yahooUrl: '',
+          error: 'Bot verification failed.',
+        },
+      };
+    }
+  }
+
   const validation = validateContactPayload(payload);
   const recipient = process.env.CONTACT_RECIPIENT_EMAIL || DEFAULT_RECIPIENT;
 
