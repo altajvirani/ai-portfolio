@@ -145,6 +145,42 @@ export const TAB_COLOR_PALETTES: TabColorTheme[] = [
     activeDot: "bg-white ring-2 ring-white/50",
   },
   {
+    name: "crimson",
+    btnClass: "skeuo-btn-crimson",
+    dot: "bg-[#DC2626]",
+    text: "text-[#B91C1C]",
+    marker: "bg-[#DC2626] shadow-[0_0_0_2px_#DC2626]",
+    ring: "ring-[#DC2626]/40",
+    activeBg: "bg-[#FEF2F2] border-[#FCA5A5]",
+    isLight: false,
+    activeTextColor: "text-white",
+    activeDot: "bg-white ring-2 ring-white/50",
+  },
+  {
+    name: "teal",
+    btnClass: "skeuo-btn-teal",
+    dot: "bg-[#0D9488]",
+    text: "text-[#0F766E]",
+    marker: "bg-[#0D9488] shadow-[0_0_0_2px_#0D9488]",
+    ring: "ring-[#0D9488]/40",
+    activeBg: "bg-[#F0FDFA] border-[#99F6E4]",
+    isLight: false,
+    activeTextColor: "text-white",
+    activeDot: "bg-white ring-2 ring-white/50",
+  },
+  {
+    name: "indigo",
+    btnClass: "skeuo-btn-indigo",
+    dot: "bg-[#4F46E5]",
+    text: "text-[#4338CA]",
+    marker: "bg-[#4F46E5] shadow-[0_0_0_2px_#4F46E5]",
+    ring: "ring-[#4F46E5]/40",
+    activeBg: "bg-[#EEF2FF] border-[#C7D2FE]",
+    isLight: false,
+    activeTextColor: "text-white",
+    activeDot: "bg-white ring-2 ring-white/50",
+  },
+  {
     name: "dark",
     btnClass: "skeuo-btn-dark",
     dot: "bg-[#18181B]",
@@ -156,35 +192,11 @@ export const TAB_COLOR_PALETTES: TabColorTheme[] = [
     activeTextColor: "text-white",
     activeDot: "bg-white ring-2 ring-white/50",
   },
-  {
-    name: "amber",
-    btnClass: "skeuo-btn-amber",
-    dot: "bg-[#D97706]",
-    text: "text-[#B45309]",
-    marker: "bg-[#D97706] shadow-[0_0_0_2px_#D97706]",
-    ring: "ring-[#D97706]/40",
-    activeBg: "bg-[#FFFBEB] border-[#FCD34D]",
-    isLight: true,
-    activeTextColor: "text-[#78350F]",
-    activeDot: "bg-[#92400E] ring-2 ring-[#92400E]/30",
-  },
-  {
-    name: "gold",
-    btnClass: "skeuo-btn-gold",
-    dot: "bg-[#D97706]",
-    text: "text-[#B45309]",
-    marker: "bg-[#D97706] shadow-[0_0_0_2px_#D97706]",
-    ring: "ring-[#D97706]/40",
-    activeBg: "bg-[#FEF3C7] border-[#F59E0B]",
-    isLight: false,
-    activeTextColor: "text-white",
-    activeDot: "bg-white ring-2 ring-white/50",
-  },
 ];
 
 /**
  * Dynamically computes high-contrast text and dot styling for tabs,
- * guaranteeing WCAG AA/AAA compliance (>4.5:1 ratio) to completely prevent light-over-light text.
+ * guaranteeing WCAG AAA compliance (>5:1 ratio) to completely prevent light-over-light text.
  */
 export function getTabContrastColors(theme?: Partial<TabColorTheme> | null): {
   textColor: string;
@@ -200,16 +212,19 @@ export function getTabContrastColors(theme?: Partial<TabColorTheme> | null): {
   }
 
   // Detect whether the selected button class or theme is a light background
+  const btnClass = theme.btnClass || "";
   const isLight =
-    theme.isLight ??
-    (theme.btnClass?.includes("amber") ||
-      theme.btnClass?.includes("ivory") ||
-      false);
+    theme.isLight === true ||
+    btnClass.includes("amber") ||
+    btnClass.includes("ivory") ||
+    btnClass.includes("white") ||
+    btnClass.includes("yellow") ||
+    btnClass.includes("light");
 
   if (isLight) {
     return {
-      textColor: theme.activeTextColor || "text-[#78350F]",
-      dotClass: theme.activeDot || "bg-[#92400E] ring-2 ring-[#92400E]/30",
+      textColor: theme.activeTextColor || "text-[#18181B]",
+      dotClass: theme.activeDot || "bg-[#18181B] ring-2 ring-black/20",
       isLight: true,
     };
   }

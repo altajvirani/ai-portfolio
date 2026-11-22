@@ -1,5 +1,5 @@
 import { normalizeConversationId } from "./chatMemory.ts";
-import { processRAGQuery } from "./ragEngine.ts";
+import { processAgentQuery } from "./groundingEngine.ts";
 import { createHash } from "node:crypto";
 import { checkChatRateLimit } from "./chatRateLimit.ts";
 
@@ -79,6 +79,6 @@ export async function handleChatRequest(request: Request) {
       .map((item) => ({ role: item.role, text: item.text.slice(0, 4000) }))
     : [];
   const conversationId = normalizeConversationId(payload.conversationId);
-  const result = await processRAGQuery(payload.message.trim(), history, conversationId);
+  const result = await processAgentQuery(payload.message.trim(), history, conversationId);
   return jsonResponse({ ...result, conversationId });
 }

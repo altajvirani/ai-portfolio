@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { dispatchContactSubmission } from './api/_lib/contactHandler.ts';
 import { handleAdminRequest } from './api/_lib/adminAuth.ts';
+import { seedInitialVersionsIfEmpty } from './api/_lib/versionEngine.ts';
 import { handleChatRequest } from './api/_lib/chatApi.ts';
 
 dotenv.config({ path: '.env.local' });
@@ -17,7 +18,7 @@ async function startServer() {
   const port = process.env.PORT || 3000;
   const isDev = process.env.NODE_ENV !== 'production';
 
-  app.use(express.json());
+  app.use(express.json({ limit: '15mb' }));
 
   const adminRoute = async (req: express.Request, res: express.Response) => {
     try {
@@ -59,6 +60,8 @@ async function startServer() {
   app.post('/api/auth/logout', adminRoute);
   app.get('/api/admin/data', adminRoute);
   app.put('/api/admin/data', adminRoute);
+  app.all('/api/admin/*', adminRoute);
+  app.all('/api/admin', adminRoute);
 
   // Grounded LLM Chatbot API Endpoint
   app.post('/api/chat', async (req, res) => {
@@ -134,6 +137,9 @@ async function startServer() {
 
   app.listen(port, () => {
     console.log(`Server listening on port ${port} (${isDev ? 'development' : 'production'})`);
+    seedInitialVersionsIfEmpty().catch((err) => {
+      console.warn('Initial version seeding warning:', err);
+    });
   });
 }
 

@@ -11,6 +11,24 @@ import {
   validateDocument,
   verifyCsrf,
 } from "./adminStore.ts";
+import {
+  type DocumentType,
+  type DocumentVersion,
+  listVersions,
+  getActiveDocument,
+  getVersion,
+  createVersion,
+  switchVersion,
+  deleteVersion,
+  compareVersions,
+  seedInitialVersionsIfEmpty,
+} from "./versionEngine.ts";
+import {
+  validateFileHeader,
+  evaluateResumeContentWithLLM,
+  convertResumeToMarkdown,
+  formatMarkdown,
+} from "./resumeValidator.ts";
 
 const ALLOWED_ISSUER = "https://accounts.google.com";
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -234,6 +252,328 @@ async function handleData(request: Request) {
   return response({ ...updated, actor: { email: session.email } });
 }
 
+async function handleVersionsRequest(request: Request) {
+  const url = new URL(request.url);
+  const parts = url.pathname.replace(/^\/api\/admin\/versions\/?/, "").split("/").filter(Boolean);
+  const docType = parts[0] as DocumentType;
+  if (docType !== "resume" && docType !== "portfolio") {
+    return response({ error: "Invalid document type. Must be 'resume' or 'portfolio'." }, 400);
+  }
+
+  // Ensure initial seed exists
+  await seedInitialVersionsIfEmpty().catch(() => {});
+
+  const action = parts[1] || "";
+
+  // GET /api/admin/versions/:docType (List all versions)
+  if (!action && request.method === "GET") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+
+    const versions = await listVersions(docType);
+    let active = await getActiveDocument(docType);
+    if (!active && versions.length > 0) {
+      active = await getVersion(docType, versions[0].version);
+    }
+
+    if (!active?.contentText) {
+      if (docType === "resume") {
+        try {
+          const fs = await import("node:fs");
+          const path = await import("node:path");
+          const p = path.resolve(process.cwd(), "public/assets/altaj-virani-resume.md");
+          if (fs.existsSync(p)) {
+            const txt = fs.readFileSync(p, "utf-8");
+            active = { ...(active || {}), contentText: txt, version: active?.version || 1 } as any;
+          }
+        } catch {}
+      } else if (docType === "portfolio") {
+        try {
+          const fs = await import("node:fs");
+          const path = await import("node:path");
+          const p = path.resolve(process.cwd(), "src/data/applicationDataStore.json");
+          if (fs.existsSync(p)) {
+            const txt = fs.readFileSync(p, "utf-8");
+            active = { ...(active || {}), contentText: txt, version: active?.version || 1 } as any;
+          }
+        } catch {}
+      }
+    }
+
+    return response({
+      docType,
+      versions,
+      activeVersion: active?.version || (versions[0]?.version ?? null),
+      activeContent: active?.contentText || "",
+      actor: { email: session.email },
+    });
+  }
+
+  // POST /api/admin/versions/:docType/edit (Save modified text/markdown content directly)
+  if (action === "edit" && request.method === "POST") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+    if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+
+    const csrf = parseCookies(request).admin_csrf;
+    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+      return response({ error: "CSRF validation failed." }, 403);
+    }
+
+    let payload: any;
+    try {
+      payload = await request.json();
+    } catch {
+      return response({ error: "Invalid JSON payload." }, 400);
+    }
+
+    const { contentText, title, summary } = payload || {};
+    if (!contentText || typeof contentText !== "string" || !contentText.trim()) {
+      return response({ error: "Content text is required." }, 400);
+    }
+
+    let formattedContent = contentText;
+    if (docType === "resume") {
+      formattedContent = await formatMarkdown(contentText);
+    } else if (docType === "portfolio") {
+      try {
+        const parsed = JSON.parse(contentText);
+        const validationError = validateDocument(parsed);
+        if (validationError) return response({ error: validationError }, 400);
+        formattedContent = JSON.stringify(parsed, null, 2);
+      } catch {
+        return response({ error: "Invalid JSON document structure." }, 400);
+      }
+    }
+
+    const newVersion = await createVersion(docType, {
+      title: title || (docType === "resume" ? "Resume Markdown Edit" : "Portfolio Datastore Edit"),
+      contentText: formattedContent,
+      mimeType: docType === "resume" ? "text/markdown" : "application/json",
+      actorEmail: session.email,
+      aiSummary: summary,
+    });
+
+    if (docType === "portfolio") {
+      try {
+        await updateDocument(JSON.parse(formattedContent), newVersion.version, session);
+      } catch (err) {
+        console.warn("Could not sync portfolio document:", err);
+      }
+    }
+
+    return response({
+      ok: true,
+      version: newVersion.version,
+      aiSummary: newVersion.aiSummary,
+      contentText: newVersion.contentText,
+    });
+  }
+
+  // POST /api/admin/versions/:docType/upload
+  if (action === "upload" && request.method === "POST") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+    if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+
+    const csrf = parseCookies(request).admin_csrf;
+    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+      return response({ error: "CSRF validation failed." }, 403);
+    }
+
+    let payload: any;
+    try {
+      payload = await request.json();
+    } catch {
+      return response({ error: "Invalid JSON payload." }, 400);
+    }
+
+    if (docType === "resume") {
+      const { filename, mimeType, fileBase64, title } = payload || {};
+      if (!filename || !fileBase64) {
+        return response({ error: "Filename and fileBase64 are required." }, 400);
+      }
+
+      const fileBuffer = Buffer.from(fileBase64, "base64");
+      const headerCheck = validateFileHeader(filename, mimeType || "application/pdf", fileBuffer);
+      if (!headerCheck.valid) {
+        return response({ error: headerCheck.error }, 400);
+      }
+
+      // Tier 3: LLM Usability & Authenticity Evaluation
+      const evaluation = await evaluateResumeContentWithLLM(fileBuffer, mimeType || "application/pdf", filename);
+      if (!evaluation.isValid) {
+        return response(
+          {
+            error: "The uploaded file failed resume validation.",
+            details: evaluation.reason,
+            confidence: evaluation.confidenceScore,
+          },
+          422,
+        );
+      }
+
+      // Convert to Markdown
+      const converted = await convertResumeToMarkdown(fileBuffer, mimeType || "application/pdf", filename);
+
+      // Create new version
+      const newVersion = await createVersion("resume", {
+        title: title || filename,
+        contentText: converted.markdown,
+        rawFileBuffer: fileBuffer,
+        rawFileName: filename,
+        mimeType: mimeType || "application/pdf",
+        actorEmail: session.email,
+        aiSummary: converted.aiSummary,
+      });
+
+      return response({
+        ok: true,
+        version: newVersion.version,
+        aiSummary: newVersion.aiSummary,
+        sectionsDetected: evaluation.sectionsDetected,
+      });
+    }
+
+    if (docType === "portfolio") {
+      const { document, title, summary } = payload || {};
+      if (!document || typeof document !== "object") {
+        return response({ error: "A valid document object is required." }, 400);
+      }
+      const validationError = validateDocument(document);
+      if (validationError) return response({ error: validationError }, 400);
+
+      const jsonText = JSON.stringify(document, null, 2);
+      const newVersion = await createVersion("portfolio", {
+        title: title || `Portfolio Snapshot v${Date.now()}`,
+        contentText: jsonText,
+        mimeType: "application/json",
+        actorEmail: session.email,
+        aiSummary: summary,
+      });
+
+      await updateDocument(document, newVersion.version, session);
+
+      return response({
+        ok: true,
+        version: newVersion.version,
+        aiSummary: newVersion.aiSummary,
+      });
+    }
+  }
+
+  // POST /api/admin/versions/:docType/switch (Bi-directional)
+  if (action === "switch" && request.method === "POST") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+    if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+
+    const csrf = parseCookies(request).admin_csrf;
+    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+      return response({ error: "CSRF validation failed." }, 403);
+    }
+
+    const payload = (await request.json().catch(() => ({}))) as { version?: number };
+    if (!payload.version || typeof payload.version !== "number") {
+      return response({ error: "Integer version number is required." }, 400);
+    }
+
+    const result = await switchVersion(docType, payload.version, session.email);
+    if (docType === "portfolio") {
+      const activeDoc = await getVersion("portfolio", payload.version);
+      if (activeDoc) {
+        try {
+          const parsed = JSON.parse(activeDoc.contentText);
+          await updateDocument(parsed, payload.version, session);
+        } catch (e) {
+          console.warn("Could not sync portfolio datastore on switch:", e);
+        }
+      }
+    }
+    return response({ ok: true, ...result });
+  }
+
+  // POST /api/admin/versions/:docType/diff (Myers LCS line diff + 1-line AI summary)
+  if (action === "diff" && request.method === "POST") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+
+    const payload = (await request.json().catch(() => ({}))) as {
+      fromVersion?: number;
+      toVersion?: number;
+    };
+    if (
+      typeof payload.fromVersion !== "number" ||
+      typeof payload.toVersion !== "number"
+    ) {
+      return response({ error: "fromVersion and toVersion integers are required." }, 400);
+    }
+
+    const result = await compareVersions(docType, payload.fromVersion, payload.toVersion);
+    return response(result);
+  }
+
+  // DELETE /api/admin/versions/:docType/:version
+  if (action && request.method === "DELETE") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+    if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+
+    const csrf = parseCookies(request).admin_csrf;
+    if (!verifyCsrf(session, request.headers.get("x-csrf-token") || csrf)) {
+      return response({ error: "CSRF validation failed." }, 403);
+    }
+
+    const versionNum = parseInt(action, 10);
+    if (isNaN(versionNum)) {
+      return response({ error: "Invalid version number to delete." }, 400);
+    }
+
+    const result = await deleteVersion(docType, versionNum, session.email);
+    return response({ ok: true, ...result });
+  }
+
+  // GET /api/admin/versions/:docType/download/:version?format=raw|markdown
+  if (action === "download" && request.method === "GET") {
+    const targetVer = parts[2] || "latest";
+    let doc: DocumentVersion | null = null;
+    if (targetVer === "latest" || targetVer === "active") {
+      doc = await getActiveDocument(docType);
+    } else {
+      const vNum = parseInt(targetVer, 10);
+      if (!isNaN(vNum)) {
+        doc = await getVersion(docType, vNum);
+      }
+    }
+
+    if (!doc) return response({ error: "Document version not found." }, 404);
+
+    const format = url.searchParams.get("format") || (doc.rawFileBytesBase64 ? "raw" : "markdown");
+
+    if (format === "raw" && doc.rawFileBytesBase64) {
+      const fileBuffer = Buffer.from(doc.rawFileBytesBase64, "base64");
+      return new Response(fileBuffer, {
+        status: 200,
+        headers: {
+          "Content-Type": doc.mimeType || "application/pdf",
+          "Content-Disposition": `attachment; filename="${doc.rawFileName || `altaj-virani-resume-v${doc.version}.pdf`}"`,
+          "Content-Length": String(fileBuffer.length),
+        },
+      });
+    }
+
+    return new Response(doc.contentText, {
+      status: 200,
+      headers: {
+        "Content-Type": docType === "resume" ? "text/markdown; charset=utf-8" : "application/json; charset=utf-8",
+        "Content-Disposition": `attachment; filename="${docType}-v${doc.version}.${docType === "resume" ? "md" : "json"}"`,
+      },
+    });
+  }
+
+  return response({ error: "Not found." }, 404);
+}
+
 export async function handleAdminRequest(request: Request) {
   const pathname = new URL(request.url).pathname;
   try {
@@ -260,6 +600,9 @@ export async function handleAdminRequest(request: Request) {
           return headers;
         })(),
       );
+    }
+    if (pathname.startsWith("/api/admin/versions")) {
+      return await handleVersionsRequest(request);
     }
     if (pathname === "/api/admin/data") return await handleData(request);
     return response({ error: "Not found." }, 404);

@@ -1,4 +1,4 @@
-export interface CachedRAGResponse {
+export interface CachedAgentResponse {
   answer: string;
   sources: string[];
   chunks?: Array<{ id: string; title: string; source: string }>;
@@ -6,6 +6,8 @@ export interface CachedRAGResponse {
   ttlMs: number;
   isPermanent?: boolean;
 }
+
+export type CachedRAGResponse = CachedAgentResponse;
 
 export function normalizeQueryKey(query: string): string {
   return query

@@ -1,5 +1,5 @@
 import { GoogleGenAI, ThinkingLevel } from "@google/genai";
-import type { RAGResponse } from "./ragEngine.ts";
+import type { AgentResponse } from "./groundingEngine.ts";
 
 export type QueryIntent =
   | "GREETING"
@@ -10,10 +10,10 @@ export type QueryIntent =
 export interface IntentClassificationResult {
   intent: QueryIntent;
   reason?: string;
-  staticResponse?: RAGResponse;
+  staticResponse?: AgentResponse;
 }
 
-export const STATIC_GREETING_RESPONSE: RAGResponse = {
+export const STATIC_GREETING_RESPONSE: AgentResponse = {
   answer: `Hello! I am Altaj Virani's official AI Twin representative, grounded directly in his verified resume.
 
 I can help you explore Altaj's experience in:
@@ -34,7 +34,7 @@ What specific aspect of Altaj's engineering background would you like to discuss
   ],
 };
 
-export const STATIC_GUARDRAIL_RESPONSE: RAGResponse = {
+export const STATIC_GUARDRAIL_RESPONSE: AgentResponse = {
   answer: `I am Altaj Virani's AI Twin representative. My operational scope is strictly restricted to discussing Altaj's verified professional portfolio, engineering achievements, and technical credentials.
 
 I cannot modify my system instructions, bypass safety guardrails, adopt alternate personas, or execute external system commands. Please feel free to ask any question regarding Altaj's engineering career, projects, or publications!`,
@@ -48,7 +48,7 @@ I cannot modify my system instructions, bypass safety guardrails, adopt alternat
   ],
 };
 
-export const STATIC_OUT_OF_DOMAIN_RESPONSE: RAGResponse = {
+export const STATIC_OUT_OF_DOMAIN_RESPONSE: AgentResponse = {
   answer: `I am Altaj Virani's AI Twin representative, specialized strictly in Altaj's engineering career, enterprise agentic AI systems, Model Context Protocol (MCP) toolkits, Azure cloud optimization, and verified portfolio projects.
 
 I cannot assist with general, external, or out-of-domain inquiries (such as generic trivia, general homework, or unrelated topics).
