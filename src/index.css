@@ -467,9 +467,6 @@
 .horizontal-scroll-track {
   overflow-x: auto;
   overflow-y: hidden;
-  overscroll-behavior-x: contain;
-  overscroll-behavior-y: auto;
-  touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
 }
 

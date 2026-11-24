@@ -37,7 +37,7 @@ export const Footer: React.FC<FooterProps> = () => {
                 alt="Altaj Virani monogram"
                 className="h-8 w-8 object-contain"
               />
-              <div>
+              <div className="flex flex-col items-start">
                 <span className="text-base font-extrabold font-display text-[#18181B] tracking-tight block">
                   ALTAJ VIRANI
                 </span>

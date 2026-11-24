@@ -25,7 +25,7 @@ export const HoverPopup: React.FC<HoverPopupProps> = ({
 
   return (
     <div
-      className={`relative inline-flex ${className}`}
+      className={`relative inline-flex ${open ? "z-50" : ""} ${className}`}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       onFocus={() => setOpen(true)}
@@ -41,7 +41,7 @@ export const HoverPopup: React.FC<HoverPopupProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 460, damping: 28 }}
-            className={`hidden md:block pointer-events-none absolute bottom-full mb-2.5 z-50 w-64 p-3 rounded-xl skeuo-glass text-left ${alignClasses}`}
+            className={`hidden md:block pointer-events-none absolute bottom-full mb-2.5 z-50 w-64 p-3 rounded-xl skeuo-glass shadow-xl text-left ${alignClasses}`}
           >
             {content}
           </motion.div>

@@ -112,7 +112,7 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
 }) => {
   const [slideIdx, setSlideIdx] = useState(0);
   const [imgFailed, setImgFailed] = useState(false);
-  const touchStartX = useRef<number | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const theme = getAccentTheme(project.accentColor);
   const totalSlides = 1 + project.slides.length;
   const imageSrc = PROJECT_IMAGES[project.id];
@@ -136,16 +136,25 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const delta = e.changedTouches[0].clientX - touchStartX.current;
-    touchStartX.current = null;
-    if (Math.abs(delta) < 36) return;
+    if (!touchStartRef.current) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartRef.current.x;
+    const deltaY = e.changedTouches[0].clientY - touchStartRef.current.y;
+    touchStartRef.current = null;
+
+    // Disregard vertical scrolling completely: if vertical displacement exceeds horizontal,
+    // let native page scroll proceed without touching slide state or stopping propagation!
+    if (Math.abs(deltaY) >= Math.abs(deltaX)) return;
+
+    if (Math.abs(deltaX) < 40) return;
     e.stopPropagation();
-    if (delta < 0) {
+    if (deltaX < 0) {
       setSlideIdx((prev) => (prev + 1) % totalSlides);
     } else {
       setSlideIdx((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -156,7 +165,6 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
     <div
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      style={{ touchAction: "pan-y" }}
       className="p-1.5 rounded-xl bg-white paper-cutout-sm w-full min-w-0 relative"
     >
       {/* Translucent Masking Washi Tape Pin */}
@@ -346,12 +354,12 @@ const ExpandedProjectDetail: React.FC<ExpandedProjectDetailProps> = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       data-project-expanded={project.id}
-      className={`scroll-mt-20 md:col-span-2 w-full min-w-0 p-4 sm:p-7 rounded-2xl paper-cutout ${theme.cardSurface} ${theme.expandedRing} space-y-5 sm:space-y-6 group relative overflow-hidden`}
+      className={`scroll-mt-20 md:col-span-2 w-full min-w-0 p-4 sm:p-7 rounded-2xl paper-cutout ${theme.cardSurface} ${theme.expandedRing} space-y-5 sm:space-y-6 group relative z-20 hover:z-30 focus-within:z-30`}
     >
       {/* Top Folder Color Rail */}
       <div
         aria-hidden="true"
-        className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${theme.topRail}`}
+        className={`absolute top-0 inset-x-0 h-1.5 rounded-t-2xl bg-gradient-to-r ${theme.topRail}`}
       />
 
       {/* Top Bar with Collapse Control */}
@@ -591,8 +599,8 @@ export const ProjectsResearch: React.FC<ProjectsResearchProps> = ({
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.12 }}
-        whileHover={{ y: -5, rotate: index % 2 === 0 ? -0.35 : 0.35 }}
-        whileTap={{ scale: 0.99 }}
+        whileHover={isMobileDeck ? undefined : { y: -5, rotate: index % 2 === 0 ? -0.35 : 0.35 }}
+        whileTap={isMobileDeck ? undefined : { scale: 0.99 }}
         transition={{
           type: "spring",
           stiffness: 360,
@@ -603,14 +611,14 @@ export const ProjectsResearch: React.FC<ProjectsResearchProps> = ({
         onClick={() => setExpandedId(project.id)}
         className={`${
           isMobileDeck
-            ? "w-[85vw] max-w-[348px] shrink-0 snap-center"
-            : ""
-        } relative overflow-hidden p-4 sm:p-5 pt-5 sm:pt-6 rounded-2xl paper-cutout ${theme.cardSurface} transition-all duration-300 flex flex-col justify-between space-y-4 group cursor-pointer min-w-0`}
+            ? "w-[85vw] max-w-[348px] shrink-0 snap-center overflow-hidden"
+            : "hover:z-30 focus-within:z-30"
+        } relative p-4 sm:p-5 pt-5 sm:pt-6 rounded-2xl paper-cutout ${theme.cardSurface} transition-all duration-300 flex flex-col justify-between space-y-4 group cursor-pointer min-w-0`}
       >
         {/* Top Folder Color Rail */}
         <div
           aria-hidden="true"
-          className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${theme.topRail}`}
+          className={`absolute top-0 inset-x-0 h-1.5 rounded-t-2xl bg-gradient-to-r ${theme.topRail}`}
         />
 
         <ProjectCarousel
@@ -677,7 +685,7 @@ export const ProjectsResearch: React.FC<ProjectsResearchProps> = ({
   return (
     <section
       id="projects"
-      className="scroll-mt-16 py-16 sm:py-24 border-b border-[#DFD9CE] relative bg-[#FAF7F0] paper-grain overflow-x-clip"
+      className="scroll-mt-16 py-16 sm:py-24 border-b border-[#DFD9CE] relative bg-[#FAF7F0] paper-grain"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-10 relative z-10">
         {/* Section Header */}
@@ -725,7 +733,7 @@ export const ProjectsResearch: React.FC<ProjectsResearchProps> = ({
                 <div
                   ref={mobileDeckRef}
                   onScroll={handleMobileDeckScroll}
-                  className="flex overflow-x-auto overflow-y-hidden horizontal-scroll-track snap-x snap-mandatory gap-4 pb-3 -mx-4 px-4 no-scrollbar"
+                  className="flex overflow-x-auto overflow-y-hidden horizontal-scroll-track snap-x snap-proximity gap-4 pb-3 -mx-4 px-4 no-scrollbar"
                 >
                   {PERSONAL_PROJECTS.map((project, index) =>
                     renderCollapsedCard(project, index, true),

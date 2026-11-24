@@ -423,7 +423,7 @@ export const AwardsEducation: React.FC = () => {
   return (
     <section
       id="honors"
-      className="scroll-mt-16 py-16 sm:py-24 border-b border-[#DFD9CE] relative bg-[#FAF7F0] paper-grain overflow-x-clip"
+      className="scroll-mt-16 py-16 sm:py-24 border-b border-[#DFD9CE] relative bg-[#FAF7F0] paper-grain"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-14 relative z-10">
         {/* SUBSECTION 1: HONORS & AWARDS */}
@@ -455,7 +455,7 @@ export const AwardsEducation: React.FC = () => {
           </div>
 
           {/* Mobile Horizontal Snap Deck / Desktop 2x2 Grid */}
-          <div className="flex overflow-x-auto overflow-y-hidden horizontal-scroll-track snap-x snap-mandatory gap-4 pb-3 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible no-scrollbar">
+          <div className="flex overflow-x-auto overflow-y-hidden horizontal-scroll-track snap-x snap-proximity gap-4 pb-3 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible no-scrollbar">
             {AWARDS_DATA.map((award, idx) => {
               const styles = getAwardStyles(award.accentColor);
               return (
@@ -470,12 +470,12 @@ export const AwardsEducation: React.FC = () => {
                     delay: idx * 0.04,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className={`w-[84vw] max-w-[340px] shrink-0 snap-center md:w-auto md:max-w-none p-5 sm:p-6 pt-6 sm:pt-7 rounded-2xl paper-cutout ${styles.cardSurface} transition-all flex flex-col justify-between gap-5 group relative overflow-hidden`}
+                  className={`w-[84vw] max-w-[340px] shrink-0 snap-center md:w-auto md:max-w-none md:overflow-visible overflow-hidden hover:z-30 focus-within:z-30 p-5 sm:p-6 pt-6 sm:pt-7 rounded-2xl paper-cutout ${styles.cardSurface} transition-all flex flex-col justify-between gap-5 group relative`}
                 >
                   {/* Top Foil Accent Rail */}
                   <div
                     aria-hidden="true"
-                    className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${styles.topRail}`}
+                    className={`absolute top-0 inset-x-0 h-1.5 rounded-t-2xl bg-gradient-to-r ${styles.topRail}`}
                   />
 
                   {/* Decorative Corner Washi Tab */}
