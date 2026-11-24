@@ -1,214 +1,281 @@
-# Altaj Virani Portfolio
+# Altaj Virani — AI Systems Engineering Portfolio & Unified Intelligence Platform
 
-Personal portfolio for Altaj Virani, focused on Azure AI engineering, agentic systems, cloud reliability, and selected projects. The site includes a public portfolio, a protected datastore editor, and an authenticated MCP server for AI-assisted datastore maintenance.
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Production%20Live-black?style=flat&logo=vercel)](https://altajvirani.vercel.app)
+[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=flat&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org)
+[![Neon Postgres](https://img.shields.io/badge/Neon-PostgreSQL-00E599?style=flat&logo=postgresql)](https://neon.tech)
+[![Gemini 2.5](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-4285F4?style=flat&logo=google)](https://deepmind.google/technologies/gemini)
+[![Model Context Protocol](https://img.shields.io/badge/MCP-Standard%20%26%20HTTP-7C3AED?style=flat)](https://modelcontextprotocol.io)
+[![Cloudflare Turnstile](https://img.shields.io/badge/Cloudflare-Turnstile%20Defense-F38020?style=flat&logo=cloudflare)](https://www.cloudflare.com)
 
-## Current data boundary
+A high-performance personal portfolio, interactive systems engineering playground, and intelligent datastore platform for **Altaj Virani** (Azure AI Engineer). Built with a tactile, skeuomorphic papercraft aesthetic, the platform features an anti-hallucination Grounded AI Twin, a Git/PR-style version control engine with persistent working drafts in Neon PostgreSQL, a Myers LCS diff analyzer with 1-line AI executive summaries, and dual-transport Model Context Protocol (MCP) servers.
 
-The public portfolio is intentionally **not driven by the admin datastore yet**.
+---
 
-- Public sections import static TypeScript data from [`src/data/portfolioData.ts`](./src/data/portfolioData.ts), [`src/data/skillsData.tsx`](./src/data/skillsData.tsx), and related components.
-- The resume link, UI asset paths, and some presentation references remain in the public components.
-- The admin datastore is an independent editable copy. Changes made through `/admin` or MCP do not change the public portfolio until an explicit future interpolation task is requested.
-- The chatbot grounds directly in-context on [`public/assets/altaj-virani-resume.md`](./public/assets/altaj-virani-resume.md) with canonical caching and safety guardrails.
+## Architecture & Workflow Overview
 
-## Stack
+![Platform Architecture & Workflow](./public/assets/platform-architecture-workflow.png)
 
-- React 19 and TypeScript
-- Vite 8
-- Express local server
-- Tailwind CSS 4
-- Neon/Vercel Postgres for production persistence
-- Google OAuth 2.0 with PKCE for administrator access
-- Model Context Protocol (MCP) stdio server for AI-assisted editing
+```mermaid
+flowchart TD
+    subgraph UI ["Public Portfolio Client"]
+        Client["Interactive Papercraft UI<br/>• 3D Particle Hero Canvas<br/>• Web Audio Synthesizer<br/>• Decoupled Static Presentation"]
+    end
 
-## Requirements
+    subgraph Security ["Edge Defense & Access Control"]
+        Turnstile["Cloudflare Turnstile Bot Defense"]
+        OAuth["Google OAuth 2.0 (PKCE)<br/>• CSRF Token Guard<br/>• 2-Account Whitelist"]
+    end
 
-- Node.js 18 or newer
-- npm
-- A Google OAuth client for admin authentication
-- Neon/Vercel Postgres only when running in production mode
+    subgraph Entrypoints ["Application Entrypoints"]
+        Twin["Grounded AI Twin (/api/chat)<br/>• Gemini 2.5 Flash LLM<br/>• Strict Anti-Hallucination"]
+        Admin["Admin Studio (/api/admin/*)<br/>• Monaco VS Code Deck<br/>• Synchronized GFM Markdown Preview"]
+        MCP["Dual-Transport MCP (/api/mcp & Stdio)<br/>• 13+ Granular Management Tools"]
+    end
 
-## Install and run locally
+    subgraph Engine ["Agent Grounding & Version Engine"]
+        Ingestion["Multi-Tier Document Ingestion<br/>(FlowCV PDF/DOCX → AST → Canonical GFM)"]
+        Diff["Myers LCS Line Diff Analyzer<br/>& 1-Line AI Executive Summaries"]
+        Branching["Git / PR-Style Versioning<br/>(Base Version Lineage & Working Drafts)"]
+    end
 
+    subgraph Database ["Neon Serverless PostgreSQL"]
+        Versions[("document_versions<br/>(Immutable Snapshots)")]
+        Drafts[("document_drafts<br/>(Working Drafts Layer)")]
+        Audit[("document_audit_log<br/>(Cryptographic Audit Trail)")]
+    end
+
+    Client --> Turnstile
+    Turnstile --> Twin
+    OAuth --> Admin
+    OAuth --> MCP
+    Twin --> Ingestion
+    Admin --> Branching
+    Admin --> Diff
+    MCP --> Branching
+    Branching --> Versions
+    Branching --> Drafts
+    Admin --> Audit
+    MCP --> Audit
+    Versions -.->|"Active Ground Truth"| Twin
+```
+
+---
+
+## Core System Capabilities
+
+### 1. Tactile Skeuomorphic Frontend & Audio Engine
+* **Papercraft & Airmail Visual Identity**: Tactile paper textures (`paper-grain`), precision cobalt grid overlays, airmail borders, skeuomorphic stamp buttons, and smooth micro-interactions powered by Motion (Framer Motion).
+* **Interactive 3D Hero Canvas**: Custom Three.js particle sphere and reactive audio-visual canvas responding to mouse movements and user interactions.
+* **Web Audio Synthesis**: Built-in sound synthesis engine generating bespoke tactile clicks, mechanical typewriter taps, retro hums, and UI feedback without external audio assets.
+* **Responsive Architecture**: Multi-device support across mobile (<640px), tablet (640px–1024px), and desktop (>1024px) viewports with uniform 2×2 touch grids and isolated Monaco code editor canvases.
+
+### 2. Grounded AI Twin Assistant
+* **Strict Anti-Hallucination Grounding**: Operates without speculative extrapolation—strictly constrained to verified engineering records and canonical resume documents.
+* **Gemini 2.5 Flash Engine**: Streaming completions with structured citation markers and fallback resilience.
+* **Context Preservation**: Multi-turn conversation memory with automatic context compaction and deterministic session boundaries.
+
+### 3. Agent Grounding Engine
+* **3-Tier Document Ingestion**:
+  1. *Binary & MIME Validation*: Validates file size, integrity, and headers.
+  2. *Deterministic AST Extraction*: Parses PDFs and DOCX files verbatim, capturing all 19 verified hyperlinks, project references, and metrics.
+  3. *Gemini Multimodal Verification*: LLM static check ensuring zero-hallucination parity between uploaded artifacts and generated Markdown.
+* **Myers LCS Line Diff Engine**: Fast diff computation providing side-by-side split and unified inline diff views.
+* **1-Line AI Executive Summaries**: Generates high-level summaries of changes between historical snapshots.
+
+### 4. Git / PR-Style Versioning & Draft Engine
+* **Parent Lineage (`base_version`)**: Every version records its parent snapshot, enabling branching off any historical version (`v1`, `v2`, etc.).
+* **Persistent Neon PostgreSQL Draft Layer**: In-progress edits are persisted in the `document_drafts` table by admin email, decoupled from published snapshots.
+* **Staged Lifecycle**:
+  - `Save Draft`: Persists working copy to database without publishing.
+  - `Discard Draft`: Rolls back working copy to the base version.
+  - `Commit (PR)`: Creates an immutable snapshot in `document_versions` (`is_active: false` by default).
+  - `Publish Live`: Promotes a revision snapshot to live active ground truth.
+* **Bi-Directional Checkouts**: Instant rollback and fast-forward switches between historical versions.
+
+### 5. Two-Account Security Guard & Audit Trail
+* **Strict Whitelist**: Administrative writes are restricted exclusively to authorized emails configured in the `ADMIN_GOOGLE_EMAILS` environment variable.
+* **Google OAuth 2.0 PKCE**: Sealed behind Google SSO with cryptographic CSRF cookies (`admin_csrf`) and domain restrictions.
+* **Audit Trail**: Every mutation is logged in `document_audit_log` with timestamp, actor email, IP address, and JSONB payload details.
+
+### 6. Dual-Transport Model Context Protocol (MCP)
+Supports both local stdio and remote HTTP JSON-RPC transports:
+* **Stdio Server**: `tsx api/_lib/mcpServer.ts`
+* **HTTP Endpoint**: `/api/mcp` (remote SSE/POST JSON-RPC 2.0)
+* **Registered Tools**:
+  - `get_active_document`
+  - `get_draft`
+  - `save_draft`
+  - `discard_draft`
+  - `commit_revision`
+  - `publish_revision`
+  - `list_versions`
+  - `get_version`
+  - `diff_versions`
+  - `rollback_version`
+  - `inspect_audit_logs`
+  - `search_document_history`
+  - `get_grounding_document`
+
+### 7. Cloudflare Turnstile Bot Defense
+* Integrated Cloudflare Turnstile verification guards contact forms and public endpoints against automated scrapers and bot traffic.
+
+---
+
+## Data Boundary Policy
+
+> [!NOTE]
+> **Decoupled Architecture**: The public-facing portfolio components (`HeroSection`, `Experience`, `ProjectsResearch`, etc.) import static TypeScript data from [`src/data/portfolioData.ts`](./src/data/portfolioData.ts) and [`src/data/skillsData.tsx`](./src/data/skillsData.tsx).
+> 
+> The admin datastore and versioning engine operate independently. Changes made in the admin command center or via MCP update the database and AI Twin grounding documents, but do not directly interpolate into the live portfolio presentation until explicitly instructed.
+
+---
+
+## Repository Structure
+
+```text
+ai-portfolio/
+├── api/                          # Vercel Serverless Functions
+│   ├── _lib/                     # Core Backend Engine
+│   │   ├── adminAuth.ts          # OAuth 2.0, CSRF & 2-Account Mutation Guard
+│   │   ├── db.ts                 # Neon PostgreSQL Connection Pool
+│   │   ├── diffEngine.ts         # Myers LCS Side-by-Side & Unified Diff Engine
+│   │   ├── mcpHttpHandler.ts     # HTTP JSON-RPC MCP Server Handler
+│   │   ├── mcpServer.ts          # Stdio Model Context Protocol Server
+│   │   ├── resumeValidator.ts    # 3-Tier Document Validation & AI Summaries
+│   │   ├── turnstile.ts          # Cloudflare Turnstile Verification Helper
+│   │   └── versionEngine.ts      # Git/PR Branching & Working Drafts Engine
+│   ├── admin/                    # Admin REST Endpoints (Versions, Drafts, Audit)
+│   ├── auth/                     # Google OAuth Login, Callback & Logout
+│   ├── chat/                     # Grounded Gemini AI Twin Streaming API
+│   ├── contact/                  # Contact Submission with Turnstile Verification
+│   └── mcp/                      # HTTP MCP Endpoint
+├── public/                       # Static Assets & Documents
+│   ├── assets/                   # Architecture Diagrams, Icons & FlowCV Documents
+│   └── favicon.svg               # Vector Branding
+├── src/                          # React 19 Frontend
+│   ├── components/               # UI Components
+│   │   ├── AdminPage.tsx         # Unified Command Center & Monaco Studio
+│   │   ├── Experience.tsx        # Career Journey & Timeline
+│   │   ├── HeroSection.tsx       # 3D Interactive Hero Canvas
+│   │   ├── ProjectsResearch.tsx  # Interactive Research & Project Carousels
+│   │   ├── TactileUI.tsx         # Skeuomorphic Spinners, Skeletons & Modals
+│   │   └── TurnstileWidget.tsx   # Cloudflare Turnstile Verification Widget
+│   ├── data/                     # Application Datastore Seed & Portfolio Data
+│   └── index.css                 # Tailwind CSS 4 & Tactile Papercraft Styles
+├── server.ts                     # Local Express & Vite Development Server
+└── vercel.json                   # Vercel Production Route & Build Configuration
+```
+
+---
+
+## Local Development & Setup
+
+### Prerequisites
+* **Node.js**: v18.0.0 or higher
+* **npm**: v9.0.0 or higher
+* **PostgreSQL / Neon Account**: For database persistence
+
+### 1. Installation
 ```bash
+git clone https://github.com/altajvirani/ai-portfolio.git
+cd ai-portfolio
 npm install
-npm run dev
 ```
 
-The local site runs at `http://localhost:3000`.
+### 2. Environment Configuration
+Create a `.env.local` file in the root directory (never commit this file):
 
-The first authenticated datastore read creates:
+```ini
+# Google OAuth 2.0 (Admin Authentication)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GOOGLE_REDIRECT_URI="http://localhost:3000/api/auth/google/callback"
+MCP_GOOGLE_REDIRECT_URI="http://127.0.0.1:8787/mcp/oauth/callback"
+ADMIN_GOOGLE_EMAILS="admin@example.com,developer@example.com"
 
-```text
-.local/admin-data-store.json
+# Application URL
+APP_URL="http://localhost:3000"
+
+# Contact Recipient Email
+CONTACT_RECIPIENT_EMAIL="contact@example.com"
+
+# Neon Serverless PostgreSQL Database
+DATABASE_URL="postgres://user:password@ep-sample-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
+
+# Google Gemini API (AI Twin Grounding)
+GEMINI_API_KEY="your-gemini-api-key"
+GEMINI_MODEL="gemini-2.5-flash"
+
+# Cloudflare Turnstile (Bot Defense)
+CLOUDFLARE_TURNSTILE_SITE_KEY="your-turnstile-site-key"
+CLOUDFLARE_TURNSTILE_SECRET_KEY="your-turnstile-secret-key"
+
+# Rate Limiting & Safety Caps
+CHAT_LIMIT_PER_MINUTE="20"
+CHAT_LIMIT_PER_DAY="150"
+CHAT_GLOBAL_DAILY_LIMIT="250"
 ```
 
-The local datastore is ignored by Git and is separate from the committed seed at [`src/data/applicationDataStore.json`](./src/data/applicationDataStore.json).
-
-## Environment
-
-Copy the example variables into `.env.local` and provide real values locally. Do not commit `.env.local` or any other `.env` file.
-
-```text
-GOOGLE_CLIENT_ID
-GOOGLE_CLIENT_SECRET
-GOOGLE_REDIRECT_URI
-ADMIN_GOOGLE_EMAILS
-APP_URL
-DATABASE_URL
-MCP_GOOGLE_REDIRECT_URI
-GEMINI_API_KEY
-GEMINI_MODEL
-CHAT_LIMIT_PER_MINUTE
-CHAT_LIMIT_PER_DAY
-```
-
-## Gemini AI Twin Setup
-
-Create a Gemini API key in Google AI Studio (https://aistudio.google.com/app/apikey), then add it to `.env.local`:
-
-```text
-GEMINI_API_KEY="your-server-side-api-key"
-GEMINI_MODEL="gemini-3.5-flash-lite"
-```
-
-Do not commit the API key or paste it into frontend code. The AI Twin uses in-context Markdown grounding from `src/data/resumeMarkdown.ts` with multi-turn session memory and automatic compaction.
-
-Start or restart the application:
-
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
+The application will launch at `http://localhost:3000`.
 
-Verify the configuration at:
-
-```text
-http://localhost:3000/api/health
-```
-
-The response should report `hasGeminiKey: true`.
-
-For Vercel, add `GEMINI_API_KEY` and `GEMINI_MODEL` to your Project Settings under **Environment Variables**. Never add the Gemini API key to `VITE_*` variables or frontend JavaScript.
-
-The application callback should be registered as:
-
-```text
-http://localhost:3000/api/auth/google/callback
-```
-
-The MCP callback is separate and must be registered in the same Google OAuth client:
-
-```text
-http://127.0.0.1:8787/mcp/oauth/callback
-```
-
-`ADMIN_GOOGLE_EMAILS` is a comma-separated allowlist. Google authentication succeeds only when the verified Google account is present in that allowlist.
-
-## Admin datastore
-
-Open `/admin` after starting the application.
-
-The admin editor:
-
-- Requires Google SSO and an allowlisted account.
-- Edits the datastore as JSON only.
-- Validates the JSON root, size, depth, and forbidden object keys.
-- Uses optimistic versioning to prevent overwriting a newer edit.
-- Records production updates in the audit log.
-- Uses local JSON persistence during development.
-- Uses Neon/Vercel Postgres when `NODE_ENV=production` or `VERCEL=1`.
-
-The committed datastore seed contains profile, social, project, award, education, certification, and asset-reference data. It also contains existing chatbot/knowledge content required by the current seed format; this is not consumed by public portfolio rendering.
-
-## MCP server
-
-The MCP server exposes the same protected datastore operations without using the admin UI:
-
+### 4. Run Model Context Protocol (MCP) Server
+To run the authenticated stdio MCP server for Claude Desktop, Antigravity, or other MCP clients:
 ```bash
 npm run mcp
 ```
 
-Configure an MCP client with the equivalent of:
-
+Configure your MCP client (`claude_desktop_config.json`):
 ```json
 {
   "mcpServers": {
-    "ai-portfolio": {
-      "command": "npm",
-      "args": ["run", "mcp"],
-      "cwd": "/absolute/path/to/ai-portfolio"
+    "altaj-ai-portfolio": {
+      "command": "npx",
+      "args": ["tsx", "api/_lib/mcpServer.ts"],
+      "cwd": "/path/to/ai-portfolio"
     }
   }
 }
 ```
 
-Available tools:
+---
 
-- `authenticate_portfolio` — returns a Google authorization URL.
-- `get_portfolio_datastore` — fetches the currently saved datastore, version, and update metadata.
-- `update_portfolio_datastore` — replaces the saved datastore using the current version.
-- `logout_portfolio` — ends the MCP session.
+## Production Deployment & Verification
 
-### MCP authentication flow
-
-1. Start the MCP server through the MCP client.
-2. Call `authenticate_portfolio`.
-3. Open the returned authorization URL in a browser.
-4. Complete Google sign-in with an account in `ADMIN_GOOGLE_EMAILS`.
-5. The local callback at `127.0.0.1:8787` establishes the MCP session.
-6. Call `get_portfolio_datastore` before editing, then submit the returned `version` with `update_portfolio_datastore`.
-
-The MCP server does not read or expose environment values through tools. It reuses the same Google client credentials, allowlist, session store, document validation, persistence layer, and optimistic version checks as the admin API.
-
-This is a stdio MCP server, so the MCP client must be able to launch the command on the machine where the project and its environment are configured. It is not currently a publicly hosted remote MCP endpoint.
-
-## Production and Vercel
-
-Build the client:
-
+### Build Verification
+Before deploying, ensure all TypeScript checks, linting, and bundling pass cleanly:
 ```bash
-npm run build
-```
-
-Run the production server locally:
-
-```bash
-NODE_ENV=production npm start
-```
-
-Vercel uses the project configuration in [`vercel.json`](./vercel.json). Set the required environment variables in Vercel, including `DATABASE_URL`, OAuth values, `ADMIN_GOOGLE_EMAILS`, and `APP_URL`. Do not place production secrets in the repository.
-
-The production datastore is initialized from [`src/data/applicationDataStore.json`](./src/data/applicationDataStore.json) when the database record does not yet exist. Existing saved production content is not automatically overwritten by later seed edits.
-
-## Useful commands
-
-```bash
-npm run dev       # Local development server
-npm run build     # Production client build
-npm run start     # Production-mode Express server
-npm run mcp       # Authenticated stdio MCP server
-npm run lint      # TypeScript validation
-```
-
-## Project layout
-
-```text
-api/                    Vercel API handlers
-api/_lib/               Internal backend library, RAG engine & MCP server
-public/assets/          Canonical public assets
-src/components/         React UI components
-src/data/               Static public data and datastore seed
-server.ts               Local Express/Vite server
-```
-
-## Validation
-
-Before submitting changes, run:
-
-```bash
+# TypeScript verification
 npm run lint
+
+# Production bundle
 npm run build
-git diff --check
 ```
 
-Never commit `.env` files, OAuth secrets, database URLs, session tokens, or the local `.local/` datastore.
+### Deploying to Vercel
+```bash
+# Production deployment
+npx vercel --prod
+```
+
+Configure environment variables in the Vercel Dashboard under **Project Settings > Environment Variables**:
+* `DATABASE_URL`
+* `GOOGLE_CLIENT_ID`
+* `GOOGLE_CLIENT_SECRET`
+* `GOOGLE_REDIRECT_URI` (`https://altajvirani.vercel.app/api/auth/google/callback`)
+* `ADMIN_GOOGLE_EMAILS`
+* `GEMINI_API_KEY`
+* `GEMINI_MODEL`
+* `CLOUDFLARE_TURNSTILE_SITE_KEY`
+* `CLOUDFLARE_TURNSTILE_SECRET_KEY`
+
+---
+
+## License & Security Policy
+
+* **Security**: Administrative mutations are strictly guarded by Google OAuth 2.0 PKCE and allowlist checks. Do not commit `.env` files, production tokens, or credentials.
+* **License**: Private & Proprietary © 2026 Altaj Virani. All Rights Reserved.
