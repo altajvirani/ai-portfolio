@@ -199,6 +199,7 @@ async function main() {
     }
 
     // Add / overwrite definition via stdin pipe with --force --yes (NEVER prints secret value)
+    const isPublic = entry.key.startsWith("VITE_") || entry.key.startsWith("NEXT_PUBLIC_");
     const addResult = spawnSync(
       vercelCmd[0],
       [
@@ -208,6 +209,8 @@ async function main() {
         entry.key,
         "--environment",
         "production",
+        "--type",
+        isPublic ? "config" : "secret",
         "--force",
         "--yes",
       ],
