@@ -31,7 +31,7 @@ const localSessions = new Map<string, AdminSession & { expiresAt: number }>();
 const localOAuthStates = new Map<string, { codeVerifier: string; expiresAt: number }>();
 
 export function usesRemoteStore() {
-  return process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
+  return Boolean(process.env.DATABASE_URL);
 }
 
 function getSql() {

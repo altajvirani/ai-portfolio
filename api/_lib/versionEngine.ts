@@ -45,7 +45,7 @@ export function registerGroundingCacheInvalidator(fn: () => void) {
 }
 
 function usesRemoteStore() {
-  return (process.env.VERCEL === "1" || process.env.NODE_ENV === "production") && Boolean(process.env.DATABASE_URL);
+  return Boolean(process.env.DATABASE_URL);
 }
 
 function getSql() {

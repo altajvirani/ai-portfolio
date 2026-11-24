@@ -14,6 +14,19 @@ import {
   validateDocument,
   type AdminSession,
 } from "./adminStore.ts";
+import {
+  listVersions,
+  getVersion,
+  getActiveDocument,
+  createVersion,
+  switchVersion,
+  deleteVersion,
+  compareVersions,
+  getAuditLogs,
+  recordAuditLog,
+  type DocumentType,
+} from "./versionEngine.ts";
+import { formatMarkdown } from "./resumeValidator.ts";
 import { exchangeGoogleCode, getGoogleAdminConfig } from "./adminAuth.ts";
 
 dotenv.config({ path: ".env.local" });
@@ -129,6 +142,237 @@ mcpServer.registerTool(
         authorizationUrl: authUrl.toString(),
         instructions: "Open authorizationUrl in a browser. The MCP server will receive the callback and authorize only an account listed in ADMIN_GOOGLE_EMAILS.",
       });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "list_versions",
+  {
+    description: "List all version snapshots with active indicator, timestamps, author email, and 1-line AI summaries for either 'resume' or 'portfolio'.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]).describe("The document category ('resume' or 'portfolio')"),
+    }),
+  },
+  async ({ docType }) => {
+    try {
+      const actor = await requireSession();
+      const versions = await listVersions(docType);
+      const active = await getActiveDocument(docType);
+      return mcpResult({ docType, activeVersion: active?.version, versions, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "get_version",
+  {
+    description: "Fetch the full canonical content and metadata for a specific version number of a document.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      version: z.number().int().positive(),
+    }),
+  },
+  async ({ docType, version }) => {
+    try {
+      const actor = await requireSession();
+      const doc = await getVersion(docType, version);
+      if (!doc) throw new Error(`Version v${version} not found for ${docType}.`);
+      return mcpResult({ ...doc, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "get_active_document",
+  {
+    description: "Fetch the currently active live grounded document (Markdown for resume, JSON for portfolio).",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+    }),
+  },
+  async ({ docType }) => {
+    try {
+      const actor = await requireSession();
+      const active = await getActiveDocument(docType);
+      return mcpResult({ ...(active || { message: "No active document found." }), actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "save_version",
+  {
+    description: "Create and publish a new version snapshot. Resume Markdown is automatically formatted with Prettier; portfolio JSON is validated against schema. Computes Myers LCS diff and generates 1-line AI summary.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      contentText: z.string(),
+      title: z.string().optional(),
+      summary: z.string().optional(),
+    }),
+  },
+  async ({ docType, contentText, title, summary }) => {
+    try {
+      const actor = await requireSession();
+      let formatted = contentText;
+      if (docType === "resume") {
+        formatted = await formatMarkdown(contentText);
+      } else if (docType === "portfolio") {
+        const parsed = JSON.parse(contentText);
+        const valErr = validateDocument(parsed);
+        if (valErr) throw new Error(valErr);
+        formatted = JSON.stringify(parsed, null, 2);
+      }
+
+      const newVer = await createVersion(docType, {
+        title: title || `Revision via MCP (${actor.email})`,
+        contentText: formatted,
+        mimeType: docType === "resume" ? "text/markdown" : "application/json",
+        actorEmail: actor.email,
+        aiSummary: summary,
+      });
+
+      if (docType === "portfolio") {
+        await updateDocument(JSON.parse(formatted), newVer.version, actor);
+      }
+
+      await recordAuditLog({
+        documentType: docType,
+        action: "MCP_SAVE_VERSION",
+        toVersion: newVer.version,
+        performedBy: actor.email,
+        aiSummary: newVer.aiSummary,
+      });
+
+      return mcpResult({
+        ok: true,
+        version: newVer.version,
+        aiSummary: newVer.aiSummary,
+        author: actor.email,
+      });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "switch_version",
+  {
+    description: "Bi-directionally check out (rollback to older or fast-forward to newer) a target version, immediately updating live ground truth and AI Twin context.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      targetVersion: z.number().int().positive(),
+    }),
+  },
+  async ({ docType, targetVersion }) => {
+    try {
+      const actor = await requireSession();
+      const switched = await switchVersion(docType, targetVersion, actor.email);
+
+      if (docType === "portfolio") {
+        const activeDoc = await getVersion("portfolio", targetVersion);
+        if (activeDoc) {
+          await updateDocument(JSON.parse(activeDoc.contentText), targetVersion, actor);
+        }
+      }
+
+      await recordAuditLog({
+        documentType: docType,
+        action: "MCP_SWITCH_VERSION",
+        toVersion: targetVersion,
+        performedBy: actor.email,
+        aiSummary: switched.aiSummary,
+      });
+
+      return mcpResult({ ok: true, ...switched, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "diff_versions",
+  {
+    description: "Compute Myers LCS line-by-line diff and Gemini 2.5 Flash 1-line AI executive summary between any two document versions.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      fromVersion: z.number().int().positive(),
+      toVersion: z.number().int().positive(),
+    }),
+  },
+  async ({ docType, fromVersion, toVersion }) => {
+    try {
+      const actor = await requireSession();
+      const diffRes = await compareVersions(docType, fromVersion, toVersion);
+
+      await recordAuditLog({
+        documentType: docType,
+        action: "MCP_DIFF_VERSIONS",
+        fromVersion,
+        toVersion,
+        performedBy: actor.email,
+        aiSummary: diffRes.aiSummary,
+      });
+
+      return mcpResult({ ...diffRes, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "delete_version",
+  {
+    description: "Permanently delete an intermediate non-active version snapshot. (Cannot delete the active live version).",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      version: z.number().int().positive(),
+    }),
+  },
+  async ({ docType, version }) => {
+    try {
+      const actor = await requireSession();
+      const delRes = await deleteVersion(docType, version, actor.email);
+
+      await recordAuditLog({
+        documentType: docType,
+        action: "MCP_DELETE_VERSION",
+        fromVersion: version,
+        performedBy: actor.email,
+        aiSummary: `Deleted version v${version} via MCP (${actor.email})`,
+      });
+
+      return mcpResult({ ...delRes, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "get_audit_log",
+  {
+    description: "Retrieve recent security audit logs of all actions performed by authorized administrators.",
+    inputSchema: z.object({
+      limit: z.number().int().positive().optional(),
+    }),
+  },
+  async ({ limit = 50 }) => {
+    try {
+      const actor = await requireSession();
+      const logs = await getAuditLogs(limit);
+      return mcpResult({ count: logs.length, logs, actor: { email: actor.email } });
     } catch (error) {
       return mcpError(error);
     }
