@@ -22,7 +22,7 @@ export const Footer: React.FC<FooterProps> = () => {
   };
 
   return (
-    <footer className="relative border-t border-[#D8D0C1] bg-[#EFEAE0] paper-grain pt-0 pb-20 sm:pb-16 overflow-hidden">
+    <footer className="relative border-t border-[#D8D0C1] bg-[#EFEAE0] paper-grain pt-0 pb-32 sm:pb-20 overflow-hidden">
       {/* Top Air-Mail Stationery Trim */}
       <div aria-hidden="true" className="h-1.5 w-full airmail-border" />
 
@@ -48,7 +48,7 @@ export const Footer: React.FC<FooterProps> = () => {
             </div>
             <p className="text-xs text-[#52525B] max-w-md mx-auto md:mx-0 leading-relaxed font-sans">
               Designed &amp; engineered with paper-craft tactility, interactive
-              systems diagrams, and a resume-grounded AI Twin.
+              systems diagrams, and a grounded AI Twin.
             </p>
           </div>
 
@@ -96,13 +96,13 @@ export const Footer: React.FC<FooterProps> = () => {
         </div>
 
         {/* Bottom Strip: Copyright & Cloudflare Defense Badge */}
-        <div className="pt-6 border-t border-[#D8D0C1] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52525B] font-mono">
-          <span>
+        <div className="pt-6 border-t border-[#D8D0C1] flex flex-col sm:flex-row items-center sm:justify-between gap-3 text-xs text-[#52525B] font-mono text-center sm:text-left">
+          <span className="text-[11px] sm:text-xs leading-relaxed max-w-sm sm:max-w-none">
             © {new Date().getFullYear()} Altaj Virani. Grounded in verified
             engineering experience.
           </span>
 
-          <div className="flex items-center gap-2 rounded-full bg-white/80 border border-[#DCD5C9] px-3 py-1 shadow-2xs text-[11px] text-[#475569]">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/90 border border-[#DCD5C9] px-3 py-1 shadow-2xs text-[10.5px] sm:text-[11px] text-[#475569] shrink-0">
             <span className="h-1.5 w-1.5 rounded-full bg-[#16a34a] animate-pulse" />
             <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB]" />
             <span>Cloudflare Turnstile Active · Bot Defense</span>
