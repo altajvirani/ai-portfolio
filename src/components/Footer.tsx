@@ -101,12 +101,6 @@ export const Footer: React.FC<FooterProps> = () => {
             © {new Date().getFullYear()} Altaj Virani. Grounded in verified
             engineering experience.
           </span>
-
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/90 border border-[#DCD5C9] px-3 py-1 shadow-2xs text-[10.5px] sm:text-[11px] text-[#475569] shrink-0">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#16a34a] animate-pulse" />
-            <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB]" />
-            <span>Cloudflare Turnstile Active · Bot Defense</span>
-          </div>
         </div>
       </div>
     </footer>

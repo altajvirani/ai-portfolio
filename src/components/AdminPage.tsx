@@ -1042,26 +1042,27 @@ export const AdminPage: React.FC = () => {
   if (!authenticated) return <UnauthorizedScreen />;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#F7F4EE] px-3 py-5 text-[#18181B] paper-grain sm:px-6 sm:py-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#F7F4EE] px-2.5 py-4 text-[#18181B] paper-grain sm:px-6 sm:py-8">
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 airmail-border" />
-      <div className="mx-auto max-w-7xl space-y-6">
+      <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
         {/* Top Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#DCD5C9] pb-4">
-          <div className="min-w-0">
-            <div className="mb-2 flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-[0.22em] text-[#2563EB]">
-              <Layers size={14} className="shrink-0" /> Unified Intelligence &amp; Version Control Engine
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-[#DCD5C9] pb-3.5 sm:pb-4">
+          <div className="min-w-0 flex-1">
+            <div className="mb-1.5 flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-[0.16em] sm:tracking-[0.22em] text-[#2563EB]">
+              <Layers size={14} className="shrink-0" />
+              <span className="truncate">Unified Intelligence &amp; Version Engine</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#18181B] truncate">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-[#18181B] leading-tight">
               Portfolio Command Center
             </h1>
-            <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#64748B] flex-wrap">
-              <CheckCircle2 size={14} className="text-[#059669] shrink-0" />
-              <span>Authenticated as</span>
-              <span className="font-mono font-bold text-[#475569] truncate max-w-[200px] sm:max-w-none">{email}</span>
+            <p className="mt-1 flex items-center gap-1.5 text-xs text-[#64748B] flex-wrap">
+              <CheckCircle2 size={13} className="text-[#059669] shrink-0" />
+              <span>Signed in:</span>
+              <span className="font-mono font-bold text-[#475569] break-all sm:break-normal">{email}</span>
             </p>
           </div>
 
-          <div className="grid grid-cols-3 sm:flex items-center gap-2 w-full sm:w-auto">
+          <div className="grid grid-cols-3 sm:flex items-center gap-2 w-full sm:w-auto shrink-0">
             <button
               type="button"
               onClick={() => {
@@ -1071,22 +1072,22 @@ export const AdminPage: React.FC = () => {
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-2.5 sm:px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
             >
               <Shield size={13} className="text-[#2563EB] shrink-0" />
-              <span className="truncate">Audit</span>
+              <span>Audit</span>
             </button>
             <a
               href="/"
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-2.5 sm:px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8]"
             >
               <ArrowLeft size={13} className="shrink-0" />
-              <span className="truncate">Site</span>
+              <span>Site</span>
             </a>
             <button
               type="button"
               onClick={logout}
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-2.5 sm:px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:border-[#EF4444]/40 hover:text-[#B91C1C]"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-2.5 sm:px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:border-[#EF4444]/40 hover:text-[#B91C1C] cursor-pointer"
             >
               <LogOut size={13} className="shrink-0" />
-              <span className="truncate">Sign out</span>
+              <span>Sign out</span>
             </button>
           </div>
         </div>
@@ -1096,16 +1097,17 @@ export const AdminPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab("resume")}
-            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl px-3 sm:px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === "resume"
                 ? "bg-[#2563EB] text-white shadow-xs"
                 : "bg-white/75 text-[#52525B] hover:bg-white hover:text-[#18181B] border border-[#DCD5C9]"
             }`}
           >
             <FileText size={14} className="shrink-0" />
-            <span className="truncate">Agent Grounding Engine</span>
+            <span className="sm:hidden">Grounding Engine</span>
+            <span className="hidden sm:inline">Agent Grounding Engine</span>
             {activeResumeVersion && (
-              <span className="hidden sm:inline-block ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
+              <span className="hidden md:inline-block ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
                 v{activeResumeVersion} Grounded
               </span>
             )}
@@ -1114,16 +1116,17 @@ export const AdminPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab("portfolio")}
-            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl px-3 sm:px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === "portfolio"
                 ? "bg-[#2563EB] text-white shadow-xs"
                 : "bg-white/75 text-[#52525B] hover:bg-white hover:text-[#18181B] border border-[#DCD5C9]"
             }`}
           >
             <Database size={14} className="shrink-0" />
-            <span className="truncate">Portfolio Datastore</span>
+            <span className="sm:hidden">Portfolio Data</span>
+            <span className="hidden sm:inline">Portfolio Datastore</span>
             {portfolioVersion && (
-              <span className="hidden sm:inline-block ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
+              <span className="hidden md:inline-block ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
                 v{portfolioVersion}
               </span>
             )}
@@ -1132,12 +1135,12 @@ export const AdminPage: React.FC = () => {
 
         {/* ================= AGENT GROUNDING ENGINE TAB ================= */}
         {activeTab === "resume" && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Top Workspace Card: VS Code Monaco Markdown Editor & Side-by-Side Preview */}
-            <div className="skeuo-card overflow-hidden rounded-[22px] border-2 border-white p-3 sm:p-4 space-y-3">
+            <div className="skeuo-card overflow-hidden rounded-[20px] sm:rounded-[22px] border-2 border-white p-2.5 sm:p-4 space-y-3">
               {/* Top Meta Bar */}
-              <div className="flex flex-col gap-3 border-b border-[#DCD5C9] pb-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-col gap-2.5 border-b border-[#DCD5C9] pb-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                   <span className="rounded-md border border-[#BFDBFE] bg-[#F4F8FF] px-2.5 py-1 text-[11px] font-mono font-bold text-[#1E3A8A]">
                     Active Grounding v{activeResumeVersion ?? "—"}
                   </span>
@@ -1147,7 +1150,7 @@ export const AdminPage: React.FC = () => {
                   {resumeSaveStatus && (
                     <span
                       className={`rounded-md px-2 py-1 text-[11px] font-mono font-bold ${
-                        resumeSaveStatus.includes("Saved") || resumeSaveStatus.includes("Loaded")
+                        resumeSaveStatus.includes("Saved") || resumeSaveStatus.includes("Loaded") || resumeSaveStatus.includes("Committed")
                           ? "bg-[#DCFCE7] text-[#047857]"
                           : resumeSaveStatus.includes("Failed") || resumeSaveStatus.includes("error")
                           ? "bg-[#FEF2F2] text-[#B91C1C]"
@@ -1163,44 +1166,44 @@ export const AdminPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowUploadPanel(!showUploadPanel)}
-                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#CDC5B7] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#CDC5B7] bg-white px-2 sm:px-2.5 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
                   >
                     <Upload size={13} className="text-[#2563EB] shrink-0" />
-                    <span className="truncate">{showUploadPanel ? "Hide" : "Upload"}</span>
+                    <span>{showUploadPanel ? "Hide" : "Upload"}</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={loadResumeVersions}
                     disabled={isLoadingResumeVersions}
-                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#CDC5B7] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#CDC5B7] bg-white px-2 sm:px-2.5 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
                   >
                     <RefreshCw size={13} className={`shrink-0 ${isLoadingResumeVersions ? "animate-spin" : ""}`} />
-                    <span className="truncate">Reload</span>
+                    <span>Reload</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={saveResumeMarkdown}
                     disabled={isSavingResume}
-                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-2.5 py-1.5 text-xs font-mono font-bold text-white shadow-xs transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-2 sm:px-2.5 py-1.5 text-xs font-mono font-bold text-white shadow-xs transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                   >
                     {isSavingResume ? <Loader2 size={13} className="animate-spin shrink-0" /> : <Save size={13} className="shrink-0" />}
-                    <span className="truncate">{isSavingResume ? "Saving…" : "Save"}</span>
+                    <span>{isSavingResume ? "Saving…" : "Save"}</span>
                   </button>
                 </div>
               </div>
 
               {/* Collapsible Drag & Drop Uploader (When user wants to upload PDF/DOCX instead) */}
               {showUploadPanel && (
-                <div className="rounded-xl border border-[#DCD5C9] bg-[#FAF8F3] p-4 space-y-3">
+                <div className="rounded-xl border border-[#DCD5C9] bg-[#FAF8F3] p-3 sm:p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#18181B] flex items-center gap-1.5">
-                        <Upload size={14} className="text-[#2563EB]" /> Ingest Grounding Document (FlowCV PDF, DOCX, TXT, MD)
+                        <Upload size={14} className="text-[#2563EB]" /> Ingest Grounding Document
                       </h4>
                       <p className="text-[11px] text-[#64748B] mt-0.5">
-                        Automatically runs 3-tier validation (MIME + AST static extraction + Gemini LLM multimodal check), parses links verbatim, generates canonical Markdown, and stores snapshot in DB.
+                        FlowCV PDF, DOCX, TXT, MD: 3-tier validation (MIME + AST static extraction + Gemini multimodal check).
                       </p>
                     </div>
                     <button
@@ -1236,7 +1239,7 @@ export const AdminPage: React.FC = () => {
                       if (file) handleFileUpload(file);
                     }}
                     onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
+                    className={`border-2 border-dashed rounded-xl p-4 sm:p-6 text-center cursor-pointer transition-all ${
                       isDragging
                         ? "border-[#2563EB] bg-[#EFF6FF]"
                         : "border-[#C9A673] hover:border-[#2563EB] bg-white"
@@ -1246,7 +1249,7 @@ export const AdminPage: React.FC = () => {
                       <Upload size={18} />
                     </div>
                     <div className="text-xs font-bold text-[#18181B]">
-                      Click to choose or drag &amp; drop PDF / DOCX file here
+                      Click or drag &amp; drop PDF / DOCX file here
                     </div>
                     <div className="text-[10px] text-[#64748B] mt-0.5 font-mono">
                       Deterministic link preservation + AI verification (Max 10MB)
@@ -1255,17 +1258,17 @@ export const AdminPage: React.FC = () => {
 
                   {uploadStatus && (
                     <div className="p-2.5 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono text-[#1E40AF] flex items-center gap-2">
-                      <Loader2 size={14} className="animate-spin text-[#2563EB]" />
+                      <Loader2 size={14} className="animate-spin text-[#2563EB] shrink-0" />
                       <span>{uploadStatus}</span>
                     </div>
                   )}
                   {uploadError && (
                     <div className="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#FECACA] text-xs font-mono text-[#B91C1C] flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
                         <AlertCircle size={14} className="shrink-0" />
-                        <span>{uploadError}</span>
+                        <span className="truncate">{uploadError}</span>
                       </div>
-                      <button type="button" onClick={() => setUploadError(null)} className="cursor-pointer">
+                      <button type="button" onClick={() => setUploadError(null)} className="cursor-pointer shrink-0">
                         <X size={12} />
                       </button>
                     </div>
@@ -1274,11 +1277,11 @@ export const AdminPage: React.FC = () => {
               )}
 
               {/* Git / PR Branching & Working Draft Control Deck */}
-              <div className="rounded-xl border border-[#DCD5C9] bg-gradient-to-r from-[#FAF8F3] via-white to-[#F4F8FF] p-3 sm:p-3.5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-bold text-[#1E40AF]">
-                    <GitBranch size={13} className="text-[#2563EB]" />
-                    <span>Branch from:</span>
+              <div className="rounded-xl border border-[#DCD5C9] bg-gradient-to-r from-[#FAF8F3] via-white to-[#F4F8FF] p-2.5 sm:p-3.5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-bold text-[#1E40AF] shrink-0">
+                    <GitBranch size={13} className="text-[#2563EB] shrink-0" />
+                    <span className="shrink-0">Branch:</span>
                     <select
                       value={baseResumeVersion || activeResumeVersion || 1}
                       onChange={(e) => {
@@ -1286,38 +1289,40 @@ export const AdminPage: React.FC = () => {
                         setBaseResumeVersion(newBase);
                         loadVersionIntoResumeEditor(newBase);
                       }}
-                      className="bg-transparent font-bold text-[#1E40AF] cursor-pointer outline-none"
+                      className="bg-transparent font-bold text-[#1E40AF] cursor-pointer outline-none max-w-[140px] sm:max-w-[200px] truncate"
                     >
                       {resumeVersions.map((v) => (
                         <option key={v.version} value={v.version}>
-                          v{v.version} {v.isActive ? "★ (Live Active)" : ""} - {v.title.slice(0, 24)}
+                          v{v.version} {v.isActive ? "★ (Live)" : ""} - {v.title.slice(0, 20)}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   {resumeDraft ? (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FEF3C7] border border-[#FDE68A] text-xs font-mono font-bold text-[#92400E]">
-                      <span className="h-2 w-2 rounded-full bg-[#D97706] animate-pulse" />
-                      <span>Draft on v{resumeDraft.baseVersion} (Uncommitted Changes)</span>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FEF3C7] border border-[#FDE68A] text-xs font-mono font-bold text-[#92400E] min-w-0">
+                      <span className="h-2 w-2 rounded-full bg-[#D97706] animate-pulse shrink-0" />
+                      <span className="sm:hidden truncate">Draft on v{resumeDraft.baseVersion}</span>
+                      <span className="hidden sm:inline truncate">Draft on v{resumeDraft.baseVersion} (Uncommitted Changes)</span>
                     </div>
                   ) : (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F0FDF4] border border-[#BBF7D0] text-xs font-mono font-bold text-[#166534]">
-                      <Check size={13} className="text-[#16A34A]" />
-                      <span>Clean Working Copy (In sync with v{baseResumeVersion || activeResumeVersion})</span>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#F0FDF4] border border-[#BBF7D0] text-xs font-mono font-bold text-[#166534] min-w-0">
+                      <Check size={13} className="text-[#16A34A] shrink-0" />
+                      <span className="sm:hidden truncate">Clean (v{baseResumeVersion || activeResumeVersion})</span>
+                      <span className="hidden sm:inline truncate">Clean Working Copy (In sync with v{baseResumeVersion || activeResumeVersion})</span>
                     </div>
                   )}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 w-full lg:w-auto">
                   <button
                     type="button"
                     onClick={saveResumeDraft}
                     disabled={isSavingResumeDraft}
-                    className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#CDC5B7] bg-white hover:bg-[#F8FAFC] text-xs font-mono font-bold text-[#334155] shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg border border-[#CDC5B7] bg-white hover:bg-[#F8FAFC] text-xs font-mono font-bold text-[#334155] shadow-xs cursor-pointer disabled:opacity-50"
                     title="Save in-progress changes to database draft without committing a version snapshot"
                   >
-                    <FileText size={12} className="text-[#0284C7]" />
+                    <FileText size={12} className="text-[#0284C7] shrink-0" />
                     <span>{isSavingResumeDraft ? "Saving…" : "Save Draft"}</span>
                   </button>
 
@@ -1326,10 +1331,10 @@ export const AdminPage: React.FC = () => {
                       type="button"
                       onClick={discardResumeDraft}
                       disabled={isSavingResumeDraft}
-                      className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#FECACA] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-xs font-mono font-bold text-[#991B1B] shadow-xs cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg border border-[#FECACA] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-xs font-mono font-bold text-[#991B1B] shadow-xs cursor-pointer"
                       title="Discard working draft and revert editor to base version"
                     >
-                      <RotateCcw size={12} className="text-[#DC2626]" />
+                      <RotateCcw size={12} className="text-[#DC2626] shrink-0" />
                       <span>Discard</span>
                     </button>
                   )}
@@ -1338,10 +1343,10 @@ export const AdminPage: React.FC = () => {
                     type="button"
                     onClick={() => commitResumeRevision(false)}
                     disabled={isCommittingResume}
-                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#3B82F6] bg-[#2563EB] hover:bg-[#1D4ED8] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg border border-[#3B82F6] bg-[#2563EB] hover:bg-[#1D4ED8] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
                     title="Commit this draft as an immutable revision snapshot (branching from base, unselected by default)"
                   >
-                    <GitPullRequest size={13} className="text-white" />
+                    <GitPullRequest size={13} className="text-white shrink-0" />
                     <span>{isCommittingResume ? "Committing…" : "Commit (PR)"}</span>
                   </button>
 
@@ -1349,17 +1354,17 @@ export const AdminPage: React.FC = () => {
                     type="button"
                     onClick={() => commitResumeRevision(true)}
                     disabled={isCommittingResume}
-                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#16A34A] bg-[#15803D] hover:bg-[#166534] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg border border-[#16A34A] bg-[#15803D] hover:bg-[#166534] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
                     title="Commit and immediately publish as the live active ground truth"
                   >
-                    <CheckCircle2 size={13} className="text-white" />
+                    <CheckCircle2 size={13} className="text-white shrink-0" />
                     <span>Publish Live</span>
                   </button>
                 </div>
               </div>
 
               {/* VS Code Studio Editor & Split Preview Shell */}
-              <div className="rounded-xl border border-[#334155] bg-[#1E1E1E] overflow-hidden shadow-2xl">
+              <div className="rounded-xl border border-[#334155] bg-[#1E1E1E] overflow-hidden shadow-2xl max-w-full min-w-0">
                 {/* Mobile View Switcher (Visible on < lg) */}
                 <div className="lg:hidden flex items-center border-b border-[#333333] bg-[#252526] p-1.5 gap-1.5">
                   <button
@@ -1389,8 +1394,8 @@ export const AdminPage: React.FC = () => {
                 {/* VS Code Control Toolbar */}
                 <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 bg-[#252526] border-b border-[#333333] text-xs font-mono text-[#CCCCCC]">
                   {/* File & Mode Status */}
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#1E1E1E] border border-[#383838] text-[#38BDF8] font-bold text-[11px] shadow-xs truncate">
+                  <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                    <span className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded bg-[#1E1E1E] border border-[#383838] text-[#38BDF8] font-bold text-[11px] shadow-xs truncate max-w-[150px] sm:max-w-none">
                       <FileText size={13} className="text-[#38BDF8] shrink-0" />
                       <span className="truncate">altaj-virani-resume.md</span>
                     </span>
@@ -1426,7 +1431,7 @@ export const AdminPage: React.FC = () => {
                       onClick={handleFormatResume}
                       className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      <Sparkles size={12} className="text-[#FBBF24]" />
+                      <Sparkles size={12} className="text-[#FBBF24] shrink-0" />
                       <span className="hidden sm:inline">Format</span>
                     </button>
 
@@ -1437,7 +1442,7 @@ export const AdminPage: React.FC = () => {
                       onClick={handleFindResume}
                       className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      <Search size={12} className="text-[#34D399]" />
+                      <Search size={12} className="text-[#34D399] shrink-0" />
                       <span className="hidden sm:inline">Find</span>
                     </button>
 
@@ -1448,7 +1453,7 @@ export const AdminPage: React.FC = () => {
                       onClick={handleCommandPaletteResume}
                       className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      <Terminal size={12} className="text-[#C084FC]" /> <kbd className="text-[10px]">F1</kbd>
+                      <Terminal size={12} className="text-[#C084FC] shrink-0" /> <kbd className="text-[10px]">F1</kbd>
                     </button>
 
                     {/* Minimap Toggle */}
@@ -1495,20 +1500,20 @@ export const AdminPage: React.FC = () => {
 
                 {/* Main Split (Editor + Live Preview) or Full Editor View */}
                 <div
-                  className={`p-2 bg-[#1E1E1E] ${
+                  className={`p-1.5 sm:p-2 bg-[#1E1E1E] ${
                     showResumePreview
-                      ? "grid grid-cols-1 lg:grid-cols-2 gap-3"
+                      ? "grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-3"
                       : "grid grid-cols-1"
                   }`}
                 >
                   {/* Left Column: Monaco Markdown Editor */}
                   <div
-                    className={`rounded-lg overflow-hidden border border-[#333333] ${
+                    className={`rounded-lg overflow-hidden border border-[#333333] min-w-0 max-w-full ${
                       mobileResumeDeckTab === "preview" ? "hidden lg:block" : "block"
                     }`}
                   >
                     <Editor
-                      height={isMobile ? "440px" : "700px"}
+                      height={isMobile ? "460px" : "700px"}
                       language="markdown"
                       theme={resumeEditorTheme}
                       value={resumeEditorValue}
@@ -1540,12 +1545,12 @@ export const AdminPage: React.FC = () => {
                   {/* Right Column: Live Rendered Markdown Preview (GFM) */}
                   {(showResumePreview || mobileResumeDeckTab === "preview") && (
                     <div
-                      className={`flex flex-col h-[440px] sm:h-[550px] lg:h-[700px] rounded-lg border border-[#333333] bg-[#FFFEFA] overflow-hidden shadow-inner ${
+                      className={`flex flex-col h-[460px] sm:h-[550px] lg:h-[700px] rounded-lg border border-[#333333] bg-[#FFFEFA] overflow-hidden shadow-inner min-w-0 max-w-full ${
                         mobileResumeDeckTab === "editor" ? "hidden lg:flex" : "flex"
                       }`}
                     >
                       {/* Preview Pane Top Rail */}
-                      <div className="flex items-center justify-between px-3.5 py-2 bg-[#F4F4F5] border-b border-[#E4E4E7] text-[11px] font-mono font-bold text-[#52525B]">
+                      <div className="flex items-center justify-between px-3 sm:px-3.5 py-2 bg-[#F4F4F5] border-b border-[#E4E4E7] text-[11px] font-mono font-bold text-[#52525B]">
                         <span className="flex items-center gap-1.5 text-[#2563EB]">
                           <Eye size={13} /> Live Markdown Preview
                         </span>
@@ -1555,7 +1560,7 @@ export const AdminPage: React.FC = () => {
                       </div>
 
                       {/* Rendered Document View */}
-                      <div className="flex-1 overflow-y-auto p-4 sm:p-6 text-[#18181B] paper-grain">
+                      <div className="flex-1 overflow-y-auto p-3.5 sm:p-6 text-[#18181B] paper-grain break-words">
                         <ReactMarkdown remarkPlugins={[remarkGfm]} components={resumeMarkdownRenderers}>
                           {resumeEditorValue}
                         </ReactMarkdown>
@@ -1565,23 +1570,23 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 {/* VS Code Bottom Status Bar */}
-                <div className="flex items-center justify-between px-3 py-1 bg-[#007ACC] text-[11px] font-mono text-white select-none">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1">
+                <div className="flex items-center justify-between px-3 py-1 bg-[#007ACC] text-[11px] font-mono text-white select-none overflow-x-auto min-w-0">
+                  <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                    <span className="flex items-center gap-1 font-bold">
                       <Terminal size={11} /> Ready
                     </span>
                     <span>
                       Ln {resumeCursorPos.line}, Col {resumeCursorPos.col}
                     </span>
-                    <span>Spaces: 2</span>
-                    <span>UTF-8</span>
-                    <span>Markdown (GFM)</span>
+                    <span className="hidden md:inline">Spaces: 2</span>
+                    <span className="hidden md:inline">UTF-8</span>
+                    <span className="hidden sm:inline">Markdown (GFM)</span>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <span className="hidden sm:inline">
                       {resumeEditorValue.split("\n").length} lines · {resumeEditorValue.length} chars
                     </span>
-                    <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">
+                    <span className="text-[10px] font-bold bg-white/20 px-1.5 py-0.5 rounded">
                       v{activeResumeVersion || 1}
                     </span>
                   </div>
@@ -1590,11 +1595,11 @@ export const AdminPage: React.FC = () => {
             </div>
 
             {/* Version History Timeline */}
-            <div className="skeuo-card rounded-2xl border-2 border-white p-5 sm:p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-[#DCD5C9] pb-3">
-                <div className="flex items-center gap-2">
-                  <History size={18} className="text-[#2563EB]" />
-                  <h3 className="text-base font-bold text-[#18181B]">
+            <div className="skeuo-card rounded-2xl border-2 border-white p-3.5 sm:p-6 space-y-3 sm:space-y-4">
+              <div className="flex items-center justify-between border-b border-[#DCD5C9] pb-3 gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <History size={18} className="text-[#2563EB] shrink-0" />
+                  <h3 className="text-sm sm:text-base font-bold text-[#18181B] truncate">
                     Agent Grounding Version Snapshots &amp; Checkout History
                   </h3>
                 </div>
@@ -1602,10 +1607,10 @@ export const AdminPage: React.FC = () => {
                   type="button"
                   onClick={loadResumeVersions}
                   disabled={isLoadingResumeVersions}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-3 py-1.5 text-xs font-mono font-bold text-[#475569] hover:text-[#1D4ED8] cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-2.5 sm:px-3 py-1.5 text-xs font-mono font-bold text-[#475569] hover:text-[#1D4ED8] cursor-pointer shrink-0"
                 >
                   <RefreshCw size={12} className={isLoadingResumeVersions ? "animate-spin" : ""} />
-                  Reload
+                  <span>Reload</span>
                 </button>
               </div>
 
@@ -1620,14 +1625,14 @@ export const AdminPage: React.FC = () => {
                   {resumeVersions.map((v) => (
                     <div
                       key={v.version}
-                      className={`p-3.5 sm:p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 ${
+                      className={`p-3 sm:p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 ${
                         v.isActive
                           ? "bg-white border-[#2563EB] shadow-xs ring-2 ring-[#2563EB]/15"
                           : "bg-white/60 hover:bg-white border-[#DCD5C9]"
                       }`}
                     >
-                      <div className="space-y-1.5 min-w-0">
-                        <div className="flex flex-wrap items-center gap-2">
+                      <div className="space-y-1.5 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                           <span className="font-mono font-bold text-xs px-2.5 py-0.5 rounded-md bg-[#F4F8FF] border border-[#BFDBFE] text-[#1E40AF]">
                             v{v.version}
                           </span>
@@ -1666,107 +1671,113 @@ export const AdminPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Version Actions: Grid on mobile, flex on desktop */}
-                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 shrink-0 pt-2 lg:pt-0 w-full lg:w-auto">
-                        {/* Load in Monaco Editor Button */}
-                        <button
-                          type="button"
-                          onClick={() => loadVersionIntoResumeEditor(v.version)}
-                          className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
-                          title="Load this revision into Monaco Editor"
-                        >
-                          <FileEdit size={12} className="text-[#059669] shrink-0" />
-                          <span className="truncate">Load</span>
-                        </button>
-
-                        {/* Diff with Active Button */}
-                        {activeResumeVersion && v.version !== activeResumeVersion && (
+                      {/* Version Actions: Symmetrical 2x2 on mobile, clean inline on desktop */}
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-2 shrink-0 pt-2.5 lg:pt-0 w-full lg:w-auto border-t lg:border-t-0 border-[#E2E8F0]/80">
+                        {/* Primary Lifecycle Actions Grid */}
+                        <div className={`grid ${v.isActive ? "grid-cols-1" : "grid-cols-2"} sm:flex sm:items-center gap-1.5 w-full sm:w-auto`}>
+                          {/* Load in Monaco Editor Button */}
                           <button
                             type="button"
-                            onClick={() => openDiffModal(v.version, activeResumeVersion, "resume")}
-                            className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
+                            onClick={() => loadVersionIntoResumeEditor(v.version)}
+                            className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer whitespace-nowrap"
+                            title="Load this revision into Monaco Editor"
                           >
-                            <GitCompare size={12} className="text-[#2563EB] shrink-0" />
-                            <span className="truncate">Diff vs Active</span>
+                            <FileEdit size={12} className="text-[#059669] shrink-0" />
+                            <span>Load</span>
                           </button>
-                        )}
 
-                        {/* Diff vs Base Button */}
-                        {v.baseVersion && (
-                          <button
-                            type="button"
-                            onClick={() => openDiffModal(v.baseVersion!, v.version, "resume")}
-                            className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#475569] shadow-xs cursor-pointer"
-                            title={`Diff v${v.version} against its base v${v.baseVersion}`}
-                          >
-                            <GitCompare size={12} className="text-[#6366F1] shrink-0" />
-                            <span className="truncate">vs Base</span>
-                          </button>
-                        )}
+                          {!v.isActive && (
+                            <>
+                              {/* Diff with Active Button */}
+                              <button
+                                type="button"
+                                onClick={() => openDiffModal(v.version, activeResumeVersion || 1, "resume")}
+                                className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer whitespace-nowrap"
+                              >
+                                <GitCompare size={12} className="text-[#2563EB] shrink-0" />
+                                <span>Diff vs Active</span>
+                              </button>
 
-                        {/* Publish Live Button (Merge into live truth) */}
-                        {!v.isActive && (
-                          <button
-                            type="button"
-                            onClick={() => publishResumeVersion(v.version)}
-                            className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#16A34A] bg-[#F0FDF4] hover:bg-[#16A34A] hover:text-white text-[11px] font-mono font-bold text-[#15803D] shadow-xs cursor-pointer transition-colors"
-                            title="Activate this revision snapshot as the live ground truth"
-                          >
-                            <CheckCircle2 size={12} className="shrink-0" />
-                            <span className="truncate">Publish Live</span>
-                          </button>
-                        )}
+                              {/* Switch Live Version Button (Bi-directional) */}
+                              <button
+                                type="button"
+                                onClick={() => promptSwitchVersion(v.version, "resume")}
+                                className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors whitespace-nowrap"
+                              >
+                                <ArrowLeftRight size={12} className="shrink-0" />
+                                <span>
+                                  {v.version < (activeResumeVersion || 0) ? "Rollback" : "Fast-forward"}
+                                </span>
+                              </button>
 
-                        {/* Switch Live Version Button (Bi-directional) */}
-                        {!v.isActive && (
-                          <button
-                            type="button"
-                            onClick={() => promptSwitchVersion(v.version, "resume")}
-                            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
-                          >
-                            <ArrowLeftRight size={12} className="shrink-0" />
-                            <span className="truncate">
-                              {v.version < (activeResumeVersion || 0) ? "Rollback" : "Fast-forward"}
-                            </span>
-                          </button>
-                        )}
+                              {/* Publish Live Button (Merge into live truth) */}
+                              <button
+                                type="button"
+                                onClick={() => publishResumeVersion(v.version)}
+                                className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#86EFAC] bg-[#F0FDF4] hover:bg-[#16A34A] hover:text-white text-[11px] font-mono font-bold text-[#15803D] shadow-xs cursor-pointer transition-colors whitespace-nowrap"
+                                title="Activate this revision snapshot as the live ground truth"
+                              >
+                                <CheckCircle2 size={12} className="shrink-0" />
+                                <span>Publish Live</span>
+                              </button>
+                            </>
+                          )}
+                        </div>
 
-                        {/* Download Menu */}
-                        {v.rawFileName && (
-                          <a
-                            href={`/api/admin/versions/resume/download/${v.version}?format=raw`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
-                            title="Download Raw File"
-                          >
-                            <Download size={12} className="shrink-0" />
-                            <span className="truncate">Raw</span>
-                          </a>
-                        )}
+                        {/* Utility Toolbar: vs Base, Downloads, Delete */}
+                        <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
+                          <div className="flex items-center gap-1.5">
+                            {/* Diff vs Base Button */}
+                            {v.baseVersion && (
+                              <button
+                                type="button"
+                                onClick={() => openDiffModal(v.baseVersion!, v.version, "resume")}
+                                className="inline-flex items-center justify-center gap-1 h-7 px-2 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[10px] font-mono font-bold text-[#475569] shadow-xs cursor-pointer whitespace-nowrap"
+                                title={`Diff v${v.version} against its base v${v.baseVersion}`}
+                              >
+                                <GitFork size={11} className="text-[#6366F1] shrink-0" />
+                                <span>vs Base</span>
+                              </button>
+                            )}
 
-                        <a
-                          href={`/api/admin/versions/resume/download/${v.version}?format=markdown`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
-                          title="Download Markdown"
-                        >
-                          <FileCode size={12} className="shrink-0" />
-                          <span className="truncate">.md</span>
-                        </a>
+                            {/* Download Menu */}
+                            {v.rawFileName && (
+                              <a
+                                href={`/api/admin/versions/resume/download/${v.version}?format=raw`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-1 h-7 px-2 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[10px] font-mono font-bold text-[#52525B] cursor-pointer whitespace-nowrap"
+                                title="Download Raw File"
+                              >
+                                <Download size={11} className="shrink-0" />
+                                <span>Raw</span>
+                              </a>
+                            )}
 
-                        {/* Delete Button (Allowed only on non-active versions) */}
-                        {!v.isActive && resumeVersions.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => deleteVersionItem(v.version, "resume")}
-                            className="p-1.5 rounded-lg border border-[#FECACA] bg-white hover:bg-[#FEF2F2] text-[#B91C1C] cursor-pointer"
-                            title="Delete this version"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        )}
+                            <a
+                              href={`/api/admin/versions/resume/download/${v.version}?format=markdown`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center gap-1 h-7 px-2 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[10px] font-mono font-bold text-[#52525B] cursor-pointer whitespace-nowrap"
+                              title="Download Markdown"
+                            >
+                              <FileCode size={11} className="shrink-0" />
+                              <span>.md</span>
+                            </a>
+                          </div>
+
+                          {/* Delete Button (Allowed only on non-active versions) */}
+                          {!v.isActive && resumeVersions.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => deleteVersionItem(v.version, "resume")}
+                              className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-[#FECACA] bg-white hover:bg-[#FEF2F2] text-[#B91C1C] cursor-pointer shrink-0"
+                              title="Delete this version"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -1778,11 +1789,11 @@ export const AdminPage: React.FC = () => {
 
         {/* ================= PORTFOLIO DATASTORE TAB ================= */}
         {activeTab === "portfolio" && (
-          <div className="space-y-6">
-            <div className="skeuo-card overflow-hidden rounded-[22px] border-2 border-white p-3 sm:p-4 space-y-3">
-              <div className="flex flex-col gap-3 border-b border-[#DCD5C9] pb-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-md border border-[#CFC6B7] bg-[#F4F8FF] px-2.5 py-1.5 text-[11px] font-mono font-bold text-[#1E3A8A]">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="skeuo-card overflow-hidden rounded-[20px] sm:rounded-[22px] border-2 border-white p-2.5 sm:p-4 space-y-3">
+              <div className="flex flex-col gap-2.5 border-b border-[#DCD5C9] pb-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <span className="rounded-md border border-[#CFC6B7] bg-[#F4F8FF] px-2.5 py-1 text-[11px] font-mono font-bold text-[#1E3A8A]">
                     Datastore Version {portfolioVersion ?? "—"}
                   </span>
                   {portfolioUpdatedAt && (
@@ -1792,10 +1803,10 @@ export const AdminPage: React.FC = () => {
                   )}
                   {status && (
                     <span
-                      className={`rounded-md px-2.5 py-1.5 text-[11px] font-mono font-bold ${
-                        status.includes("Saved")
+                      className={`rounded-md px-2.5 py-1 text-[11px] font-mono font-bold ${
+                        status.includes("Saved") || status.includes("Committed") || status.includes("Loaded")
                           ? "bg-[#DCFCE7] text-[#047857]"
-                          : status.includes("invalid") || status.includes("changed") || status.includes("Unable")
+                          : status.includes("invalid") || status.includes("changed") || status.includes("Unable") || status.includes("error")
                           ? "bg-[#FEF2F2] text-[#B91C1C]"
                           : "bg-[#FFF7ED] text-[#C2410C]"
                       }`}
@@ -1804,33 +1815,33 @@ export const AdminPage: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
+                <div className="grid grid-cols-2 sm:flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={loadPortfolioDocument}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-3 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-3 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
                   >
-                    <RefreshCw size={14} className="shrink-0" />
-                    <span className="truncate">Reload</span>
+                    <RefreshCw size={13} className="shrink-0" />
+                    <span>Reload</span>
                   </button>
                   <button
                     type="button"
                     onClick={savePortfolioDocument}
                     disabled={isSaving}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-3.5 py-2 text-xs font-mono font-bold text-white shadow-xs disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-3.5 py-1.5 text-xs font-mono font-bold text-white shadow-xs disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                   >
-                    <Save size={14} className="shrink-0" />
-                    <span className="truncate">{isSaving ? "Saving…" : "Save snapshot"}</span>
+                    {isSaving ? <Loader2 size={13} className="animate-spin shrink-0" /> : <Save size={13} className="shrink-0" />}
+                    <span>{isSaving ? "Saving…" : "Save snapshot"}</span>
                   </button>
                 </div>
               </div>
 
               {/* Git / PR Branching & Working Draft Control Deck */}
-              <div className="rounded-xl border border-[#DCD5C9] bg-gradient-to-r from-[#FAF8F3] via-white to-[#F4F8FF] p-3 sm:p-3.5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-bold text-[#1E40AF]">
-                    <GitBranch size={13} className="text-[#2563EB]" />
-                    <span>Branch from:</span>
+              <div className="rounded-xl border border-[#DCD5C9] bg-gradient-to-r from-[#FAF8F3] via-white to-[#F4F8FF] p-2.5 sm:p-3.5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-bold text-[#1E40AF] shrink-0">
+                    <GitBranch size={13} className="text-[#2563EB] shrink-0" />
+                    <span className="shrink-0">Branch:</span>
                     <select
                       value={basePortfolioVersion || portfolioVersion || 1}
                       onChange={(e) => {
@@ -1838,38 +1849,40 @@ export const AdminPage: React.FC = () => {
                         setBasePortfolioVersion(newBase);
                         loadPortfolioDocument();
                       }}
-                      className="bg-transparent font-bold text-[#1E40AF] cursor-pointer outline-none"
+                      className="bg-transparent font-bold text-[#1E40AF] cursor-pointer outline-none max-w-[140px] sm:max-w-[200px] truncate"
                     >
                       {portfolioVersions.map((v) => (
                         <option key={v.version} value={v.version}>
-                          v{v.version} {v.isActive ? "★ (Live Active)" : ""} - {v.title.slice(0, 24)}
+                          v{v.version} {v.isActive ? "★ (Live)" : ""} - {v.title.slice(0, 20)}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   {portfolioDraft ? (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FEF3C7] border border-[#FDE68A] text-xs font-mono font-bold text-[#92400E]">
-                      <span className="h-2 w-2 rounded-full bg-[#D97706] animate-pulse" />
-                      <span>Draft on v{portfolioDraft.baseVersion} (Uncommitted Changes)</span>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FEF3C7] border border-[#FDE68A] text-xs font-mono font-bold text-[#92400E] min-w-0">
+                      <span className="h-2 w-2 rounded-full bg-[#D97706] animate-pulse shrink-0" />
+                      <span className="sm:hidden truncate">Draft on v{portfolioDraft.baseVersion}</span>
+                      <span className="hidden sm:inline truncate">Draft on v{portfolioDraft.baseVersion} (Uncommitted Changes)</span>
                     </div>
                   ) : (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F0FDF4] border border-[#BBF7D0] text-xs font-mono font-bold text-[#166534]">
-                      <Check size={13} className="text-[#16A34A]" />
-                      <span>Clean Working Copy (In sync with v{basePortfolioVersion || portfolioVersion})</span>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#F0FDF4] border border-[#BBF7D0] text-xs font-mono font-bold text-[#166534] min-w-0">
+                      <Check size={13} className="text-[#16A34A] shrink-0" />
+                      <span className="sm:hidden truncate">Clean (v{basePortfolioVersion || portfolioVersion})</span>
+                      <span className="hidden sm:inline truncate">Clean Working Copy (In sync with v{basePortfolioVersion || portfolioVersion})</span>
                     </div>
                   )}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 w-full lg:w-auto">
                   <button
                     type="button"
                     onClick={savePortfolioDraft}
                     disabled={isSavingPortfolioDraft}
-                    className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#CDC5B7] bg-white hover:bg-[#F8FAFC] text-xs font-mono font-bold text-[#334155] shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg border border-[#CDC5B7] bg-white hover:bg-[#F8FAFC] text-xs font-mono font-bold text-[#334155] shadow-xs cursor-pointer disabled:opacity-50"
                     title="Save in-progress changes to database draft without committing a version snapshot"
                   >
-                    <FileText size={12} className="text-[#0284C7]" />
+                    <FileText size={12} className="text-[#0284C7] shrink-0" />
                     <span>{isSavingPortfolioDraft ? "Saving…" : "Save Draft"}</span>
                   </button>
 
@@ -1878,10 +1891,10 @@ export const AdminPage: React.FC = () => {
                       type="button"
                       onClick={discardPortfolioDraft}
                       disabled={isSavingPortfolioDraft}
-                      className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#FECACA] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-xs font-mono font-bold text-[#991B1B] shadow-xs cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg border border-[#FECACA] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-xs font-mono font-bold text-[#991B1B] shadow-xs cursor-pointer"
                       title="Discard working draft and revert editor to base version"
                     >
-                      <RotateCcw size={12} className="text-[#DC2626]" />
+                      <RotateCcw size={12} className="text-[#DC2626] shrink-0" />
                       <span>Discard</span>
                     </button>
                   )}
@@ -1890,10 +1903,10 @@ export const AdminPage: React.FC = () => {
                     type="button"
                     onClick={() => commitPortfolioRevision(false)}
                     disabled={isCommittingPortfolio}
-                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#3B82F6] bg-[#2563EB] hover:bg-[#1D4ED8] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg border border-[#3B82F6] bg-[#2563EB] hover:bg-[#1D4ED8] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
                     title="Commit this draft as an immutable revision snapshot (branching from base, unselected by default)"
                   >
-                    <GitPullRequest size={13} className="text-white" />
+                    <GitPullRequest size={13} className="text-white shrink-0" />
                     <span>{isCommittingPortfolio ? "Committing…" : "Commit (PR)"}</span>
                   </button>
 
@@ -1901,63 +1914,68 @@ export const AdminPage: React.FC = () => {
                     type="button"
                     onClick={() => commitPortfolioRevision(true)}
                     disabled={isCommittingPortfolio}
-                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#16A34A] bg-[#15803D] hover:bg-[#166534] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg border border-[#16A34A] bg-[#15803D] hover:bg-[#166534] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
                     title="Commit and immediately publish as the live active ground truth"
                   >
-                    <CheckCircle2 size={13} className="text-white" />
+                    <CheckCircle2 size={13} className="text-white shrink-0" />
                     <span>Publish Live</span>
                   </button>
                 </div>
               </div>
 
               {/* VS Code Studio Editor Container */}
-              <div className="rounded-xl border border-[#334155] bg-[#1E1E1E] overflow-hidden shadow-2xl">
+              <div className="rounded-xl border border-[#334155] bg-[#1E1E1E] overflow-hidden shadow-2xl max-w-full min-w-0">
                 {/* VS Code Window Top Titlebar / Control Deck */}
-                <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2 bg-[#252526] border-b border-[#333333] text-xs font-mono text-[#CCCCCC]">
-                  <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#1E1E1E] border border-[#383838] text-[#38BDF8] font-bold text-[11px] shadow-xs">
-                      <FileCode size={13} className="text-[#FBBF24]" /> applicationDataStore.json
+                <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 bg-[#252526] border-b border-[#333333] text-xs font-mono text-[#CCCCCC]">
+                  <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                    <span className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded bg-[#1E1E1E] border border-[#383838] text-[#38BDF8] font-bold text-[11px] shadow-xs truncate max-w-[150px] sm:max-w-none">
+                      <FileCode size={13} className="text-[#FBBF24] shrink-0" />
+                      <span className="truncate">applicationDataStore.json</span>
                     </span>
                     <span className="hidden sm:inline text-[11px] text-[#858585]">
-                      JSON · UTF-8 · 2 Spaces
+                      JSON · UTF-8
                     </span>
                     {jsonValidationError ? (
                       <span
                         title={jsonValidationError}
-                        className="flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#451A1A] border border-[#7F1D1D] text-[#FCA5A5] text-[11px] max-w-xs truncate"
+                        className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#451A1A] border border-[#7F1D1D] text-[#FCA5A5] text-[10px] sm:text-[11px] max-w-[120px] sm:max-w-xs truncate"
                       >
-                        <AlertCircle size={12} className="shrink-0" /> {jsonValidationError}
+                        <AlertCircle size={12} className="shrink-0" />
+                        <span className="truncate">{jsonValidationError}</span>
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#132A1C] border border-[#14532D] text-[#4ADE80] text-[11px]">
-                        <Check size={12} /> Valid JSON
+                      <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#132A1C] border border-[#14532D] text-[#4ADE80] text-[10px] sm:text-[11px]">
+                        <Check size={12} className="shrink-0" />
+                        <span className="hidden sm:inline">Valid JSON</span>
                       </span>
                     )}
                   </div>
 
-                  {/* VS Code Controls Palette Toolbar */}
-                  <div className="flex items-center gap-1.5 flex-wrap">
+                  {/* VS Code Controls Palette Toolbar: Fully Responsive */}
+                  <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
                     <button
                       type="button"
                       title="Format JSON (Shift+Alt+F / Cmd+Option+F)"
                       onClick={handleFormatDocument}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
+                      className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      <Sparkles size={12} className="text-[#60A5FA]" /> Format
+                      <Sparkles size={12} className="text-[#60A5FA] shrink-0" />
+                      <span className="hidden sm:inline">Format</span>
                     </button>
                     <button
                       type="button"
                       title="Find in File (Cmd+F / Ctrl+F)"
                       onClick={handleFindReplace}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
+                      className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      <Search size={12} className="text-[#34D399]" /> Find
+                      <Search size={12} className="text-[#34D399] shrink-0" />
+                      <span className="hidden sm:inline">Find</span>
                     </button>
                     <button
                       type="button"
                       title="Toggle Minimap"
                       onClick={() => setShowMinimap(!showMinimap)}
-                      className={`px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
+                      className={`hidden sm:inline-block px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
                         showMinimap
                           ? "bg-[#0E639C] text-white"
                           : "bg-[#333333] hover:bg-[#3E3E42] text-[#858585]"
@@ -1969,7 +1987,7 @@ export const AdminPage: React.FC = () => {
                       type="button"
                       title="Toggle Word Wrap"
                       onClick={() => setWordWrap(!wordWrap)}
-                      className={`px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
+                      className={`px-2 sm:px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
                         wordWrap
                           ? "bg-[#0E639C] text-white"
                           : "bg-[#333333] hover:bg-[#3E3E42] text-[#858585]"
@@ -1983,23 +2001,23 @@ export const AdminPage: React.FC = () => {
                       onClick={() =>
                         setEditorTheme(editorTheme === "vs-dark" ? "light" : "vs-dark")
                       }
-                      className="px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
+                      className="px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      {editorTheme === "vs-dark" ? "🌙 Dark" : "☀️ Light"}
+                      {editorTheme === "vs-dark" ? "🌙" : "☀️"}
                     </button>
                     <button
                       type="button"
                       title="Trigger VS Code Command Palette (F1)"
                       onClick={handleOpenCommandPalette}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#0E639C] hover:bg-[#1177BB] text-white font-bold transition cursor-pointer text-[11px] shadow-xs"
+                      className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#0E639C] hover:bg-[#1177BB] text-white font-bold transition cursor-pointer text-[11px] shadow-xs"
                     >
-                      <Terminal size={12} /> Command Palette (F1)
+                      <Terminal size={12} className="shrink-0" /> <kbd className="text-[10px]">F1</kbd>
                     </button>
                   </div>
                 </div>
 
                 {/* Monaco Code Editor Canvas */}
-                <div className="h-[440px] sm:h-[550px] lg:h-[66vh] w-full bg-[#1E1E1E]">
+                <div className="h-[460px] sm:h-[560px] lg:h-[700px] w-full bg-[#1E1E1E] min-w-0 max-w-full overflow-hidden">
                   <Editor
                     height="100%"
                     language="json"
@@ -2041,13 +2059,13 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 {/* VS Code Bottom Status Bar */}
-                <div className="flex items-center justify-between px-3.5 py-1 bg-[#007ACC] text-white text-[11px] font-mono select-none">
-                  <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between px-3 py-1 bg-[#007ACC] text-white text-[11px] font-mono select-none overflow-x-auto min-w-0">
+                  <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
                     <span className="font-bold flex items-center gap-1">
-                      ⚡ VS Code Engine
+                      ⚡ <span className="hidden sm:inline">VS Code</span> Engine
                     </span>
-                    <span className="hidden md:inline opacity-85">
-                      F1: Command Palette
+                    <span className="hidden lg:inline opacity-85">
+                      F1: Palette
                     </span>
                     <span className="hidden md:inline opacity-85">
                       ⌥⇧F: Format
@@ -2056,22 +2074,22 @@ export const AdminPage: React.FC = () => {
                       ⌘F: Find
                     </span>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <span>
                       Ln {cursorPos.line}, Col {cursorPos.col}
                     </span>
-                    <span className="font-bold">JSON</span>
+                    <span className="font-bold bg-white/20 px-1.5 py-0.5 rounded text-[10px]">JSON</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Portfolio Version History Timeline */}
-            <div className="skeuo-card rounded-2xl border-2 border-white p-5 sm:p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-[#DCD5C9] pb-3">
-                <div className="flex items-center gap-2">
-                  <History size={18} className="text-[#2563EB]" />
-                  <h3 className="text-base font-bold text-[#18181B]">
+            <div className="skeuo-card rounded-2xl border-2 border-white p-3.5 sm:p-6 space-y-3 sm:space-y-4">
+              <div className="flex items-center justify-between border-b border-[#DCD5C9] pb-3 gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <History size={18} className="text-[#2563EB] shrink-0" />
+                  <h3 className="text-sm sm:text-base font-bold text-[#18181B] truncate">
                     Portfolio Version Snapshots &amp; Checkout History
                   </h3>
                 </div>
@@ -2079,10 +2097,10 @@ export const AdminPage: React.FC = () => {
                   type="button"
                   onClick={loadPortfolioDocument}
                   disabled={isLoadingPortfolioVersions}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-3 py-1.5 text-xs font-mono font-bold text-[#475569] hover:text-[#1D4ED8] cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-2.5 sm:px-3 py-1.5 text-xs font-mono font-bold text-[#475569] hover:text-[#1D4ED8] cursor-pointer shrink-0"
                 >
                   <RefreshCw size={12} className={isLoadingPortfolioVersions ? "animate-spin" : ""} />
-                  Reload
+                  <span>Reload</span>
                 </button>
               </div>
 
@@ -2097,25 +2115,32 @@ export const AdminPage: React.FC = () => {
                   {portfolioVersions.map((v) => (
                     <div
                       key={v.version}
-                      className={`p-3.5 sm:p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 ${
+                      className={`p-3 sm:p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 ${
                         v.isActive
                           ? "bg-white border-[#2563EB] shadow-xs ring-2 ring-[#2563EB]/15"
                           : "bg-white/60 hover:bg-white border-[#DCD5C9]"
                       }`}
                     >
-                      <div className="space-y-1.5 min-w-0">
-                        <div className="flex flex-wrap items-center gap-2">
+                      <div className="space-y-1.5 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                           <span className="font-mono font-bold text-xs px-2.5 py-0.5 rounded-md bg-[#F4F8FF] border border-[#BFDBFE] text-[#1E40AF]">
                             v{v.version}
                           </span>
+                          {v.baseVersion ? (
+                            <span className="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-md bg-[#F1F5F9] border border-[#CBD5E1] text-[#475569]">
+                              <GitFork size={10} className="text-[#64748B]" />
+                              Base: v{v.baseVersion}
+                            </span>
+                          ) : null}
                           {v.isActive ? (
                             <span className="inline-flex items-center gap-1 rounded-full bg-[#DCFCE7] border border-[#86EFAC] px-2.5 py-0.5 text-[10px] font-mono font-bold text-[#166534]">
                               <span className="h-1.5 w-1.5 rounded-full bg-[#16a34a] animate-pulse" />
                               ACTIVE LIVE
                             </span>
                           ) : (
-                            <span className="rounded-full bg-[#F4F4F5] border border-[#E4E4E7] px-2 py-0.5 text-[10px] font-mono text-[#71717A]">
-                              Historic Revision
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#F3E8FF] border border-[#E9D5FF] px-2 py-0.5 text-[10px] font-mono font-bold text-[#7E22CE]">
+                              <GitPullRequest size={10} className="text-[#9333EA]" />
+                              Revision Snapshot (PR)
                             </span>
                           )}
                           <span className="text-[11px] font-mono text-[#71717A]">
@@ -2136,68 +2161,102 @@ export const AdminPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Version Actions: Grid on mobile, flex on desktop */}
-                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 shrink-0 pt-2 lg:pt-0 w-full lg:w-auto">
-                        {/* Load in Monaco Editor Button */}
-                        <button
-                          type="button"
-                          onClick={() => loadVersionIntoPortfolioEditor(v.version)}
-                          className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
-                          title="Load this revision into Monaco Editor"
-                        >
-                          <FileEdit size={12} className="text-[#059669] shrink-0" />
-                          <span className="truncate">Load</span>
-                        </button>
-
-                        {/* Diff with Active Button */}
-                        {portfolioVersion && v.version !== portfolioVersion && (
+                      {/* Version Actions: Symmetrical 2x2 on mobile, clean inline on desktop */}
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-2 shrink-0 pt-2.5 lg:pt-0 w-full lg:w-auto border-t lg:border-t-0 border-[#E2E8F0]/80">
+                        {/* Primary Lifecycle Actions Grid */}
+                        <div className={`grid ${v.isActive ? "grid-cols-1" : "grid-cols-2"} sm:flex sm:items-center gap-1.5 w-full sm:w-auto`}>
+                          {/* Load in Monaco Editor Button */}
                           <button
                             type="button"
-                            onClick={() => openDiffModal(v.version, portfolioVersion, "portfolio")}
-                            className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
+                            onClick={() => loadVersionIntoPortfolioEditor(v.version)}
+                            className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer whitespace-nowrap"
+                            title="Load this revision into Monaco Editor"
                           >
-                            <GitCompare size={12} className="text-[#2563EB] shrink-0" />
-                            <span className="truncate">Diff vs Active</span>
+                            <FileEdit size={12} className="text-[#059669] shrink-0" />
+                            <span>Load</span>
                           </button>
-                        )}
 
-                        {/* Switch Live Version Button (Bi-directional) */}
-                        {!v.isActive && (
-                          <button
-                            type="button"
-                            onClick={() => promptSwitchVersion(v.version, "portfolio")}
-                            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
-                          >
-                            <ArrowLeftRight size={12} className="shrink-0" />
-                            <span className="truncate">
-                              {v.version < (portfolioVersion || 0) ? "Rollback to this" : "Fast-forward to this"}
-                            </span>
-                          </button>
-                        )}
+                          {!v.isActive && (
+                            <>
+                              {/* Diff with Active Button */}
+                              {portfolioVersion && v.version !== portfolioVersion && (
+                                <button
+                                  type="button"
+                                  onClick={() => openDiffModal(v.version, portfolioVersion, "portfolio")}
+                                  className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer whitespace-nowrap"
+                                >
+                                  <GitCompare size={12} className="text-[#2563EB] shrink-0" />
+                                  <span>Diff vs Active</span>
+                                </button>
+                              )}
 
-                        {/* Download JSON Snapshot */}
-                        <a
-                          href={`/api/admin/versions/portfolio/download/${v.version}?format=json`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
-                          title="Download JSON Snapshot"
-                        >
-                          <Download size={12} className="shrink-0" />
-                          <span className="truncate">JSON</span>
-                        </a>
+                              {/* Switch Live Version Button (Bi-directional) */}
+                              <button
+                                type="button"
+                                onClick={() => promptSwitchVersion(v.version, "portfolio")}
+                                className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors whitespace-nowrap"
+                              >
+                                <ArrowLeftRight size={12} className="shrink-0" />
+                                <span>
+                                  {v.version < (portfolioVersion || 0) ? "Rollback" : "Fast-forward"}
+                                </span>
+                              </button>
 
-                        {/* Delete Button (Allowed only on non-active versions) */}
-                        {!v.isActive && portfolioVersions.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => deleteVersionItem(v.version, "portfolio")}
-                            className="p-1.5 rounded-lg border border-[#FECACA] bg-white hover:bg-[#FEF2F2] text-[#B91C1C] cursor-pointer"
-                            title="Delete this version"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        )}
+                              {/* Publish Live Button */}
+                              <button
+                                type="button"
+                                onClick={() => publishPortfolioVersion(v.version)}
+                                className="inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border border-[#86EFAC] bg-[#F0FDF4] hover:bg-[#16A34A] hover:text-white text-[11px] font-mono font-bold text-[#15803D] shadow-xs cursor-pointer transition-colors whitespace-nowrap"
+                                title="Activate this revision snapshot as the live active datastore"
+                              >
+                                <CheckCircle2 size={12} className="shrink-0" />
+                                <span>Publish Live</span>
+                              </button>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Utility Toolbar: vs Base, Downloads, Delete */}
+                        <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
+                          <div className="flex items-center gap-1.5">
+                            {/* Diff vs Base Button */}
+                            {v.baseVersion && (
+                              <button
+                                type="button"
+                                onClick={() => openDiffModal(v.baseVersion!, v.version, "portfolio")}
+                                className="inline-flex items-center justify-center gap-1 h-7 px-2 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[10px] font-mono font-bold text-[#475569] shadow-xs cursor-pointer whitespace-nowrap"
+                                title={`Diff v${v.version} against its base v${v.baseVersion}`}
+                              >
+                                <GitFork size={11} className="text-[#6366F1] shrink-0" />
+                                <span>vs Base</span>
+                              </button>
+                            )}
+
+                            {/* Download JSON Snapshot */}
+                            <a
+                              href={`/api/admin/versions/portfolio/download/${v.version}?format=json`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center gap-1 h-7 px-2 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[10px] font-mono font-bold text-[#52525B] cursor-pointer whitespace-nowrap"
+                              title="Download JSON Snapshot"
+                            >
+                              <Download size={11} className="shrink-0" />
+                              <span>JSON</span>
+                            </a>
+                          </div>
+
+                          {/* Delete Button (Allowed only on non-active versions) */}
+                          {!v.isActive && portfolioVersions.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => deleteVersionItem(v.version, "portfolio")}
+                              className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-[#FECACA] bg-white hover:bg-[#FEF2F2] text-[#B91C1C] cursor-pointer shrink-0"
+                              title="Delete this version"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -2210,31 +2269,31 @@ export const AdminPage: React.FC = () => {
 
       {/* ================= GIT-BASED DIFF VIEWER MODAL ================= */}
       {diffModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs">
-          <div className="w-full max-w-6xl max-h-[92vh] flex flex-col rounded-2xl bg-[#FAF8F3] border-2 border-white shadow-2xl overflow-hidden paper-grain">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/60 backdrop-blur-xs">
+          <div className="w-full max-w-6xl h-[94vh] sm:h-[90vh] flex flex-col rounded-2xl bg-[#FAF8F3] border-2 border-white shadow-2xl overflow-hidden paper-grain">
             {/* Modal Header */}
-            <div className="p-4 sm:p-5 bg-white border-b border-[#DCD5C9] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
-              <div className="space-y-1 min-w-0">
+            <div className="p-3 sm:p-5 bg-white border-b border-[#DCD5C9] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shrink-0">
+              <div className="space-y-0.5 min-w-0">
                 <div className="flex items-center gap-2">
-                  <GitCompare size={18} className="text-[#2563EB]" />
-                  <h3 className="text-base font-bold text-[#18181B] truncate">
-                    Git Diff Inspector: v{diffData?.fromVersion} ⟷ v{diffData?.toVersion}
+                  <GitCompare size={18} className="text-[#2563EB] shrink-0" />
+                  <h3 className="text-sm sm:text-base font-bold text-[#18181B] truncate">
+                    Git Diff: v{diffData?.fromVersion} ⟷ v{diffData?.toVersion}
                   </h3>
                 </div>
-                <div className="text-xs text-[#52525B]">
+                <div className="text-[11px] sm:text-xs text-[#52525B] truncate">
                   {diffData?.docType === "portfolio"
-                    ? "Comparing canonical JSON datastore snapshots using Myers LCS algorithm."
-                    : "Comparing canonical Markdown documents using Myers LCS algorithm."}
+                    ? "Comparing canonical JSON datastore snapshots with Myers LCS."
+                    : "Comparing canonical Markdown documents with Myers LCS."}
                 </div>
               </div>
 
               {/* View Switcher, Theme & Close */}
-              <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap">
-                <div className="p-1 rounded-xl bg-[#F1ECE1] border border-[#DCD5C9] flex items-center gap-1">
+              <div className="flex items-center justify-between sm:justify-end gap-2 flex-wrap">
+                <div className="p-0.5 rounded-lg bg-[#F1ECE1] border border-[#DCD5C9] flex items-center gap-0.5">
                   <button
                     type="button"
                     onClick={() => setDiffViewMode("split")}
-                    className={`hidden sm:inline-block px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all ${
+                    className={`hidden md:inline-block px-2.5 py-1 rounded-md text-[11px] font-mono font-bold cursor-pointer transition-all ${
                       diffViewMode === "split"
                         ? "bg-white text-[#18181B] shadow-xs"
                         : "text-[#52525B] hover:text-[#18181B]"
@@ -2245,13 +2304,13 @@ export const AdminPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setDiffViewMode("unified")}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all ${
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-bold cursor-pointer transition-all ${
                       diffViewMode === "unified"
                         ? "bg-white text-[#18181B] shadow-xs"
                         : "text-[#52525B] hover:text-[#18181B]"
                     }`}
                   >
-                    Unified (Inline)
+                    Unified
                   </button>
                 </div>
 
@@ -2261,7 +2320,7 @@ export const AdminPage: React.FC = () => {
                   onClick={() =>
                     setDiffTheme(diffTheme === "vs-dark" ? "light" : "vs-dark")
                   }
-                  className="px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F4F4F5] text-xs font-mono text-[#3F3F46] cursor-pointer"
+                  className="px-2 py-1 rounded-md border border-[#DCD5C9] bg-white hover:bg-[#F4F4F5] text-xs font-mono text-[#3F3F46] cursor-pointer"
                 >
                   {diffTheme === "vs-dark" ? "🌙" : "☀️"}
                 </button>
@@ -2280,7 +2339,7 @@ export const AdminPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setDiffModalOpen(false)}
-                  className="p-1.5 rounded-lg border border-[#DCD5C9] hover:bg-[#F4F4F5] text-[#52525B] cursor-pointer"
+                  className="p-1 rounded-md border border-[#DCD5C9] hover:bg-[#F4F4F5] text-[#52525B] cursor-pointer"
                 >
                   <X size={16} />
                 </button>
@@ -2289,26 +2348,26 @@ export const AdminPage: React.FC = () => {
 
             {/* 1-Line AI Executive Summary Banner */}
             {diffData?.aiSummary && (
-              <div className="px-4 sm:px-5 py-2.5 sm:py-3 bg-[#EFF6FF] border-b border-[#BFDBFE] text-xs font-sans text-[#1E40AF] flex items-center gap-2 shrink-0">
-                <Sparkles size={15} className="text-[#2563EB] shrink-0" />
-                <span>
-                  <strong>AI Executive Summary:</strong> {diffData.aiSummary}
+              <div className="px-3 sm:px-5 py-2 sm:py-2.5 bg-[#EFF6FF] border-b border-[#BFDBFE] text-xs font-sans text-[#1E40AF] flex items-center gap-2 shrink-0">
+                <Sparkles size={14} className="text-[#2563EB] shrink-0" />
+                <span className="truncate sm:whitespace-normal">
+                  <strong>AI Summary:</strong> {diffData.aiSummary}
                 </span>
               </div>
             )}
 
-            {/* Diff Body Content — VS Code Monaco Diff Engine */}
-            <div className="flex-1 min-h-[50vh] sm:min-h-[58vh] max-h-[65vh] sm:max-h-[72vh] w-full bg-[#1E1E1E] overflow-hidden flex flex-col">
+            {/* Diff Body Content — VS Code Monaco Diff Engine with min-h-0 */}
+            <div className="flex-1 min-h-0 w-full bg-[#1E1E1E] overflow-hidden flex flex-col">
               {diffLoading ? (
-                <div className="flex-1 flex flex-col items-center justify-center py-20 gap-3 text-[#94A3B8]">
+                <div className="flex-1 flex flex-col items-center justify-center py-12 gap-3 text-[#94A3B8]">
                   <TactileSpinner
                     size="md"
                     label="Computing Myers LCS Line Diff…"
-                    sublabel="Gemini 2.5 Flash generating 1-line AI executive summary"
+                    sublabel="Generating AI executive summary"
                   />
                 </div>
               ) : !diffData ? (
-                <div className="flex-1 flex items-center justify-center py-20 text-[#71717A]">
+                <div className="flex-1 flex items-center justify-center py-12 text-[#71717A]">
                   No diff data loaded.
                 </div>
               ) : (
@@ -2324,7 +2383,7 @@ export const AdminPage: React.FC = () => {
                     automaticLayout: true,
                     minimap: { enabled: false },
                     scrollBeyondLastLine: false,
-                    fontSize: 13,
+                    fontSize: 12,
                     diffWordWrap: "on",
                     lineNumbers: "on",
                     renderIndicators: true,
@@ -2336,21 +2395,19 @@ export const AdminPage: React.FC = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-3.5 sm:p-4 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
-              <div className="text-xs font-mono text-[#52525B]">
+            <div className="p-3 sm:p-4 bg-white border-t border-[#DCD5C9] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shrink-0">
+              <div className="text-[11px] sm:text-xs font-mono text-[#52525B] truncate">
                 {diffData &&
                 (diffData.docType === "resume"
                   ? diffData.fromVersion !== activeResumeVersion
                   : diffData.fromVersion !== portfolioVersion) ? (
-                  <span>
-                    Viewing delta between Version {diffData.fromVersion} and Version {diffData.toVersion}.
-                  </span>
+                  <span>Delta between v{diffData.fromVersion} and v{diffData.toVersion}</span>
                 ) : (
-                  <span>Inspection mode active.</span>
+                  <span>Inspection mode active</span>
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
                 {diffData &&
                   (diffData.docType === "resume"
                     ? diffData.fromVersion !== activeResumeVersion
@@ -2360,7 +2417,7 @@ export const AdminPage: React.FC = () => {
                       onClick={() => {
                         promptSwitchVersion(diffData.fromVersion, diffData.docType);
                       }}
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer"
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer"
                     >
                       <ArrowLeftRight size={13} />
                       <span>Switch Live to v{diffData.fromVersion}</span>
@@ -2369,7 +2426,7 @@ export const AdminPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setDiffModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-[#DCD5C9] bg-white text-xs font-mono font-bold text-[#52525B] cursor-pointer hover:bg-[#F4F4F5] text-center"
+                  className="flex-1 sm:flex-initial px-4 py-2 rounded-xl border border-[#DCD5C9] bg-white text-xs font-mono font-bold text-[#52525B] cursor-pointer hover:bg-[#F4F4F5] text-center"
                 >
                   Close
                 </button>
@@ -2381,25 +2438,25 @@ export const AdminPage: React.FC = () => {
 
       {/* ================= SWITCH CONFIRMATION MODAL ================= */}
       {switchConfirmOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="w-full max-w-lg rounded-2xl bg-white border-2 border-white shadow-2xl p-6 space-y-4 paper-grain">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+          <div className="w-full max-w-lg rounded-2xl bg-white border-2 border-white shadow-2xl p-4 sm:p-6 space-y-4 paper-grain">
             <div className="flex items-center gap-3 border-b border-[#DCD5C9] pb-3">
-              <div className="p-2.5 rounded-xl bg-[#EFF6FF] text-[#2563EB]">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-[#EFF6FF] text-[#2563EB] shrink-0">
                 <ArrowLeftRight size={20} />
               </div>
-              <div>
-                <h3 className="text-base font-bold text-[#18181B]">
-                  Confirm Live Version Checkout (v{targetSwitchVersion})
+              <div className="min-w-0">
+                <h3 className="text-sm sm:text-base font-bold text-[#18181B] truncate">
+                  Confirm Version Checkout (v{targetSwitchVersion})
                 </h3>
-                <p className="text-xs text-[#52525B]">
-                  This updates the live ground truth connected directly to your AI Twin assistant.
+                <p className="text-[11px] sm:text-xs text-[#52525B]">
+                  Updates live ground truth for your AI Twin assistant.
                 </p>
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#FAF8F3] border border-[#C9A673]/60 space-y-2">
-              <div className="text-[11px] font-mono uppercase tracking-wider text-[#92400E] font-bold flex items-center gap-1">
-                <Sparkles size={13} />
+            <div className="p-3 sm:p-3.5 rounded-xl bg-[#FAF8F3] border border-[#C9A673]/60 space-y-1.5">
+              <div className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[#92400E] font-bold flex items-center gap-1">
+                <Sparkles size={12} />
                 <span>One-Line AI Impact Analysis</span>
               </div>
               <p className="text-xs text-[#18181B] leading-relaxed font-sans font-medium">
@@ -2407,11 +2464,11 @@ export const AdminPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-2.5 pt-2">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-1">
               <button
                 type="button"
                 onClick={() => setSwitchConfirmOpen(false)}
-                className="px-4 py-2 rounded-xl border border-[#DCD5C9] bg-white text-xs font-mono font-bold text-[#52525B] cursor-pointer hover:bg-[#F4F4F5]"
+                className="px-4 py-2 rounded-xl border border-[#DCD5C9] bg-white text-xs font-mono font-bold text-[#52525B] cursor-pointer hover:bg-[#F4F4F5] text-center"
               >
                 Cancel
               </button>
@@ -2419,7 +2476,7 @@ export const AdminPage: React.FC = () => {
                 type="button"
                 onClick={confirmSwitchVersion}
                 disabled={isSwitching}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer disabled:opacity-50"
               >
                 {isSwitching ? (
                   <>

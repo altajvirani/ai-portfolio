@@ -187,10 +187,10 @@ export const AuditLogModal: React.FC<{
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs">
-      <div className="w-full max-w-4xl max-h-[88vh] flex flex-col rounded-2xl bg-[#FAF8F3] border-2 border-white shadow-2xl overflow-hidden paper-grain">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/60 backdrop-blur-xs">
+      <div className="w-full max-w-4xl h-[92vh] sm:h-[88vh] flex flex-col rounded-2xl bg-[#FAF8F3] border-2 border-white shadow-2xl overflow-hidden paper-grain">
         {/* Header */}
-        <div className="p-4 sm:p-5 bg-white border-b border-[#DCD5C9] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+        <div className="p-3.5 sm:p-5 bg-white border-b border-[#DCD5C9] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shrink-0">
           <div className="space-y-0.5 min-w-0">
             <div className="flex items-center gap-2">
               <Shield size={18} className="text-[#2563EB] shrink-0" />
@@ -198,7 +198,7 @@ export const AuditLogModal: React.FC<{
                 Security Audit Log &amp; Operations Trail
               </h3>
             </div>
-            <p className="text-xs text-[#52525B]">
+            <p className="text-[11px] sm:text-xs text-[#52525B]">
               Every administrative mutation and MCP tool execution is recorded against the authenticated user email.
             </p>
           </div>
@@ -221,7 +221,7 @@ export const AuditLogModal: React.FC<{
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-2.5 sm:space-y-3">
           {isLoading ? (
             <div className="py-16 flex flex-col items-center justify-center gap-3">
               <TactileSpinner size="md" label="Querying security audit store…" />
@@ -234,10 +234,10 @@ export const AuditLogModal: React.FC<{
             logs.map((log, idx) => (
               <div
                 key={log.id || idx}
-                className="p-3.5 rounded-xl border border-[#DCD5C9] bg-white shadow-2xs space-y-1.5 transition-all hover:border-[#2563EB]/40"
+                className="p-3 sm:p-3.5 rounded-xl border border-[#DCD5C9] bg-white shadow-2xs space-y-1.5 transition-all hover:border-[#2563EB]/40"
               >
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                     <span className="font-mono font-bold text-[10px] uppercase px-2 py-0.5 rounded bg-[#F4F8FF] border border-[#BFDBFE] text-[#1E40AF]">
                       {log.action}
                     </span>
@@ -253,20 +253,20 @@ export const AuditLogModal: React.FC<{
                     )}
                   </div>
                   <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#71717A]">
-                    <Clock size={11} />
-                    <span>{log.createdAt ? new Date(log.createdAt).toLocaleString() : "Just now"}</span>
+                    <Clock size={11} className="shrink-0" />
+                    <span className="truncate">{log.createdAt ? new Date(log.createdAt).toLocaleString() : "Just now"}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-xs text-[#1E3A8A]">
                   <UserCheck size={12} className="text-[#059669] shrink-0" />
-                  <span className="font-mono font-semibold">{log.performedBy}</span>
+                  <span className="font-mono font-semibold break-all">{log.performedBy}</span>
                 </div>
 
                 {log.aiSummary && (
                   <div className="text-xs text-[#475569] leading-relaxed pt-0.5 flex items-start gap-1.5 font-sans">
                     <Sparkles size={12} className="text-[#7C3AED] shrink-0 mt-0.5" />
-                    <span>{log.aiSummary}</span>
+                    <span className="break-words">{log.aiSummary}</span>
                   </div>
                 )}
               </div>
