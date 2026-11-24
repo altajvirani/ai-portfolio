@@ -282,7 +282,7 @@ export const AgentChatbot: React.FC<AgentChatbotProps> = ({
       </div>
 
       {/* Suggested Prompt Keycaps */}
-      <div className="px-3.5 sm:px-4 py-2.5 bg-[#EFE9DC] border-b border-[#DCD5C9] overflow-x-auto flex items-center gap-2 no-scrollbar">
+      <div className="px-3.5 sm:px-4 py-2.5 bg-[#EFE9DC] border-b border-[#DCD5C9] overflow-x-auto overflow-y-hidden horizontal-scroll-track flex items-center gap-2 no-scrollbar">
         <span className="text-[11px] font-mono text-[#EA580C] whitespace-nowrap shrink-0 flex items-center gap-1 font-bold">
           <Sparkles className="w-3 h-3" />
           Prompts:

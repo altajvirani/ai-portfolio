@@ -23,16 +23,31 @@ export function computeActiveSections(
     return lastId ? [lastId] : [];
   }
 
-  // Band from just below header (~84px) down to 58% of viewport height
-  const bandTop = Math.min(96, viewportHeight * 0.2);
-  const bandBottom = Math.max(bandTop + 80, viewportHeight * 0.58);
+  // Band from just below header (~84px) down into reading focal zone
+  const bandTop = Math.min(96, viewportHeight * 0.18);
+  const bandBottom = Math.max(bandTop + 80, viewportHeight * 0.55);
+  const focalPoint = bandTop + 40;
 
-  const overlapping = metrics
-    .filter((m) => m.bottom > bandTop && m.top < bandBottom)
-    .map((m) => m.id);
+  // Rank candidate sections by whether they contain the focal point and their visible coverage
+  const ranked = metrics
+    .map((m) => {
+      const overlapTop = Math.max(m.top, bandTop);
+      const overlapBottom = Math.min(m.bottom, bandBottom);
+      const visibleHeight = Math.max(0, overlapBottom - overlapTop);
+      const containsFocalPoint = m.top <= focalPoint && m.bottom > focalPoint;
+      return { id: m.id, visibleHeight, containsFocalPoint, top: m.top };
+    })
+    .filter((m) => m.visibleHeight > 0);
 
-  if (overlapping.length > 0) {
-    return overlapping;
+  if (ranked.length > 0) {
+    // 1. The section containing the reading focal line wins
+    // 2. Otherwise, the section with the largest visible presence in the band wins
+    ranked.sort((a, b) => {
+      if (a.containsFocalPoint && !b.containsFocalPoint) return -1;
+      if (!a.containsFocalPoint && b.containsFocalPoint) return 1;
+      return b.visibleHeight - a.visibleHeight;
+    });
+    return [ranked[0].id];
   }
 
   // Fallback to closest section above or near viewport top

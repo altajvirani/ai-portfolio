@@ -223,7 +223,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
         <div
           role="group"
           aria-label="Filter skills by domain"
-          className="flex items-center gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible no-scrollbar"
+          className="flex items-center gap-2 overflow-x-auto overflow-y-hidden horizontal-scroll-track pb-1 sm:flex-wrap sm:overflow-visible no-scrollbar"
         >
           <span className="text-xs font-mono font-bold text-[#52525B] mr-1 shrink-0">
             Filter:

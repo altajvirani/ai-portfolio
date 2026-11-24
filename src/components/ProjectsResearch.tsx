@@ -156,6 +156,7 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
     <div
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      style={{ touchAction: "pan-y" }}
       className="p-1.5 rounded-xl bg-white paper-cutout-sm w-full min-w-0 relative"
     >
       {/* Translucent Masking Washi Tape Pin */}
@@ -724,7 +725,7 @@ export const ProjectsResearch: React.FC<ProjectsResearchProps> = ({
                 <div
                   ref={mobileDeckRef}
                   onScroll={handleMobileDeckScroll}
-                  className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 -mx-4 px-4 no-scrollbar"
+                  className="flex overflow-x-auto overflow-y-hidden horizontal-scroll-track snap-x snap-mandatory gap-4 pb-3 -mx-4 px-4 no-scrollbar"
                 >
                   {PERSONAL_PROJECTS.map((project, index) =>
                     renderCollapsedCard(project, index, true),

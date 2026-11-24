@@ -110,25 +110,73 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
   });
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (isProgrammaticScrollRef.current) return;
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) {
-          const id = visible[0].target.getAttribute("data-timeline-id");
-          if (id) setActiveId(id);
+    let rafId = 0;
+
+    const updateActiveMilestone = () => {
+      if (isProgrammaticScrollRef.current) return;
+
+      const milestones = WORK_EXPERIENCE.map((item) => ({
+        id: item.id,
+        el: cardRefs.current[item.id],
+      })).filter((m): m is { id: string; el: HTMLDivElement } => Boolean(m.el));
+
+      if (!milestones.length) return;
+
+      // On mobile / small screens, sticky header (64px) + sticky tab track (~48px) = 112px.
+      // The natural reading focal line is at ~160px from viewport top.
+      const focalLine = Math.min(220, Math.max(130, window.innerHeight * 0.28));
+
+      // 1. Check which card contains the reading focal line: rect.top <= focalLine < rect.bottom
+      for (const m of milestones) {
+        const rect = m.el.getBoundingClientRect();
+        if (rect.top <= focalLine && rect.bottom > focalLine) {
+          setActiveId((prev) => (prev === m.id ? prev : m.id));
+          return;
         }
-      },
-      { threshold: [0.25, 0.55], rootMargin: "-15% 0px -35% 0px" },
-    );
+      }
 
-    Object.values(cardRefs.current).forEach((el) => {
-      if (el) observer.observe(el);
-    });
+      // 2. If scrolled above the first card
+      const firstRect = milestones[0].el.getBoundingClientRect();
+      if (firstRect.top > focalLine) {
+        setActiveId((prev) => (prev === milestones[0].id ? prev : milestones[0].id));
+        return;
+      }
 
-    return () => observer.disconnect();
+      // 3. If scrolled past the bottom of the last card
+      const lastRect = milestones[milestones.length - 1].el.getBoundingClientRect();
+      if (lastRect.bottom <= focalLine) {
+        setActiveId((prev) => (prev === milestones[milestones.length - 1].id ? prev : milestones[milestones.length - 1].id));
+        return;
+      }
+
+      // 4. Deterministic fallback: whichever milestone's top is closest to the focal line
+      let closestId = milestones[0].id;
+      let minDistance = Infinity;
+      for (const m of milestones) {
+        const rect = m.el.getBoundingClientRect();
+        const dist = Math.abs(rect.top - focalLine);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestId = m.id;
+        }
+      }
+      setActiveId((prev) => (prev === closestId ? prev : closestId));
+    };
+
+    const handleScrollOrResize = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updateActiveMilestone);
+    };
+
+    updateActiveMilestone();
+    window.addEventListener("scroll", handleScrollOrResize, { passive: true });
+    window.addEventListener("resize", handleScrollOrResize, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScrollOrResize);
+      window.removeEventListener("resize", handleScrollOrResize);
+    };
   }, []);
 
   // Automatically slide the mobile horizontal tab track so activeId stays smoothly centered in view
@@ -226,7 +274,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectSkill }) => {
         <div
           ref={mobileTrackRef}
           data-mobile-exp-track="true"
-          className="lg:hidden sticky top-16 z-20 -mx-4 px-4 py-2.5 bg-[#F7F4EE]/86 backdrop-blur-xl backdrop-saturate-150 border-y border-[#DCD5C9] shadow-[0_6px_16px_rgba(24,24,27,0.06)] flex items-center gap-2 overflow-x-auto no-scrollbar"
+          className="lg:hidden sticky top-16 z-20 -mx-4 px-4 py-2.5 bg-[#F7F4EE]/86 backdrop-blur-xl backdrop-saturate-150 border-y border-[#DCD5C9] shadow-[0_6px_16px_rgba(24,24,27,0.06)] flex items-center gap-2 overflow-x-auto overflow-y-hidden horizontal-scroll-track no-scrollbar"
         >
           {WORK_EXPERIENCE.map((item) => {
             const isActive = item.id === activeId;

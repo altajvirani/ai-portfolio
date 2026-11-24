@@ -455,7 +455,7 @@ export const AwardsEducation: React.FC = () => {
           </div>
 
           {/* Mobile Horizontal Snap Deck / Desktop 2x2 Grid */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible no-scrollbar">
+          <div className="flex overflow-x-auto overflow-y-hidden horizontal-scroll-track snap-x snap-mandatory gap-4 pb-3 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible no-scrollbar">
             {AWARDS_DATA.map((award, idx) => {
               const styles = getAwardStyles(award.accentColor);
               return (

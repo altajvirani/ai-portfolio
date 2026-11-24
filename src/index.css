@@ -463,6 +463,16 @@
   scrollbar-width: none;
 }
 
+/* Horizontal scroll tracks that never trap or hijack vertical page scroll */
+.horizontal-scroll-track {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Infinite Marquee Animation */
 @keyframes marquee {
   0% { transform: translateX(0%); }
