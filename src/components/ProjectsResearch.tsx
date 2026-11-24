@@ -190,14 +190,16 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
           style={{ transform: `translateX(-${slideIdx * 100}%)` }}
         >
           {/* Slide 0: Visual Asset Showcase */}
-          <div className="w-full h-full shrink-0 relative bg-[#18181B]">
+          <div className="w-full h-full shrink-0 relative bg-[#18181B] overflow-hidden">
             {imageSrc && !imgFailed ? (
               <img
                 src={imageSrc}
                 alt={`${project.title} preview`}
                 referrerPolicy="no-referrer"
                 onError={() => setImgFailed(true)}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                className={`w-full h-full object-cover transition-transform duration-500 ${
+                  slideIdx === 0 ? "group-hover:scale-[1.04]" : ""
+                }`}
               />
             ) : (
               <div
@@ -213,9 +215,9 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
             )}
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-t from-[#18181B]/90 via-[#18181B]/20 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-[#18181B]/90 via-[#18181B]/20 to-transparent pointer-events-none"
             />
-            <div className="absolute bottom-3 left-3 right-36 sm:right-40 flex items-center gap-2 text-[11px] font-mono text-white">
+            <div className="absolute bottom-3 left-3 right-36 sm:right-40 flex items-center gap-2 text-[11px] font-mono text-white pointer-events-none">
               <span className="px-2 py-0.5 rounded-md skeuo-glass text-[#18181B] font-bold text-[10px]">
                 Preview
               </span>
@@ -229,29 +231,29 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
           {project.slides.map((slide, idx) => (
             <div
               key={idx}
-              className={`w-full h-full shrink-0 bg-gradient-to-br ${theme.slideBg} p-4 sm:p-6 pb-12 flex flex-col justify-between`}
+              className={`w-full h-full shrink-0 overflow-hidden bg-gradient-to-br ${theme.slideBg} p-3.5 sm:p-5 lg:p-6 pb-9 sm:pb-11 flex flex-col justify-between`}
             >
-              <div className="flex items-center justify-between gap-2 text-[11px] font-mono">
+              <div className="flex items-center justify-between gap-1.5 text-[10px] sm:text-[11px] font-mono">
                 <span
-                  className={`px-2 py-0.5 rounded-md border font-bold uppercase tracking-wider ${theme.badgeBg}`}
+                  className={`px-1.5 py-0.5 sm:px-2 rounded-md border text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${theme.badgeBg}`}
                 >
                   {slide.badge}
                 </span>
-                <span className="tabular-nums text-[#52525B] font-semibold truncate">
+                <span className="tabular-nums text-[#52525B] font-semibold truncate text-[10px] sm:text-[11px]">
                   {slide.metric}
                 </span>
               </div>
 
-              <div className="space-y-1.5 my-auto">
-                <h4 className="text-base sm:text-xl font-bold font-display text-[#18181B] leading-snug">
+              <div className="space-y-1 sm:space-y-1.5 my-auto min-w-0 pr-0 sm:pr-2">
+                <h4 className="text-xs sm:text-base lg:text-lg font-bold font-display text-[#18181B] leading-snug line-clamp-2">
                   {slide.title}
                 </h4>
-                <p className="text-xs sm:text-sm text-[#3F3F46] leading-relaxed max-w-xl">
+                <p className="text-[10.5px] sm:text-xs lg:text-sm text-[#3F3F46] leading-normal sm:leading-relaxed max-w-xl line-clamp-3">
                   {slide.detail}
                 </p>
               </div>
 
-              <div className="text-[11px] font-mono text-[#52525B] font-medium">
+              <div className="text-[9.5px] sm:text-[11px] font-mono text-[#52525B] font-medium truncate pr-24 sm:pr-32">
                 {project.title}
               </div>
             </div>
@@ -259,21 +261,21 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
         </div>
 
         {/* Bottom Frosted Glass Carousel Navigation Pill */}
-        <div className="absolute bottom-2 right-2 z-20 flex items-center gap-1 skeuo-glass px-2 py-1 rounded-xl">
+        <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-20 flex items-center gap-0.5 sm:gap-1 skeuo-glass px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl">
           <button
             type="button"
             onClick={handlePrev}
             aria-label={`Previous slide for ${project.title}`}
-            className="p-1 rounded hover:bg-[#EDE8DF] text-[#18181B] cursor-pointer transition-colors"
+            className="p-0.5 sm:p-1 rounded hover:bg-[#EDE8DF] text-[#18181B] cursor-pointer transition-colors"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </button>
 
-          <span className="text-[10px] font-mono font-bold text-[#3F3F46] tabular-nums px-0.5">
+          <span className="text-[9px] sm:text-[10px] font-mono font-bold text-[#3F3F46] tabular-nums px-0.5">
             {slideIdx + 1}/{totalSlides}
           </span>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5 sm:gap-1">
             {Array.from({ length: totalSlides }).map((_, i) => (
               <button
                 key={i}
@@ -285,7 +287,7 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
                 aria-label={`View slide ${i + 1} for ${project.title}`}
                 className={`h-1.5 rounded-full transition-all cursor-pointer ${
                   slideIdx === i
-                    ? `w-4 ${theme.dot}`
+                    ? `w-3 sm:w-4 ${theme.dot}`
                     : "w-1.5 bg-[#D4CEC3] hover:bg-[#A1A1AA]"
                 }`}
               />
@@ -296,9 +298,9 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({
             type="button"
             onClick={handleNext}
             aria-label={`Next slide for ${project.title}`}
-            className="p-1 rounded hover:bg-[#EDE8DF] text-[#18181B] cursor-pointer transition-colors"
+            className="p-0.5 sm:p-1 rounded hover:bg-[#EDE8DF] text-[#18181B] cursor-pointer transition-colors"
           >
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </button>
         </div>
       </div>

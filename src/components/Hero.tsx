@@ -282,14 +282,14 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSkill }) => {
             />
 
             {/* Draggable Die-Cut Stamp Accent */}
-            <div className="hidden sm:block absolute -top-2 -right-3 z-30">
+            <div className="block absolute -top-2 -right-2 sm:-right-3 z-30 pointer-events-none">
               <PaperCutout
                 tone="kraft"
                 tape="mint"
                 rotate={7}
-                className="!px-3 !py-1.5"
+                className="!px-2.5 sm:!px-3 !py-1 sm:!py-1.5 shadow-sm"
               >
-                <div className="text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5">
+                <div className="text-[9.5px] sm:text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#EA580C]" />
                   <span>Crafted · 2.5+ YOE</span>
                 </div>
