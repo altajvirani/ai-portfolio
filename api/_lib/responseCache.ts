@@ -23,7 +23,7 @@ const DEFAULT_TTL_MS = 1000 * 60 * 60 * 24; // 24 hours
 const MAX_CACHE_SIZE = 1000;
 
 class ResponseCacheManager {
-  private cache = new Map<string, CachedRAGResponse>();
+  private cache = new Map<string, CachedAgentResponse>();
   private hits = 0;
   private misses = 0;
 
@@ -434,7 +434,7 @@ You can also use the **Send an Inquiry** module in this portfolio to open a pre-
     ].forEach((k) => this.cache.set(normalizeQueryKey(k), whyHireResponse));
   }
 
-  public get(query: string): CachedRAGResponse | null {
+  public get(query: string): CachedAgentResponse | null {
     const key = normalizeQueryKey(query);
     const entry = this.cache.get(key);
     if (!entry) {

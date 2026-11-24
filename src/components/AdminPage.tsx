@@ -822,10 +822,10 @@ export const AdminPage: React.FC = () => {
             }`}
           >
             <FileText size={14} className="shrink-0" />
-            <span className="truncate">Resume Engine</span>
+            <span className="truncate">Agent Grounding Engine</span>
             {activeResumeVersion && (
               <span className="hidden sm:inline-block ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-                v{activeResumeVersion} Active
+                v{activeResumeVersion} Grounded
               </span>
             )}
           </button>
@@ -849,7 +849,7 @@ export const AdminPage: React.FC = () => {
           </button>
         </div>
 
-        {/* ================= RESUME GROUNDING ENGINE TAB ================= */}
+        {/* ================= AGENT GROUNDING ENGINE TAB ================= */}
         {activeTab === "resume" && (
           <div className="space-y-6">
             {/* Top Workspace Card: VS Code Monaco Markdown Editor & Side-by-Side Preview */}
@@ -858,7 +858,7 @@ export const AdminPage: React.FC = () => {
               <div className="flex flex-col gap-3 border-b border-[#DCD5C9] pb-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-md border border-[#BFDBFE] bg-[#F4F8FF] px-2.5 py-1 text-[11px] font-mono font-bold text-[#1E3A8A]">
-                    Active v{activeResumeVersion ?? "—"}
+                    Active Grounding v{activeResumeVersion ?? "—"}
                   </span>
                   <span className="rounded-md border border-[#E2E8F0] bg-white px-2 py-1 text-[11px] font-mono text-[#64748B]">
                     {resumeEditorValue.split("\n").length} lines · {resumeEditorValue.trim() ? resumeEditorValue.trim().split(/\s+/).length : 0} words
@@ -916,7 +916,7 @@ export const AdminPage: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#18181B] flex items-center gap-1.5">
-                        <Upload size={14} className="text-[#2563EB]" /> Ingest Document (FlowCV PDF, DOCX, TXT, MD)
+                        <Upload size={14} className="text-[#2563EB]" /> Ingest Grounding Document (FlowCV PDF, DOCX, TXT, MD)
                       </h4>
                       <p className="text-[11px] text-[#64748B] mt-0.5">
                         Automatically runs 3-tier validation (MIME + AST static extraction + Gemini LLM multimodal check), parses links verbatim, generates canonical Markdown, and stores snapshot in DB.
@@ -1229,7 +1229,7 @@ export const AdminPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <History size={18} className="text-[#2563EB]" />
                   <h3 className="text-base font-bold text-[#18181B]">
-                    Resume Version Snapshots &amp; Checkout History
+                    Agent Grounding Version Snapshots &amp; Checkout History
                   </h3>
                 </div>
                 <button

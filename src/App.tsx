@@ -8,7 +8,7 @@ import { ProjectsResearch } from "./components/ProjectsResearch.tsx";
 import { SkillsSection } from "./components/SkillsSection.tsx";
 import { AwardsEducation } from "./components/AwardsEducation.tsx";
 import { ContactSection } from "./components/ContactSection.tsx";
-import { RAGChatbot } from "./components/RAGChatbot.tsx";
+import { AgentChatbot } from "./components/AgentChatbot.tsx";
 import { ShortcutPalette } from "./components/ShortcutPalette.tsx";
 import { Footer } from "./components/Footer.tsx";
 import { Bot, Command } from "lucide-react";
@@ -147,7 +147,7 @@ export default function App() {
 
         <AnimatePresence>
           {isChatModalOpen && (
-            <RAGChatbot
+            <AgentChatbot
               isModal={true}
               onCloseModal={() => {
                 setIsChatModalOpen(false);

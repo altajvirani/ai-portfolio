@@ -1,13 +1,13 @@
 {
   "metadata": {
     "name": "Altaj Virani | Azure AI & Agentic Systems Portfolio",
-    "description": "Portfolio and interactive RAG intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
+    "description": "Portfolio and interactive Agent Grounding intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
     "requestFramePermissions": [],
     "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
   },
   "site": {
     "title": "Altaj Virani | Azure AI & Agentic Systems Portfolio",
-    "description": "Portfolio and interactive RAG intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
+    "description": "Portfolio and interactive Agent Grounding intelligence system for Altaj Virani, Azure AI & Agentic Systems Engineer specializing in MCP toolkits, enterprise AI platforms, and high-reliability cloud architecture.",
     "assetBasePath": "/assets/",
     "assetPaths": {
       "profileImage": "/assets/altaj-virani-profile.png",

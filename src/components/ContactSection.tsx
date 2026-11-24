@@ -687,10 +687,8 @@ export const ContactSection: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Cloudflare Turnstile Bot Defense Plate */}
-                <div className="pt-2">
-                  <CloudflareTurnstile onTokenChange={setTurnstileToken} />
-                </div>
+                {/* Cloudflare Turnstile Invisible Bot Protection */}
+                <CloudflareTurnstile invisible onTokenChange={setTurnstileToken} />
 
                 <motion.button
                   type="submit"

@@ -16,7 +16,7 @@ import { ChatMessage } from "../types.ts";
 import { MarkdownRenderer } from "./MarkdownRenderer.tsx";
 import { TactileSpinner, SkeuoSkeleton } from "./TactileUI.tsx";
 
-interface RAGChatbotProps {
+interface AgentChatbotProps {
   isModal?: boolean;
   onCloseModal?: () => void;
   initialQuery?: string;
@@ -31,7 +31,7 @@ const SUGGESTED_QUERIES = [
   "What is his education & Azure certification stack?",
 ];
 
-export const RAGChatbot: React.FC<RAGChatbotProps> = ({
+export const AgentChatbot: React.FC<AgentChatbotProps> = ({
   isModal = false,
   onCloseModal,
   initialQuery = "",
@@ -40,7 +40,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
     {
       id: "welcome",
       role: "assistant",
-      content: `Hi! I am Altaj Virani's AI Twin, grounded directly in his verified public resume (altaj-virani-resume.pdf).\n\nAsk me anything about enterprise agentic AI, Model Context Protocol (MCP), Azure Container Apps optimization, SnapWright, Nivesh, IEEE research, awards, or engineering experience.`,
+      content: `Hi! I am Altaj Virani's AI Twin, grounded directly in his canonical profile and resume documents.\n\nAsk me anything about enterprise agentic AI, Model Context Protocol (MCP), Azure Container Apps optimization, SnapWright, Nivesh, IEEE research, awards, or engineering experience.`,
       sources: ["altaj-virani-resume.pdf"],
       timestamp: new Date().toLocaleTimeString([], {
         hour: "2-digit",
@@ -237,7 +237,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
             <div className="text-sm font-bold text-[#18181B] font-display flex items-center gap-2 flex-wrap">
               <span>Altaj AI Twin</span>
               <span className="text-[10px] font-mono text-[#047857] px-2 py-0.5 rounded-md bg-[#D1FAE5] border border-[#6EE7B7] font-bold">
-                Resume Grounded
+                Agent Grounded
               </span>
               <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-[#15803D] px-2 py-0.5 rounded-md bg-[#F0FDF4] border border-[#86EFAC] font-bold">
                 <Shield className="w-2.5 h-2.5 text-[#16A34A]" />
@@ -388,10 +388,10 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
                 <TactileSpinner size="sm" />
                 <div className="space-y-0.5">
                   <div className="text-xs font-mono font-bold text-[#1E3A8A]">
-                    Reasoning over verified resume documents…
+                    Reasoning over canonical grounding documents…
                   </div>
                   <div className="text-[10px] font-mono text-[#64748B]">
-                    Grounded in altaj-virani-resume.pdf via RAG
+                    Grounded in canonical profile data via Agent Grounding Engine
                   </div>
                 </div>
               </div>
@@ -468,7 +468,7 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
 
   return (
     <section
-      id="rag-console"
+      id="agent-console"
       className="py-20 border-b border-[#DFD9CE] relative"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -477,3 +477,6 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
     </section>
   );
 };
+
+// Backwards-compatibility alias for previous imports
+export const RAGChatbot = AgentChatbot;

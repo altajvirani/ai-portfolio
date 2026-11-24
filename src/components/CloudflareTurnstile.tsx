@@ -9,7 +9,7 @@ declare global {
         options: {
           sitekey: string;
           theme?: "light" | "dark" | "auto";
-          size?: "normal" | "compact" | "flexible";
+          size?: "normal" | "compact" | "flexible" | "invisible";
           callback?: (token: string) => void;
           "error-callback"?: (error: unknown) => void;
           "expired-callback"?: () => void;
@@ -25,6 +25,7 @@ interface CloudflareTurnstileProps {
   onTokenChange: (token: string) => void;
   className?: string;
   theme?: "light" | "dark" | "auto";
+  invisible?: boolean;
 }
 
 const DEFAULT_SITE_KEY = "0x4AAAAAAGNOVlvGtGBe2pRy";
@@ -33,6 +34,7 @@ export const CloudflareTurnstile: React.FC<CloudflareTurnstileProps> = ({
   onTokenChange,
   className = "",
   theme = "light",
+  invisible = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -58,7 +60,7 @@ export const CloudflareTurnstile: React.FC<CloudflareTurnstileProps> = ({
         const id = window.turnstile.render(containerRef.current, {
           sitekey: siteKey,
           theme,
-          size: "flexible",
+          size: invisible ? "invisible" : "flexible",
           callback: (receivedToken: string) => {
             if (!isMounted) return;
             setToken(receivedToken);
@@ -134,6 +136,17 @@ export const CloudflareTurnstile: React.FC<CloudflareTurnstileProps> = ({
       onTokenChange(fallbackToken);
     }
   };
+
+  if (invisible) {
+    return (
+      <div
+        ref={containerRef}
+        id="cf-turnstile-invisible-widget"
+        className="hidden absolute -z-50 opacity-0 pointer-events-none w-0 h-0 overflow-hidden"
+        aria-hidden="true"
+      />
+    );
+  }
 
   return (
     <div
