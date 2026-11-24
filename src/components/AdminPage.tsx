@@ -40,6 +40,10 @@ import {
   ChevronUp,
   ExternalLink,
   FileEdit,
+  GitBranch,
+  GitPullRequest,
+  RotateCcw,
+  GitFork,
 } from "lucide-react";
 import type { DiffResult, SideBySideRow, DiffLine } from "../../api/_lib/diffEngine.ts";
 import {
@@ -53,6 +57,7 @@ type DocumentType = "resume" | "portfolio";
 
 interface VersionItem {
   version: number;
+  baseVersion?: number | null;
   isActive: boolean;
   title: string;
   rawFileName?: string | null;
@@ -61,6 +66,18 @@ interface VersionItem {
   aiSummary: string;
   createdAt: string;
   createdBy: string;
+}
+
+interface DraftItem {
+  id: number | string;
+  documentType: DocumentType;
+  baseVersion: number;
+  title?: string;
+  contentText: string;
+  aiSummary?: string;
+  authorEmail: string;
+  updatedAt: string;
+  createdAt: string;
 }
 
 interface AdminDocumentResponse {
@@ -260,7 +277,7 @@ export const AdminPage: React.FC = () => {
     }
   };
 
-  // Portfolio Datastore State
+  // Portfolio Datastore State & Drafts
   const [editorValue, setEditorValue] = useState("");
   const [portfolioVersion, setPortfolioVersion] = useState<number | null>(null);
   const [portfolioUpdatedAt, setPortfolioUpdatedAt] = useState("");
@@ -268,11 +285,19 @@ export const AdminPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [portfolioVersions, setPortfolioVersions] = useState<VersionItem[]>([]);
   const [isLoadingPortfolioVersions, setIsLoadingPortfolioVersions] = useState(false);
+  const [portfolioDraft, setPortfolioDraft] = useState<DraftItem | null>(null);
+  const [basePortfolioVersion, setBasePortfolioVersion] = useState<number | null>(null);
+  const [isSavingPortfolioDraft, setIsSavingPortfolioDraft] = useState(false);
+  const [isCommittingPortfolio, setIsCommittingPortfolio] = useState(false);
 
-  // Resume Engine State
+  // Resume Engine State & Drafts
   const [resumeVersions, setResumeVersions] = useState<VersionItem[]>([]);
   const [activeResumeVersion, setActiveResumeVersion] = useState<number | null>(null);
   const [isLoadingResumeVersions, setIsLoadingResumeVersions] = useState(false);
+  const [resumeDraft, setResumeDraft] = useState<DraftItem | null>(null);
+  const [baseResumeVersion, setBaseResumeVersion] = useState<number | null>(null);
+  const [isSavingResumeDraft, setIsSavingResumeDraft] = useState(false);
+  const [isCommittingResume, setIsCommittingResume] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -383,14 +408,29 @@ export const AdminPage: React.FC = () => {
       if (data.actor?.email) setEmail(data.actor.email);
       if (data.versions) setPortfolioVersions(data.versions);
       setPortfolioVersion(data.activeVersion);
-      if (data.activeContent) {
+      if (data.draft) {
+        setPortfolioDraft(data.draft);
+        setBasePortfolioVersion(data.draft.baseVersion);
         try {
-          const parsed = JSON.parse(data.activeContent);
+          const parsed = JSON.parse(data.draft.contentText);
           const formatted = JSON.stringify(parsed, null, 2);
           setEditorValue(formatted);
           validateJsonContent(formatted);
         } catch {
-          setEditorValue(data.activeContent);
+          setEditorValue(data.draft.contentText);
+        }
+      } else {
+        setPortfolioDraft(null);
+        setBasePortfolioVersion(data.activeVersion || data.versions[0]?.version || 1);
+        if (data.activeContent) {
+          try {
+            const parsed = JSON.parse(data.activeContent);
+            const formatted = JSON.stringify(parsed, null, 2);
+            setEditorValue(formatted);
+            validateJsonContent(formatted);
+          } catch {
+            setEditorValue(data.activeContent);
+          }
         }
       }
       const activeVer = data.versions?.find((v: VersionItem) => v.isActive);
@@ -414,8 +454,16 @@ export const AdminPage: React.FC = () => {
       if (response.ok && data.versions) {
         setResumeVersions(data.versions);
         setActiveResumeVersion(data.activeVersion);
-        if (data.activeContent) {
-          setResumeEditorValue(data.activeContent);
+        if (data.draft) {
+          setResumeDraft(data.draft);
+          setBaseResumeVersion(data.draft.baseVersion);
+          setResumeEditorValue(data.draft.contentText);
+        } else {
+          setResumeDraft(null);
+          setBaseResumeVersion(data.activeVersion || data.versions[0]?.version || 1);
+          if (data.activeContent) {
+            setResumeEditorValue(data.activeContent);
+          }
         }
       }
     } catch (err) {
@@ -457,6 +505,239 @@ export const AdminPage: React.FC = () => {
       setResumeSaveStatus(err instanceof Error ? err.message : "Network error saving resume.");
     } finally {
       setIsSavingResume(false);
+    }
+  };
+
+  // --- Resume Draft & PR Handlers ---
+  const saveResumeDraft = async () => {
+    if (!resumeEditorValue.trim()) return;
+    setIsSavingResumeDraft(true);
+    setResumeSaveStatus("Saving working draft to Neon...");
+    try {
+      const response = await fetch("/api/admin/versions/resume/draft", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": getCsrfToken() || "",
+        },
+        body: JSON.stringify({
+          baseVersion: baseResumeVersion || activeResumeVersion || 1,
+          contentText: resumeEditorValue,
+          title: `Working Draft on v${baseResumeVersion || activeResumeVersion || 1}`,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to save draft.");
+      setResumeDraft(data.draft);
+      setResumeSaveStatus("Draft saved in Neon!");
+      setTimeout(() => setResumeSaveStatus(null), 3000);
+    } catch (err: unknown) {
+      setResumeSaveStatus(err instanceof Error ? err.message : "Error saving draft.");
+    } finally {
+      setIsSavingResumeDraft(false);
+    }
+  };
+
+  const discardResumeDraft = async () => {
+    if (!window.confirm("Discard this working draft and revert back to base version?")) return;
+    setIsSavingResumeDraft(true);
+    setResumeSaveStatus("Discarding working draft...");
+    try {
+      const res = await fetch("/api/admin/versions/resume/draft", {
+        method: "DELETE",
+        credentials: "same-origin",
+        headers: { "X-CSRF-Token": getCsrfToken() || "" },
+      });
+      if (!res.ok) throw new Error("Failed to discard draft.");
+      setResumeDraft(null);
+      const baseNum = baseResumeVersion || activeResumeVersion || 1;
+      const baseDocRes = await fetch(`/api/admin/versions/resume/download/${baseNum}?format=markdown`, {
+        credentials: "same-origin",
+      });
+      if (baseDocRes.ok) {
+        setResumeEditorValue(await baseDocRes.text());
+      }
+      setResumeSaveStatus(`Draft discarded. Reverted to v${baseNum}.`);
+      setTimeout(() => setResumeSaveStatus(null), 3000);
+    } catch (err: unknown) {
+      setResumeSaveStatus(err instanceof Error ? err.message : "Error discarding draft.");
+    } finally {
+      setIsSavingResumeDraft(false);
+    }
+  };
+
+  const commitResumeRevision = async (publishImmediately = false) => {
+    if (!resumeEditorValue.trim()) return;
+    const baseNum = baseResumeVersion || activeResumeVersion || 1;
+    const title = window.prompt(
+      publishImmediately ? "Commit & Publish Title:" : "Commit Revision (PR) Title:",
+      `Revision derived from v${baseNum}`,
+    );
+    if (title === null) return;
+    setIsCommittingResume(true);
+    setResumeSaveStatus(publishImmediately ? "Committing & Publishing Live..." : "Committing Revision Snapshot (PR)...");
+    try {
+      const res = await fetch("/api/admin/versions/resume/commit", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": getCsrfToken() || "",
+        },
+        body: JSON.stringify({
+          baseVersion: baseNum,
+          contentText: resumeEditorValue,
+          title: title || `Revision derived from v${baseNum}`,
+          publishImmediately,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to commit revision.");
+      setResumeDraft(null);
+      setResumeSaveStatus(`Committed v${data.version}${publishImmediately ? " and Published Live!" : " (Saved as PR snapshot)"}`);
+      await loadResumeVersions();
+      setTimeout(() => setResumeSaveStatus(null), 4000);
+    } catch (err: unknown) {
+      setResumeSaveStatus(err instanceof Error ? err.message : "Error committing revision.");
+    } finally {
+      setIsCommittingResume(false);
+    }
+  };
+
+  const publishResumeVersion = async (verNum: number) => {
+    try {
+      setResumeSaveStatus(`Publishing v${verNum} to Live Ground Truth...`);
+      const res = await fetch("/api/admin/versions/resume/publish", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": getCsrfToken() || "",
+        },
+        body: JSON.stringify({ version: verNum }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to publish version.");
+      setResumeSaveStatus(`v${verNum} is now the Live Ground Truth!`);
+      await loadResumeVersions();
+      setTimeout(() => setResumeSaveStatus(null), 3500);
+    } catch (err: unknown) {
+      setResumeSaveStatus(err instanceof Error ? err.message : "Error publishing version.");
+    }
+  };
+
+  // --- Portfolio Draft & PR Handlers ---
+  const savePortfolioDraft = async () => {
+    if (!editorValue.trim()) return;
+    setIsSavingPortfolioDraft(true);
+    setStatus("Saving working draft to Neon...");
+    try {
+      const response = await fetch("/api/admin/versions/portfolio/draft", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": getCsrfToken() || "",
+        },
+        body: JSON.stringify({
+          baseVersion: basePortfolioVersion || portfolioVersion || 1,
+          contentText: editorValue,
+          title: `Working Draft on v${basePortfolioVersion || portfolioVersion || 1}`,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to save draft.");
+      setPortfolioDraft(data.draft);
+      setStatus("Working draft saved in Neon!");
+      setTimeout(() => setStatus(""), 3000);
+    } catch (err: unknown) {
+      setStatus(err instanceof Error ? err.message : "Error saving draft.");
+    } finally {
+      setIsSavingPortfolioDraft(false);
+    }
+  };
+
+  const discardPortfolioDraft = async () => {
+    if (!window.confirm("Discard this working draft and revert back to base version?")) return;
+    setIsSavingPortfolioDraft(true);
+    setStatus("Discarding working draft...");
+    try {
+      const res = await fetch("/api/admin/versions/portfolio/draft", {
+        method: "DELETE",
+        credentials: "same-origin",
+        headers: { "X-CSRF-Token": getCsrfToken() || "" },
+      });
+      if (!res.ok) throw new Error("Failed to discard draft.");
+      setPortfolioDraft(null);
+      const baseNum = basePortfolioVersion || portfolioVersion || 1;
+      await loadPortfolioDocument();
+      setStatus(`Draft discarded. Reverted to v${baseNum}.`);
+      setTimeout(() => setStatus(""), 3000);
+    } catch (err: unknown) {
+      setStatus(err instanceof Error ? err.message : "Error discarding draft.");
+    } finally {
+      setIsSavingPortfolioDraft(false);
+    }
+  };
+
+  const commitPortfolioRevision = async (publishImmediately = false) => {
+    if (!editorValue.trim()) return;
+    const baseNum = basePortfolioVersion || portfolioVersion || 1;
+    const title = window.prompt(
+      publishImmediately ? "Commit & Publish Datastore Title:" : "Commit Revision (PR) Title:",
+      `Revision derived from v${baseNum}`,
+    );
+    if (title === null) return;
+    setIsCommittingPortfolio(true);
+    setStatus(publishImmediately ? "Committing & Publishing Datastore..." : "Committing Revision Snapshot (PR)...");
+    try {
+      const res = await fetch("/api/admin/versions/portfolio/commit", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": getCsrfToken() || "",
+        },
+        body: JSON.stringify({
+          baseVersion: baseNum,
+          contentText: editorValue,
+          title: title || `Revision derived from v${baseNum}`,
+          publishImmediately,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to commit revision.");
+      setPortfolioDraft(null);
+      setStatus(`Committed v${data.version}${publishImmediately ? " and Published Live!" : " (Saved as PR snapshot)"}`);
+      await loadPortfolioDocument();
+      setTimeout(() => setStatus(""), 4000);
+    } catch (err: unknown) {
+      setStatus(err instanceof Error ? err.message : "Error committing revision.");
+    } finally {
+      setIsCommittingPortfolio(false);
+    }
+  };
+
+  const publishPortfolioVersion = async (verNum: number) => {
+    try {
+      setStatus(`Publishing v${verNum} to Live Ground Truth...`);
+      const res = await fetch("/api/admin/versions/portfolio/publish", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": getCsrfToken() || "",
+        },
+        body: JSON.stringify({ version: verNum }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to publish version.");
+      setStatus(`v${verNum} is now the Live Ground Truth!`);
+      await loadPortfolioDocument();
+      setTimeout(() => setStatus(""), 3500);
+    } catch (err: unknown) {
+      setStatus(err instanceof Error ? err.message : "Error publishing version.");
     }
   };
 
@@ -992,6 +1273,91 @@ export const AdminPage: React.FC = () => {
                 </div>
               )}
 
+              {/* Git / PR Branching & Working Draft Control Deck */}
+              <div className="rounded-xl border border-[#DCD5C9] bg-gradient-to-r from-[#FAF8F3] via-white to-[#F4F8FF] p-3 sm:p-3.5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-bold text-[#1E40AF]">
+                    <GitBranch size={13} className="text-[#2563EB]" />
+                    <span>Branch from:</span>
+                    <select
+                      value={baseResumeVersion || activeResumeVersion || 1}
+                      onChange={(e) => {
+                        const newBase = Number(e.target.value);
+                        setBaseResumeVersion(newBase);
+                        loadVersionIntoResumeEditor(newBase);
+                      }}
+                      className="bg-transparent font-bold text-[#1E40AF] cursor-pointer outline-none"
+                    >
+                      {resumeVersions.map((v) => (
+                        <option key={v.version} value={v.version}>
+                          v{v.version} {v.isActive ? "★ (Live Active)" : ""} - {v.title.slice(0, 24)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {resumeDraft ? (
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FEF3C7] border border-[#FDE68A] text-xs font-mono font-bold text-[#92400E]">
+                      <span className="h-2 w-2 rounded-full bg-[#D97706] animate-pulse" />
+                      <span>Draft on v{resumeDraft.baseVersion} (Uncommitted Changes)</span>
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F0FDF4] border border-[#BBF7D0] text-xs font-mono font-bold text-[#166534]">
+                      <Check size={13} className="text-[#16A34A]" />
+                      <span>Clean Working Copy (In sync with v{baseResumeVersion || activeResumeVersion})</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={saveResumeDraft}
+                    disabled={isSavingResumeDraft}
+                    className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#CDC5B7] bg-white hover:bg-[#F8FAFC] text-xs font-mono font-bold text-[#334155] shadow-xs cursor-pointer disabled:opacity-50"
+                    title="Save in-progress changes to database draft without committing a version snapshot"
+                  >
+                    <FileText size={12} className="text-[#0284C7]" />
+                    <span>{isSavingResumeDraft ? "Saving…" : "Save Draft"}</span>
+                  </button>
+
+                  {resumeDraft && (
+                    <button
+                      type="button"
+                      onClick={discardResumeDraft}
+                      disabled={isSavingResumeDraft}
+                      className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#FECACA] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-xs font-mono font-bold text-[#991B1B] shadow-xs cursor-pointer"
+                      title="Discard working draft and revert editor to base version"
+                    >
+                      <RotateCcw size={12} className="text-[#DC2626]" />
+                      <span>Discard</span>
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => commitResumeRevision(false)}
+                    disabled={isCommittingResume}
+                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#3B82F6] bg-[#2563EB] hover:bg-[#1D4ED8] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    title="Commit this draft as an immutable revision snapshot (branching from base, unselected by default)"
+                  >
+                    <GitPullRequest size={13} className="text-white" />
+                    <span>{isCommittingResume ? "Committing…" : "Commit (PR)"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => commitResumeRevision(true)}
+                    disabled={isCommittingResume}
+                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#16A34A] bg-[#15803D] hover:bg-[#166534] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    title="Commit and immediately publish as the live active ground truth"
+                  >
+                    <CheckCircle2 size={13} className="text-white" />
+                    <span>Publish Live</span>
+                  </button>
+                </div>
+              </div>
+
               {/* VS Code Studio Editor & Split Preview Shell */}
               <div className="rounded-xl border border-[#334155] bg-[#1E1E1E] overflow-hidden shadow-2xl">
                 {/* Mobile View Switcher (Visible on < lg) */}
@@ -1265,14 +1631,21 @@ export const AdminPage: React.FC = () => {
                           <span className="font-mono font-bold text-xs px-2.5 py-0.5 rounded-md bg-[#F4F8FF] border border-[#BFDBFE] text-[#1E40AF]">
                             v{v.version}
                           </span>
+                          {v.baseVersion ? (
+                            <span className="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-md bg-[#F1F5F9] border border-[#CBD5E1] text-[#475569]">
+                              <GitFork size={10} className="text-[#64748B]" />
+                              Base: v{v.baseVersion}
+                            </span>
+                          ) : null}
                           {v.isActive ? (
                             <span className="inline-flex items-center gap-1 rounded-full bg-[#DCFCE7] border border-[#86EFAC] px-2.5 py-0.5 text-[10px] font-mono font-bold text-[#166534]">
                               <span className="h-1.5 w-1.5 rounded-full bg-[#16a34a] animate-pulse" />
-                              ACTIVE LIVE
+                              LIVE GROUND TRUTH
                             </span>
                           ) : (
-                            <span className="rounded-full bg-[#F4F4F5] border border-[#E4E4E7] px-2 py-0.5 text-[10px] font-mono text-[#71717A]">
-                              Historic Revision
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#F3E8FF] border border-[#E9D5FF] px-2 py-0.5 text-[10px] font-mono font-bold text-[#7E22CE]">
+                              <GitPullRequest size={10} className="text-[#9333EA]" />
+                              Revision Snapshot (PR)
                             </span>
                           )}
                           <span className="text-[11px] font-mono text-[#71717A]">
@@ -1318,16 +1691,42 @@ export const AdminPage: React.FC = () => {
                           </button>
                         )}
 
+                        {/* Diff vs Base Button */}
+                        {v.baseVersion && (
+                          <button
+                            type="button"
+                            onClick={() => openDiffModal(v.baseVersion!, v.version, "resume")}
+                            className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#475569] shadow-xs cursor-pointer"
+                            title={`Diff v${v.version} against its base v${v.baseVersion}`}
+                          >
+                            <GitCompare size={12} className="text-[#6366F1] shrink-0" />
+                            <span className="truncate">vs Base</span>
+                          </button>
+                        )}
+
+                        {/* Publish Live Button (Merge into live truth) */}
+                        {!v.isActive && (
+                          <button
+                            type="button"
+                            onClick={() => publishResumeVersion(v.version)}
+                            className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#16A34A] bg-[#F0FDF4] hover:bg-[#16A34A] hover:text-white text-[11px] font-mono font-bold text-[#15803D] shadow-xs cursor-pointer transition-colors"
+                            title="Activate this revision snapshot as the live ground truth"
+                          >
+                            <CheckCircle2 size={12} className="shrink-0" />
+                            <span className="truncate">Publish Live</span>
+                          </button>
+                        )}
+
                         {/* Switch Live Version Button (Bi-directional) */}
                         {!v.isActive && (
                           <button
                             type="button"
                             onClick={() => promptSwitchVersion(v.version, "resume")}
-                            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
+                            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
                           >
                             <ArrowLeftRight size={12} className="shrink-0" />
                             <span className="truncate">
-                              {v.version < (activeResumeVersion || 0) ? "Rollback to this" : "Fast-forward to this"}
+                              {v.version < (activeResumeVersion || 0) ? "Rollback" : "Fast-forward"}
                             </span>
                           </button>
                         )}
@@ -1422,6 +1821,91 @@ export const AdminPage: React.FC = () => {
                   >
                     <Save size={14} className="shrink-0" />
                     <span className="truncate">{isSaving ? "Saving…" : "Save snapshot"}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Git / PR Branching & Working Draft Control Deck */}
+              <div className="rounded-xl border border-[#DCD5C9] bg-gradient-to-r from-[#FAF8F3] via-white to-[#F4F8FF] p-3 sm:p-3.5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-bold text-[#1E40AF]">
+                    <GitBranch size={13} className="text-[#2563EB]" />
+                    <span>Branch from:</span>
+                    <select
+                      value={basePortfolioVersion || portfolioVersion || 1}
+                      onChange={(e) => {
+                        const newBase = Number(e.target.value);
+                        setBasePortfolioVersion(newBase);
+                        loadPortfolioDocument();
+                      }}
+                      className="bg-transparent font-bold text-[#1E40AF] cursor-pointer outline-none"
+                    >
+                      {portfolioVersions.map((v) => (
+                        <option key={v.version} value={v.version}>
+                          v{v.version} {v.isActive ? "★ (Live Active)" : ""} - {v.title.slice(0, 24)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {portfolioDraft ? (
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FEF3C7] border border-[#FDE68A] text-xs font-mono font-bold text-[#92400E]">
+                      <span className="h-2 w-2 rounded-full bg-[#D97706] animate-pulse" />
+                      <span>Draft on v{portfolioDraft.baseVersion} (Uncommitted Changes)</span>
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F0FDF4] border border-[#BBF7D0] text-xs font-mono font-bold text-[#166534]">
+                      <Check size={13} className="text-[#16A34A]" />
+                      <span>Clean Working Copy (In sync with v{basePortfolioVersion || portfolioVersion})</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={savePortfolioDraft}
+                    disabled={isSavingPortfolioDraft}
+                    className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#CDC5B7] bg-white hover:bg-[#F8FAFC] text-xs font-mono font-bold text-[#334155] shadow-xs cursor-pointer disabled:opacity-50"
+                    title="Save in-progress changes to database draft without committing a version snapshot"
+                  >
+                    <FileText size={12} className="text-[#0284C7]" />
+                    <span>{isSavingPortfolioDraft ? "Saving…" : "Save Draft"}</span>
+                  </button>
+
+                  {portfolioDraft && (
+                    <button
+                      type="button"
+                      onClick={discardPortfolioDraft}
+                      disabled={isSavingPortfolioDraft}
+                      className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#FECACA] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-xs font-mono font-bold text-[#991B1B] shadow-xs cursor-pointer"
+                      title="Discard working draft and revert editor to base version"
+                    >
+                      <RotateCcw size={12} className="text-[#DC2626]" />
+                      <span>Discard</span>
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => commitPortfolioRevision(false)}
+                    disabled={isCommittingPortfolio}
+                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#3B82F6] bg-[#2563EB] hover:bg-[#1D4ED8] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    title="Commit this draft as an immutable revision snapshot (branching from base, unselected by default)"
+                  >
+                    <GitPullRequest size={13} className="text-white" />
+                    <span>{isCommittingPortfolio ? "Committing…" : "Commit (PR)"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => commitPortfolioRevision(true)}
+                    disabled={isCommittingPortfolio}
+                    className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg border border-[#16A34A] bg-[#15803D] hover:bg-[#166534] text-xs font-mono font-bold text-white shadow-xs cursor-pointer disabled:opacity-50"
+                    title="Commit and immediately publish as the live active ground truth"
+                  >
+                    <CheckCircle2 size={13} className="text-white" />
+                    <span>Publish Live</span>
                   </button>
                 </div>
               </div>

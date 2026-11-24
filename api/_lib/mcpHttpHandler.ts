@@ -12,7 +12,13 @@ import {
   getAuditLogs,
   recordAuditLog,
   type DocumentType,
+  getDraft,
+  saveDraft,
+  discardDraft,
+  commitDraft,
+  publishVersion,
 } from "./versionEngine.ts";
+import { isAllowedAdmin } from "./adminAuth.ts";
 import { validateDocument, updateDocument, getSession, createOAuthState } from "./adminStore.ts";
 import { formatMarkdown } from "./resumeValidator.ts";
 import { getGoogleAdminConfig } from "./adminAuth.ts";
@@ -40,6 +46,70 @@ const MCP_SERVER_NAME = "ai-portfolio-admin";
 const MCP_SERVER_VERSION = "2.0.0";
 
 const MCP_TOOLS = [
+  {
+    name: "save_draft",
+    description: "Save or update a working draft on top of a specific base version without committing or publishing it.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        docType: { type: "string", enum: ["resume", "portfolio"], description: "The document category." },
+        baseVersion: { type: "number", description: "The integer base version number to branch this draft from." },
+        contentText: { type: "string", description: "The draft content text (Markdown or JSON)." },
+        title: { type: "string", description: "Optional title or work-in-progress note." },
+      },
+      required: ["docType", "baseVersion", "contentText"],
+    },
+  },
+  {
+    name: "get_draft",
+    description: "Fetch the active working draft for the authenticated administrator.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        docType: { type: "string", enum: ["resume", "portfolio"] },
+      },
+      required: ["docType"],
+    },
+  },
+  {
+    name: "discard_draft",
+    description: "Discard / roll back the active working draft, resetting back to the clean base version state.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        docType: { type: "string", enum: ["resume", "portfolio"] },
+      },
+      required: ["docType"],
+    },
+  },
+  {
+    name: "commit_revision",
+    description: "Commit the working draft (or provided content) into a new immutable version snapshot, recording its base version lineage. Stays unselected / inactive by default unless publishImmediately is true.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        docType: { type: "string", enum: ["resume", "portfolio"] },
+        baseVersion: { type: "number", description: "Optional base version (if providing direct contentText)." },
+        contentText: { type: "string", description: "Optional content (if committing directly without prior draft)." },
+        title: { type: "string", description: "Commit title / pull request description." },
+        summary: { type: "string", description: "Optional change summary." },
+        publishImmediately: { type: "boolean", description: "Whether to immediately activate as live ground truth (default: false)." },
+      },
+      required: ["docType"],
+    },
+  },
+  {
+    name: "publish_revision",
+    description: "Publish / merge an existing committed revision snapshot to become the live active ground truth.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        docType: { type: "string", enum: ["resume", "portfolio"] },
+        version: { type: "number", description: "The integer version number to publish." },
+      },
+      required: ["docType", "version"],
+    },
+  },
   {
     name: "list_versions",
     description: "List all version snapshots with active indicator, timestamps, author email, and 1-line AI summaries for either 'resume' or 'portfolio'.",
@@ -226,7 +296,7 @@ async function authenticateMcpRequest(request: Request) {
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
 
-  if (allowedEmails.length > 0 && !allowedEmails.includes(session.email.toLowerCase())) {
+  if (!isAllowedAdmin(session.email)) {
     console.warn(`[MCP Security] Rejected unauthorized email: ${session.email}`);
     return null;
   }
@@ -399,7 +469,67 @@ export async function handleMcpRequest(request: Request): Promise<Response> {
     try {
       let toolOutput: unknown;
 
-      if (toolName === "list_versions") {
+      if (toolName === "save_draft") {
+        const docType = args.docType as DocumentType;
+        const bVer = Number(args.baseVersion) || 1;
+        const text = String(args.contentText || "");
+        const draft = await saveDraft(docType, {
+          baseVersion: bVer,
+          contentText: text,
+          title: args.title as string | undefined,
+          authorEmail: session.email,
+        });
+        toolOutput = { ok: true, draft, actor: { email: session.email } };
+      } else if (toolName === "get_draft") {
+        const docType = args.docType as DocumentType;
+        const draft = await getDraft(docType, session.email);
+        toolOutput = { docType, draft: draft || null, actor: { email: session.email } };
+      } else if (toolName === "discard_draft") {
+        const docType = args.docType as DocumentType;
+        const res = await discardDraft(docType, session.email);
+        toolOutput = { ok: true, ...res, actor: { email: session.email } };
+      } else if (toolName === "commit_revision") {
+        const docType = args.docType as DocumentType;
+        const text = args.contentText as string | undefined;
+        let committed: any;
+        if (text) {
+          committed = await createVersion(docType, {
+            title: (args.title as string) || "Committed revision via MCP",
+            contentText: text,
+            baseVersion: Number(args.baseVersion) || null,
+            publishImmediately: Boolean(args.publishImmediately),
+            actorEmail: session.email,
+            aiSummary: args.summary as string | undefined,
+            mimeType: docType === "resume" ? "text/markdown" : "application/json",
+          });
+        } else {
+          committed = await commitDraft(docType, {
+            authorEmail: session.email,
+            title: args.title as string | undefined,
+            summary: args.summary as string | undefined,
+            publishImmediately: Boolean(args.publishImmediately),
+          });
+        }
+        if (docType === "portfolio" && args.publishImmediately) {
+          try {
+            await updateDocument(JSON.parse(committed.contentText), committed.version, session);
+          } catch {}
+        }
+        toolOutput = { ok: true, ...committed, actor: { email: session.email } };
+      } else if (toolName === "publish_revision") {
+        const docType = args.docType as DocumentType;
+        const verNum = Number(args.version);
+        const res = await publishVersion(docType, verNum, session.email);
+        if (docType === "portfolio") {
+          const activeDoc = await getVersion("portfolio", verNum);
+          if (activeDoc) {
+            try {
+              await updateDocument(JSON.parse(activeDoc.contentText), verNum, session);
+            } catch {}
+          }
+        }
+        toolOutput = { ok: true, ...res, actor: { email: session.email } };
+      } else if (toolName === "list_versions") {
         const docType = args.docType as DocumentType;
         const versions = await listVersions(docType);
         const active = await getActiveDocument(docType);

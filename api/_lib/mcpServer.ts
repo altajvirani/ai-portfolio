@@ -25,6 +25,11 @@ import {
   getAuditLogs,
   recordAuditLog,
   type DocumentType,
+  getDraft,
+  saveDraft,
+  discardDraft,
+  commitDraft,
+  publishVersion,
 } from "./versionEngine.ts";
 import { formatMarkdown } from "./resumeValidator.ts";
 import { exchangeGoogleCode, getGoogleAdminConfig } from "./adminAuth.ts";
@@ -142,6 +147,146 @@ mcpServer.registerTool(
         authorizationUrl: authUrl.toString(),
         instructions: "Open authorizationUrl in a browser. The MCP server will receive the callback and authorize only an account listed in ADMIN_GOOGLE_EMAILS.",
       });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "save_draft",
+  {
+    description: "Save or update a working draft on top of a specific base version without committing or publishing it.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      baseVersion: z.number().int().positive(),
+      contentText: z.string(),
+      title: z.string().optional(),
+    }),
+  },
+  async ({ docType, baseVersion, contentText, title }) => {
+    try {
+      const actor = await requireSession();
+      const draft = await saveDraft(docType, {
+        baseVersion,
+        contentText,
+        title,
+        authorEmail: actor.email,
+      });
+      return mcpResult({ ok: true, draft, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "get_draft",
+  {
+    description: "Fetch the active working draft for the authenticated administrator.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+    }),
+  },
+  async ({ docType }) => {
+    try {
+      const actor = await requireSession();
+      const draft = await getDraft(docType, actor.email);
+      return mcpResult({ docType, draft, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "discard_draft",
+  {
+    description: "Discard / roll back the active working draft, resetting back to the clean base version state.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+    }),
+  },
+  async ({ docType }) => {
+    try {
+      const actor = await requireSession();
+      const res = await discardDraft(docType, actor.email);
+      return mcpResult({ ok: true, ...res, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "commit_revision",
+  {
+    description: "Commit the working draft (or provided content) into a new immutable version snapshot, recording its base version lineage. Stays unselected / inactive by default unless publishImmediately is true.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      baseVersion: z.number().int().positive().optional(),
+      contentText: z.string().optional(),
+      title: z.string().optional(),
+      summary: z.string().optional(),
+      publishImmediately: z.boolean().optional(),
+    }),
+  },
+  async ({ docType, baseVersion, contentText, title, summary, publishImmediately }) => {
+    try {
+      const actor = await requireSession();
+      let committed: any;
+      if (contentText) {
+        committed = await createVersion(docType, {
+          title: title || "Committed revision via MCP",
+          contentText,
+          baseVersion: baseVersion || null,
+          publishImmediately: Boolean(publishImmediately),
+          actorEmail: actor.email,
+          aiSummary: summary,
+          mimeType: docType === "resume" ? "text/markdown" : "application/json",
+        });
+      } else {
+        committed = await commitDraft(docType, {
+          authorEmail: actor.email,
+          title,
+          summary,
+          publishImmediately: Boolean(publishImmediately),
+        });
+      }
+      if (docType === "portfolio" && publishImmediately) {
+        try {
+          await updateDocument(JSON.parse(committed.contentText), committed.version, actor);
+        } catch {}
+      }
+      return mcpResult({ ok: true, ...committed, actor: { email: actor.email } });
+    } catch (error) {
+      return mcpError(error);
+    }
+  },
+);
+
+mcpServer.registerTool(
+  "publish_revision",
+  {
+    description: "Publish / merge an existing committed revision snapshot to become the live active ground truth.",
+    inputSchema: z.object({
+      docType: z.enum(["resume", "portfolio"]),
+      version: z.number().int().positive(),
+    }),
+  },
+  async ({ docType, version }) => {
+    try {
+      const actor = await requireSession();
+      const res = await publishVersion(docType, version, actor.email);
+      if (docType === "portfolio") {
+        const activeDoc = await getVersion("portfolio", version);
+        if (activeDoc) {
+          try {
+            await updateDocument(JSON.parse(activeDoc.contentText), version, actor);
+          } catch {}
+        }
+      }
+      return mcpResult({ ok: true, ...res, actor: { email: actor.email } });
     } catch (error) {
       return mcpError(error);
     }

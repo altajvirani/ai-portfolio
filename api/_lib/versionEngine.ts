@@ -13,6 +13,7 @@ export interface DocumentVersion {
   id: number | string;
   documentType: DocumentType;
   version: number;
+  baseVersion?: number | null;
   isActive: boolean;
   title: string;
   contentText: string;
@@ -27,6 +28,7 @@ export interface DocumentVersion {
 
 export interface VersionSummaryItem {
   version: number;
+  baseVersion?: number | null;
   isActive: boolean;
   title: string;
   rawFileName?: string | null;
@@ -35,6 +37,18 @@ export interface VersionSummaryItem {
   aiSummary: string;
   createdAt: string;
   createdBy: string;
+}
+
+export interface DocumentDraft {
+  id: number | string;
+  documentType: DocumentType;
+  baseVersion: number;
+  title?: string;
+  contentText: string;
+  aiSummary?: string;
+  authorEmail: string;
+  updatedAt: string;
+  createdAt: string;
 }
 
 let schemaPromise: Promise<void> | undefined;
@@ -68,6 +82,7 @@ async function ensureSchema() {
           id BIGSERIAL PRIMARY KEY,
           document_type TEXT NOT NULL,
           version INTEGER NOT NULL,
+          base_version INTEGER DEFAULT NULL,
           is_active BOOLEAN NOT NULL DEFAULT false,
           title TEXT NOT NULL,
           content_text TEXT NOT NULL,
@@ -82,7 +97,24 @@ async function ensureSchema() {
         )
       `;
       await sql`
+        ALTER TABLE document_versions ADD COLUMN IF NOT EXISTS base_version INTEGER DEFAULT NULL
+      `;
+      await sql`
         CREATE INDEX IF NOT EXISTS idx_doc_active ON document_versions (document_type, is_active) WHERE is_active = true
+      `;
+      await sql`
+        CREATE TABLE IF NOT EXISTS document_drafts (
+          id BIGSERIAL PRIMARY KEY,
+          document_type TEXT NOT NULL,
+          base_version INTEGER NOT NULL,
+          title TEXT,
+          content_text TEXT NOT NULL,
+          ai_summary TEXT,
+          author_email TEXT NOT NULL,
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          CONSTRAINT uq_doc_draft UNIQUE (document_type, author_email)
+        )
       `;
       await sql`
         CREATE TABLE IF NOT EXISTS document_audit_log (
@@ -93,8 +125,12 @@ async function ensureSchema() {
           to_version INTEGER,
           performed_by TEXT NOT NULL,
           ai_summary TEXT,
+          details JSONB DEFAULT '{}',
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
+      `;
+      await sql`
+        ALTER TABLE document_audit_log ADD COLUMN IF NOT EXISTS details JSONB DEFAULT '{}'
       `;
     })().catch((err) => {
       schemaPromise = undefined;
@@ -185,13 +221,14 @@ export async function listVersions(docType: DocumentType): Promise<VersionSummar
       await ensureSchema();
       const sql = getSql();
       const rows = await sql`
-        SELECT version, is_active, title, raw_file_name, mime_type, checksum, ai_summary, created_at, created_by
+        SELECT version, base_version, is_active, title, raw_file_name, mime_type, checksum, ai_summary, created_at, created_by
         FROM document_versions
         WHERE document_type = ${docType}
         ORDER BY version DESC
       `;
       return rows.map((r: any) => ({
         version: Number(r.version),
+        baseVersion: r.base_version !== null && r.base_version !== undefined ? Number(r.base_version) : null,
         isActive: Boolean(r.is_active),
         title: r.title,
         rawFileName: r.raw_file_name,
@@ -211,6 +248,7 @@ export async function listVersions(docType: DocumentType): Promise<VersionSummar
     .sort((a, b) => b.version - a.version)
     .map((v) => ({
       version: v.version,
+      baseVersion: v.baseVersion ?? null,
       isActive: v.isActive,
       title: v.title,
       rawFileName: v.rawFileName,
@@ -231,7 +269,7 @@ export async function getActiveDocument(docType: DocumentType): Promise<Document
       await ensureSchema();
       const sql = getSql();
       const rows = await sql`
-        SELECT id, document_type, version, is_active, title, content_text, raw_file_name, mime_type, checksum, ai_summary, created_at, created_by
+        SELECT id, document_type, version, base_version, is_active, title, content_text, raw_file_name, mime_type, checksum, ai_summary, created_at, created_by
         FROM document_versions
         WHERE document_type = ${docType} AND is_active = true
         LIMIT 1
@@ -242,6 +280,7 @@ export async function getActiveDocument(docType: DocumentType): Promise<Document
           id: r.id,
           documentType: r.document_type as DocumentType,
           version: Number(r.version),
+          baseVersion: r.base_version !== null && r.base_version !== undefined ? Number(r.base_version) : null,
           isActive: true,
           title: r.title,
           contentText: r.content_text,
@@ -272,7 +311,7 @@ export async function getVersion(docType: DocumentType, versionNum: number): Pro
       await ensureSchema();
       const sql = getSql();
       const rows = await sql`
-        SELECT id, document_type, version, is_active, title, content_text, raw_file_name, mime_type, checksum, ai_summary, created_at, created_by,
+        SELECT id, document_type, version, base_version, is_active, title, content_text, raw_file_name, mime_type, checksum, ai_summary, created_at, created_by,
                encode(raw_file_bytes, 'base64') AS raw_base64
         FROM document_versions
         WHERE document_type = ${docType} AND version = ${versionNum}
@@ -284,6 +323,7 @@ export async function getVersion(docType: DocumentType, versionNum: number): Pro
           id: r.id,
           documentType: r.document_type as DocumentType,
           version: Number(r.version),
+          baseVersion: r.base_version !== null && r.base_version !== undefined ? Number(r.base_version) : null,
           isActive: Boolean(r.is_active),
           title: r.title,
           contentText: r.content_text,
@@ -306,13 +346,17 @@ export async function getVersion(docType: DocumentType, versionNum: number): Pro
 }
 
 /**
- * Creates and activates a new version snapshot.
+ * Creates a new version snapshot.
+ * If publishImmediately is true, it marks this version active and deactivates prior versions.
+ * If publishImmediately is false (or undefined), it creates an unselected revision snapshot (like a PR).
  */
 export async function createVersion(
   docType: DocumentType,
   params: {
     title: string;
     contentText: string;
+    baseVersion?: number | null;
+    publishImmediately?: boolean;
     rawFileBuffer?: Buffer;
     rawFileName?: string;
     mimeType?: string;
@@ -333,16 +377,23 @@ export async function createVersion(
 
   const currentActive = await getActiveDocument(docType);
   const newChecksum = computeChecksum(params.contentText);
+  const publish = Boolean(params.publishImmediately);
 
-  if (currentActive && currentActive.checksum === newChecksum) {
+  if (currentActive && currentActive.checksum === newChecksum && publish) {
     throw new Error("This exact file/content is already active. Upload a modified revision.");
   }
 
   let summary = params.aiSummary;
+  if (!summary && params.baseVersion) {
+    const baseDoc = await getVersion(docType, params.baseVersion);
+    if (baseDoc) {
+      summary = await generate1LineDiffSummary(baseDoc.contentText, params.contentText, docType);
+    }
+  }
   if (!summary && currentActive) {
     summary = await generate1LineDiffSummary(currentActive.contentText, params.contentText, docType);
   } else if (!summary) {
-    summary = `Initial ${docType} version`;
+    summary = `Revision derived from v${params.baseVersion || currentActive?.version || 1}`;
   }
 
   const allVersions = await listVersions(docType);
@@ -353,41 +404,43 @@ export async function createVersion(
     await ensureSchema();
     const sql = getSql();
 
-    // Deactivate previous active version
-    await sql`
-      UPDATE document_versions
-      SET is_active = false
-      WHERE document_type = ${docType}
-    `;
+    if (publish) {
+      await sql`
+        UPDATE document_versions
+        SET is_active = false
+        WHERE document_type = ${docType}
+      `;
+    }
 
-    // Insert new active version
     const rawBytes = params.rawFileBuffer ? `\\x${params.rawFileBuffer.toString("hex")}` : null;
     const inserted = await sql`
       INSERT INTO document_versions (
-        document_type, version, is_active, title, content_text, raw_file_bytes, raw_file_name, mime_type, checksum, ai_summary, created_by
+        document_type, version, base_version, is_active, title, content_text, raw_file_bytes, raw_file_name, mime_type, checksum, ai_summary, created_by
       ) VALUES (
-        ${docType}, ${nextVersion}, true, ${params.title}, ${params.contentText}, ${rawBytes}::bytea, ${params.rawFileName || null}, ${params.mimeType || "text/plain"}, ${newChecksum}, ${summary}, ${params.actorEmail}
+        ${docType}, ${nextVersion}, ${params.baseVersion || null}, ${publish}, ${params.title}, ${params.contentText}, ${rawBytes}::bytea, ${params.rawFileName || null}, ${params.mimeType || "text/plain"}, ${newChecksum}, ${summary}, ${params.actorEmail}
       )
       RETURNING id, created_at
     `;
 
-    // Audit log
-    await sql`
-      INSERT INTO document_audit_log (
-        document_type, action, from_version, to_version, performed_by, ai_summary
-      ) VALUES (
-        ${docType}, 'CREATE_VERSION', ${currentActive?.version || null}, ${nextVersion}, ${params.actorEmail}, ${summary}
-      )
-    `;
+    await recordAuditLog({
+      documentType: docType,
+      action: publish ? "CREATE_AND_PUBLISH_VERSION" : "COMMIT_REVISION",
+      fromVersion: params.baseVersion || currentActive?.version || null,
+      toVersion: nextVersion,
+      performedBy: params.actorEmail,
+      aiSummary: summary,
+      details: { baseVersion: params.baseVersion, published: publish },
+    });
 
-    cacheInvalidator?.();
-
-    if (docType === "resume") {
-      try {
-        const resumeMdPath = path.resolve(process.cwd(), "public/assets/altaj-virani-resume.md");
-        fs.writeFileSync(resumeMdPath, params.contentText, "utf-8");
-      } catch (e) {
-        console.warn("Failed to sync resume markdown to public asset:", e);
+    if (publish) {
+      cacheInvalidator?.();
+      if (docType === "resume") {
+        try {
+          const resumeMdPath = path.resolve(process.cwd(), "public/assets/altaj-virani-resume.md");
+          fs.writeFileSync(resumeMdPath, params.contentText, "utf-8");
+        } catch (e) {
+          console.warn("Failed to sync resume markdown to public asset:", e);
+        }
       }
     }
 
@@ -395,7 +448,8 @@ export async function createVersion(
       id: inserted[0].id,
       documentType: docType,
       version: nextVersion,
-      isActive: true,
+      baseVersion: params.baseVersion || null,
+      isActive: publish,
       title: params.title,
       contentText: params.contentText,
       rawFileBytesBase64: params.rawFileBuffer ? params.rawFileBuffer.toString("base64") : null,
@@ -410,13 +464,14 @@ export async function createVersion(
 
   // Local storage fallback
   const locals = await readLocalVersions(docType);
-  const updatedLocals = locals.map((v) => ({ ...v, isActive: false }));
+  const updatedLocals = locals.map((v) => (publish ? { ...v, isActive: false } : v));
 
   const newVersionObj: DocumentVersion = {
     id: `local-${nextVersion}`,
     documentType: docType,
     version: nextVersion,
-    isActive: true,
+    baseVersion: params.baseVersion || null,
+    isActive: publish,
     title: params.title,
     contentText: params.contentText,
     rawFileBytesBase64: params.rawFileBuffer ? params.rawFileBuffer.toString("base64") : null,
@@ -432,25 +487,251 @@ export async function createVersion(
   await writeLocalVersions(docType, updatedLocals);
   await recordAuditLog({
     documentType: docType,
-    action: "CREATE_VERSION",
-    fromVersion: currentActive?.version ?? null,
+    action: publish ? "CREATE_AND_PUBLISH_VERSION" : "COMMIT_REVISION",
+    fromVersion: params.baseVersion || currentActive?.version || null,
     toVersion: nextVersion,
     performedBy: params.actorEmail,
     aiSummary: summary,
+    details: { baseVersion: params.baseVersion, published: publish },
   });
 
-  cacheInvalidator?.();
-
-  if (docType === "resume") {
-    try {
-      const resumeMdPath = path.resolve(process.cwd(), "public/assets/altaj-virani-resume.md");
-      fs.writeFileSync(resumeMdPath, params.contentText, "utf-8");
-    } catch (e) {
-      console.warn("Failed to sync resume markdown to public asset:", e);
+  if (publish) {
+    cacheInvalidator?.();
+    if (docType === "resume") {
+      try {
+        const resumeMdPath = path.resolve(process.cwd(), "public/assets/altaj-virani-resume.md");
+        fs.writeFileSync(resumeMdPath, params.contentText, "utf-8");
+      } catch (e) {
+        console.warn("Failed to sync resume markdown to public asset:", e);
+      }
     }
   }
 
   return newVersionObj;
+}
+
+/**
+ * Explicitly publishes and activates an existing version as the live ground truth.
+ */
+export async function publishVersion(
+  docType: DocumentType,
+  targetVersionNum: number,
+  actorEmail: string,
+): Promise<{ success: boolean; version: number; aiSummary: string }> {
+  return switchVersion(docType, targetVersionNum, actorEmail);
+}
+
+/**
+ * Retrieves the working draft for a given document type and author.
+ */
+export async function getDraft(
+  docType: DocumentType,
+  authorEmail: string,
+): Promise<DocumentDraft | null> {
+  const email = authorEmail.toLowerCase().trim();
+  if (usesRemoteStore()) {
+    try {
+      await ensureSchema();
+      const sql = getSql();
+      const rows = await sql`
+        SELECT id, document_type, base_version, title, content_text, ai_summary, author_email, updated_at, created_at
+        FROM document_drafts
+        WHERE document_type = ${docType} AND author_email = ${email}
+        LIMIT 1
+      `;
+      if (rows.length > 0) {
+        const r = rows[0];
+        return {
+          id: r.id,
+          documentType: r.document_type as DocumentType,
+          baseVersion: Number(r.base_version),
+          title: r.title || undefined,
+          contentText: r.content_text,
+          aiSummary: r.ai_summary || undefined,
+          authorEmail: r.author_email,
+          updatedAt: new Date(r.updated_at).toISOString(),
+          createdAt: new Date(r.created_at).toISOString(),
+        };
+      }
+      return null;
+    } catch (err) {
+      console.warn("Failed to read remote draft, falling back to local:", err);
+    }
+  }
+
+  const emailKey = email.replace(/[^a-zA-Z0-9]/g, "_");
+  const draftFile = path.join(localStoreDir, `${docType}-draft-${emailKey}.json`);
+  if (fs.existsSync(draftFile)) {
+    try {
+      return JSON.parse(fs.readFileSync(draftFile, "utf-8")) as DocumentDraft;
+    } catch {}
+  }
+  return null;
+}
+
+/**
+ * Saves or updates a working draft on top of a specific base version.
+ */
+export async function saveDraft(
+  docType: DocumentType,
+  params: {
+    baseVersion: number;
+    contentText: string;
+    title?: string;
+    authorEmail: string;
+    aiSummary?: string;
+  },
+): Promise<DocumentDraft> {
+  let formatted = params.contentText;
+  if (docType === "resume") {
+    formatted = await formatMarkdown(params.contentText);
+  } else if (docType === "portfolio") {
+    try {
+      formatted = JSON.stringify(JSON.parse(params.contentText), null, 2);
+    } catch {
+      // Keep text if invalid
+    }
+  }
+
+  let summary = params.aiSummary;
+  if (!summary) {
+    const baseDoc = await getVersion(docType, params.baseVersion);
+    if (baseDoc) {
+      summary = await generate1LineDiffSummary(baseDoc.contentText, formatted, docType);
+    }
+  }
+
+  const email = params.authorEmail.toLowerCase().trim();
+  const now = new Date().toISOString();
+
+  if (usesRemoteStore()) {
+    await ensureSchema();
+    const sql = getSql();
+    const inserted = await sql`
+      INSERT INTO document_drafts (
+        document_type, base_version, title, content_text, ai_summary, author_email, updated_at, created_at
+      ) VALUES (
+        ${docType}, ${params.baseVersion}, ${params.title || null}, ${formatted}, ${summary || null}, ${email}, NOW(), NOW()
+      )
+      ON CONFLICT (document_type, author_email)
+      DO UPDATE SET
+        base_version = EXCLUDED.base_version,
+        title = EXCLUDED.title,
+        content_text = EXCLUDED.content_text,
+        ai_summary = EXCLUDED.ai_summary,
+        updated_at = NOW()
+      RETURNING id, updated_at, created_at
+    `;
+
+    await recordAuditLog({
+      documentType: docType,
+      action: "SAVE_DRAFT",
+      fromVersion: params.baseVersion,
+      toVersion: null,
+      performedBy: email,
+      aiSummary: summary || `Working draft on v${params.baseVersion}`,
+      details: { baseVersion: params.baseVersion, title: params.title },
+    });
+
+    return {
+      id: inserted[0].id,
+      documentType: docType,
+      baseVersion: params.baseVersion,
+      title: params.title,
+      contentText: formatted,
+      aiSummary: summary,
+      authorEmail: email,
+      updatedAt: new Date(inserted[0].updated_at).toISOString(),
+      createdAt: new Date(inserted[0].created_at).toISOString(),
+    };
+  }
+
+  const emailKey = email.replace(/[^a-zA-Z0-9]/g, "_");
+  const draftFile = path.join(localStoreDir, `${docType}-draft-${emailKey}.json`);
+  const draftObj: DocumentDraft = {
+    id: `local-draft-${Date.now()}`,
+    documentType: docType,
+    baseVersion: params.baseVersion,
+    title: params.title,
+    contentText: formatted,
+    aiSummary: summary,
+    authorEmail: email,
+    updatedAt: now,
+    createdAt: now,
+  };
+  await mkdir(localStoreDir, { recursive: true });
+  await writeFile(draftFile, JSON.stringify(draftObj, null, 2), "utf-8");
+  return draftObj;
+}
+
+/**
+ * Discards the working draft, reverting back to the base version state.
+ */
+export async function discardDraft(
+  docType: DocumentType,
+  authorEmail: string,
+): Promise<{ success: boolean; message: string }> {
+  const email = authorEmail.toLowerCase().trim();
+  if (usesRemoteStore()) {
+    await ensureSchema();
+    const sql = getSql();
+    await sql`
+      DELETE FROM document_drafts
+      WHERE document_type = ${docType} AND author_email = ${email}
+    `;
+    await recordAuditLog({
+      documentType: docType,
+      action: "DISCARD_DRAFT",
+      performedBy: email,
+      aiSummary: "Discarded working draft",
+    });
+    return { success: true, message: "Draft discarded successfully." };
+  }
+
+  const emailKey = email.replace(/[^a-zA-Z0-9]/g, "_");
+  const draftFile = path.join(localStoreDir, `${docType}-draft-${emailKey}.json`);
+  if (fs.existsSync(draftFile)) {
+    try {
+      fs.unlinkSync(draftFile);
+    } catch {}
+  }
+  return { success: true, message: "Draft discarded successfully." };
+}
+
+/**
+ * Commits a working draft into an immutable revision snapshot.
+ */
+export async function commitDraft(
+  docType: DocumentType,
+  params: {
+    authorEmail: string;
+    title?: string;
+    summary?: string;
+    publishImmediately?: boolean;
+  },
+): Promise<DocumentVersion> {
+  const draft = await getDraft(docType, params.authorEmail);
+  if (!draft) {
+    throw new Error(`No active working draft found to commit for ${params.authorEmail}.`);
+  }
+
+  const commitTitle = params.title || draft.title || `Revision derived from v${draft.baseVersion}`;
+  const commitSummary = params.summary || draft.aiSummary;
+
+  const version = await createVersion(docType, {
+    title: commitTitle,
+    contentText: draft.contentText,
+    baseVersion: draft.baseVersion,
+    publishImmediately: params.publishImmediately ?? false,
+    actorEmail: params.authorEmail,
+    aiSummary: commitSummary,
+    mimeType: docType === "resume" ? "text/markdown" : "application/json",
+  });
+
+  // Clear draft after commit
+  await discardDraft(docType, params.authorEmail);
+
+  return version;
 }
 
 /**
@@ -636,6 +917,7 @@ export interface AuditLogEntry {
   toVersion?: number | null;
   performedBy: string;
   aiSummary?: string;
+  details?: Record<string, unknown> | null;
   createdAt?: string;
 }
 
@@ -649,6 +931,7 @@ export async function recordAuditLog(entry: {
   toVersion?: number | null;
   performedBy: string;
   aiSummary?: string;
+  details?: Record<string, unknown> | null;
 }): Promise<void> {
   const summary = entry.aiSummary || "";
   if (usesRemoteStore()) {
@@ -657,14 +940,15 @@ export async function recordAuditLog(entry: {
       const sql = getSql();
       await sql`
         INSERT INTO document_audit_log (
-          document_type, action, from_version, to_version, performed_by, ai_summary
+          document_type, action, from_version, to_version, performed_by, ai_summary, details
         ) VALUES (
           ${entry.documentType},
           ${entry.action},
           ${entry.fromVersion ?? null},
           ${entry.toVersion ?? null},
           ${entry.performedBy},
-          ${summary}
+          ${summary},
+          ${JSON.stringify(entry.details || {})}::jsonb
         )
       `;
     } catch (err) {
@@ -708,12 +992,12 @@ export async function getAuditLogs(limit = 50): Promise<AuditLogEntry[]> {
       await ensureSchema();
       const sql = getSql();
       const rows = await sql`
-        SELECT id, document_type, action, from_version, to_version, performed_by, ai_summary, created_at
+        SELECT id, document_type, action, from_version, to_version, performed_by, ai_summary, details, created_at
         FROM document_audit_log
         ORDER BY created_at DESC
         LIMIT ${limit}
       `;
-      return rows.map((r) => ({
+      return rows.map((r: any) => ({
         id: String(r.id),
         documentType: r.document_type,
         action: r.action,
@@ -721,6 +1005,7 @@ export async function getAuditLogs(limit = 50): Promise<AuditLogEntry[]> {
         toVersion: r.to_version,
         performedBy: r.performed_by,
         aiSummary: r.ai_summary,
+        details: r.details || null,
         createdAt: new Date(r.created_at).toISOString(),
       }));
     } catch (err) {

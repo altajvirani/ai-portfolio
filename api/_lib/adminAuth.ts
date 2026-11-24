@@ -24,7 +24,23 @@ import {
   seedInitialVersionsIfEmpty,
   getAuditLogs,
   recordAuditLog,
+  getDraft,
+  saveDraft,
+  discardDraft,
+  commitDraft,
+  publishVersion,
+  type DocumentDraft,
 } from "./versionEngine.ts";
+
+export const ALLOWED_ADMIN_ACCOUNTS = [
+  "altajvirani786@gmail.com",
+  "altajatwork@gmail.com",
+] as const;
+
+export function isAllowedAdmin(email: string | undefined): boolean {
+  if (!email) return false;
+  return ALLOWED_ADMIN_ACCOUNTS.includes(email.toLowerCase().trim() as any);
+}
 import {
   validateFileHeader,
   evaluateResumeContentWithLLM,
@@ -344,19 +360,174 @@ async function handleVersionsRequest(request: Request) {
       }
     }
 
+    const draft = await getDraft(docType, session.email);
     return response({
       docType,
       versions,
       activeVersion: active?.version || (versions[0]?.version ?? null),
       activeContent: active?.contentText || "",
+      draft,
       actor: { email: session.email },
     });
+  }
+
+  // GET / POST / DELETE /api/admin/versions/:docType/draft
+  if (action === "draft") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+    if (!isAllowedAdmin(session.email)) {
+      return response({ error: "Forbidden. Only authorized accounts may edit drafts." }, 403);
+    }
+
+    if (request.method === "GET") {
+      const draft = await getDraft(docType, session.email);
+      return response({ docType, draft, actor: { email: session.email } });
+    }
+
+    if (request.method === "DELETE") {
+      if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+      const res = await discardDraft(docType, session.email);
+      return response({ ok: true, ...res, actor: { email: session.email } });
+    }
+
+    if (request.method === "POST") {
+      if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+      let payload: any;
+      try {
+        payload = await request.json();
+      } catch {
+        return response({ error: "Invalid JSON payload." }, 400);
+      }
+
+      const { baseVersion, contentText, title, summary } = payload || {};
+      if (!contentText || typeof contentText !== "string") {
+        return response({ error: "contentText is required." }, 400);
+      }
+      const bVer = Number(baseVersion) || 1;
+
+      const draft = await saveDraft(docType, {
+        baseVersion: bVer,
+        contentText,
+        title,
+        authorEmail: session.email,
+        aiSummary: summary,
+      });
+
+      return response({ ok: true, draft, actor: { email: session.email } });
+    }
+  }
+
+  // POST /api/admin/versions/:docType/commit
+  if (action === "commit" && request.method === "POST") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+    if (!isAllowedAdmin(session.email)) {
+      return response({ error: "Forbidden. Only authorized accounts may commit revisions." }, 403);
+    }
+    if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+
+    let payload: any;
+    try {
+      payload = await request.json();
+    } catch {
+      payload = {};
+    }
+
+    const { contentText, baseVersion, title, summary, publishImmediately } = payload;
+    let newVer: any;
+
+    if (contentText && typeof contentText === "string") {
+      let formatted = contentText;
+      if (docType === "resume") {
+        formatted = await formatMarkdown(contentText);
+      } else if (docType === "portfolio") {
+        try {
+          const parsed = JSON.parse(contentText);
+          const validationError = validateDocument(parsed);
+          if (validationError) return response({ error: validationError }, 400);
+          formatted = JSON.stringify(parsed, null, 2);
+        } catch {
+          return response({ error: "Invalid JSON document structure." }, 400);
+        }
+      }
+
+      newVer = await createVersion(docType, {
+        title: title || `Revision derived from v${baseVersion || 1}`,
+        contentText: formatted,
+        baseVersion: Number(baseVersion) || null,
+        publishImmediately: Boolean(publishImmediately),
+        actorEmail: session.email,
+        aiSummary: summary,
+        mimeType: docType === "resume" ? "text/markdown" : "application/json",
+      });
+
+      // Clear draft if it exists
+      await discardDraft(docType, session.email).catch(() => {});
+    } else {
+      // Commit from active working draft
+      newVer = await commitDraft(docType, {
+        authorEmail: session.email,
+        title,
+        summary,
+        publishImmediately: Boolean(publishImmediately),
+      });
+    }
+
+    if (docType === "portfolio" && publishImmediately) {
+      try {
+        await updateDocument(JSON.parse(newVer.contentText), newVer.version, session);
+      } catch (err) {
+        console.warn("Could not sync portfolio document:", err);
+      }
+    }
+
+    return response({
+      ok: true,
+      version: newVer.version,
+      baseVersion: newVer.baseVersion,
+      isActive: newVer.isActive,
+      title: newVer.title,
+      aiSummary: newVer.aiSummary,
+      actor: { email: session.email },
+    });
+  }
+
+  // POST /api/admin/versions/:docType/publish
+  if (action === "publish" && request.method === "POST") {
+    const session = await requireSession(request);
+    if (!session) return response({ error: "Authentication required." }, 401);
+    if (!isAllowedAdmin(session.email)) {
+      return response({ error: "Forbidden. Only authorized accounts may publish revisions." }, 403);
+    }
+    if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
+
+    const payload = (await request.json().catch(() => ({}))) as { version?: number };
+    if (!payload.version || typeof payload.version !== "number") {
+      return response({ error: "Integer version number is required." }, 400);
+    }
+
+    const result = await publishVersion(docType, payload.version, session.email);
+    if (docType === "portfolio") {
+      const activeDoc = await getVersion("portfolio", payload.version);
+      if (activeDoc) {
+        try {
+          const parsed = JSON.parse(activeDoc.contentText);
+          await updateDocument(parsed, payload.version, session);
+        } catch (e) {
+          console.warn("Could not sync portfolio datastore on publish:", e);
+        }
+      }
+    }
+    return response({ ok: true, ...result, actor: { email: session.email } });
   }
 
   // POST /api/admin/versions/:docType/edit (Save modified text/markdown content directly)
   if (action === "edit" && request.method === "POST") {
     const session = await requireSession(request);
     if (!session) return response({ error: "Authentication required." }, 401);
+    if (!isAllowedAdmin(session.email)) {
+      return response({ error: "Forbidden. Only authorized accounts may edit versions." }, 403);
+    }
     if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
 
     const isBearer = Boolean(
@@ -520,6 +691,9 @@ async function handleVersionsRequest(request: Request) {
   if (action === "switch" && request.method === "POST") {
     const session = await requireSession(request);
     if (!session) return response({ error: "Authentication required." }, 401);
+    if (!isAllowedAdmin(session.email)) {
+      return response({ error: "Forbidden. Only authorized accounts may switch versions." }, 403);
+    }
     if (!assertMutationOrigin(request)) return response({ error: "Invalid request origin." }, 400);
 
     const isBearer = Boolean(
