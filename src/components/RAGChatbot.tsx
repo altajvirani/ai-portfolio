@@ -9,10 +9,12 @@ import {
   Check,
   FileText,
   X,
+  Shield,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { ChatMessage } from "../types.ts";
 import { MarkdownRenderer } from "./MarkdownRenderer.tsx";
+import { TactileSpinner, SkeuoSkeleton } from "./TactileUI.tsx";
 
 interface RAGChatbotProps {
   isModal?: boolean;
@@ -237,6 +239,10 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
               <span className="text-[10px] font-mono text-[#047857] px-2 py-0.5 rounded-md bg-[#D1FAE5] border border-[#6EE7B7] font-bold">
                 Resume Grounded
               </span>
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-[#15803D] px-2 py-0.5 rounded-md bg-[#F0FDF4] border border-[#86EFAC] font-bold">
+                <Shield className="w-2.5 h-2.5 text-[#16A34A]" />
+                Cloudflare Protected
+              </span>
             </div>
             <div className="text-[11px] text-[#52525B] font-mono truncate">
               Sources:{" "}
@@ -373,13 +379,30 @@ export const RAGChatbot: React.FC<RAGChatbotProps> = ({
         })}
 
         {isLoading && (
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-2.5 sm:gap-3">
             <div className="w-7 h-7 rounded-lg skeuo-btn-cobalt text-white shrink-0 flex items-center justify-center">
-              <Bot className="w-3.5 h-3.5 animate-spin" />
+              <Bot className="w-3.5 h-3.5" />
             </div>
-            <div className="p-3.5 rounded-xl skeuo-card text-xs font-mono text-[#52525B] flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-ping" />
-              <span>Retrieving resume context &amp; composing answer...</span>
+            <div className="max-w-[88%] sm:max-w-[78%] rounded-xl p-3.5 sm:p-4 skeuo-card space-y-3">
+              <div className="flex items-center gap-2.5">
+                <TactileSpinner size="sm" />
+                <div className="space-y-0.5">
+                  <div className="text-xs font-mono font-bold text-[#1E3A8A]">
+                    Reasoning over verified resume documents…
+                  </div>
+                  <div className="text-[10px] font-mono text-[#64748B]">
+                    Grounded in altaj-virani-resume.pdf via RAG
+                  </div>
+                </div>
+              </div>
+
+              {/* Shimmering Response Skeletons */}
+              <div className="space-y-2 pt-2 border-t border-[#E5DFD5]">
+                <SkeuoSkeleton className="h-3.5 w-11/12 rounded" />
+                <SkeuoSkeleton className="h-3.5 w-4/5 rounded" />
+                <SkeuoSkeleton className="h-3.5 w-3/4 rounded opacity-75" />
+                <SkeuoSkeleton className="h-3 w-1/2 rounded opacity-50" />
+              </div>
             </div>
           </div>
         )}

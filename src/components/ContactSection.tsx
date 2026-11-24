@@ -17,6 +17,8 @@ import { motion } from "motion/react";
 import { SOCIAL_LINKS } from "../data/portfolioData.ts";
 import { HoverPopup } from "./HoverPopup.tsx";
 import { InteractiveEmphasis, MagneticTitle } from "./InteractiveText.tsx";
+import { CloudflareTurnstile } from "./CloudflareTurnstile.tsx";
+import { TactileSpinner } from "./TactileUI.tsx";
 
 const XIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -56,6 +58,7 @@ export const ContactSection: React.FC = () => {
     message: "",
   });
   const [selectedClient, setSelectedClient] = useState<EmailClient>("gmail");
+  const [turnstileToken, setTurnstileToken] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -162,7 +165,11 @@ export const ContactSection: React.FC = () => {
       await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          turnstileToken,
+          "cf-turnstile-response": turnstileToken,
+        }),
       });
     } catch {
       // Non-blocking fire-and-forget
@@ -680,18 +687,23 @@ export const ContactSection: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Cloudflare Turnstile Bot Defense Plate */}
+                <div className="pt-2">
+                  <CloudflareTurnstile onTokenChange={setTurnstileToken} />
+                </div>
+
                 <motion.button
                   type="submit"
                   disabled={isSending}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full min-h-[46px] py-3 rounded-xl skeuo-btn-cobalt skeuo-sheen disabled:opacity-60 font-mono font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mt-1"
+                  className="w-full min-h-[48px] py-3 rounded-xl skeuo-btn-cobalt skeuo-sheen disabled:opacity-60 font-mono font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mt-1"
                 >
                   {isSending ? (
-                    <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>Opening Email Client...</span>
-                    </>
+                    <div className="flex items-center justify-center gap-2">
+                      <TactileSpinner size="sm" />
+                      <span>Opening Secure Email Client…</span>
+                    </div>
                   ) : (
                     <>
                       <Send className="w-3.5 h-3.5 text-white" />

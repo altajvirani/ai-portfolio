@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowUp, Stamp, Sparkles } from "lucide-react";
+import { ArrowUp, Stamp, Sparkles, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface FooterProps {
@@ -95,12 +95,18 @@ export const Footer: React.FC<FooterProps> = () => {
           </div>
         </div>
 
-        {/* Bottom Strip: Copyright */}
+        {/* Bottom Strip: Copyright & Cloudflare Defense Badge */}
         <div className="pt-6 border-t border-[#D8D0C1] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#52525B] font-mono">
           <span>
             © {new Date().getFullYear()} Altaj Virani. Grounded in verified
             engineering experience.
           </span>
+
+          <div className="flex items-center gap-2 rounded-full bg-white/80 border border-[#DCD5C9] px-3 py-1 shadow-2xs text-[11px] text-[#475569]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#16a34a] animate-pulse" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB]" />
+            <span>Cloudflare Turnstile Active · Bot Defense</span>
+          </div>
         </div>
       </div>
     </footer>

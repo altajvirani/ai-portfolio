@@ -153,7 +153,7 @@ export const AwardsEducation: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2.5 shrink-0">
-              <div className="flex items-center sm:flex-col sm:items-end gap-2 sm:gap-0.5 text-right tabular-nums">
+              <div className="flex flex-col items-center sm:items-end gap-2 sm:gap-0.5 text-right tabular-nums">
                 <span className="block text-sm font-mono font-bold text-[#92400E]">
                   94.67%
                 </span>
@@ -239,9 +239,7 @@ export const AwardsEducation: React.FC = () => {
             whileHover={{ y: -2 }}
             transition={{ duration: 0.24, delay: idx * 0.04 }}
             className={`rounded-2xl paper-cutout ${theme.surface} transition-all ${
-              isOpen
-                ? `ring-2 ${theme.ring}`
-                : "hover:shadow-xs"
+              isOpen ? `ring-2 ${theme.ring}` : "hover:shadow-xs"
             }`}
           >
             <div
@@ -254,8 +252,7 @@ export const AwardsEducation: React.FC = () => {
                     {item.degree}
                   </h4>
                   <p className="text-xs text-[#3F3F46] leading-relaxed">
-                    {item.institution}{" "}
-                    <span className="text-[#A1A1AA]">·</span>{" "}
+                    {item.institution} <span className="text-[#A1A1AA]">·</span>{" "}
                     <span className="font-mono text-[#52525B] tabular-nums whitespace-nowrap">
                       {item.duration}
                     </span>
@@ -264,7 +261,9 @@ export const AwardsEducation: React.FC = () => {
 
                 <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
                   <div className="flex sm:flex-col items-center sm:items-end gap-2 sm:gap-1">
-                    <span className={`font-mono text-xs font-bold tabular-nums px-2.5 py-0.5 rounded-md shadow-xs ${theme.badge}`}>
+                    <span
+                      className={`font-mono text-xs font-bold tabular-nums px-2.5 py-0.5 rounded-md shadow-xs ${theme.badge}`}
+                    >
                       {item.grade}
                     </span>
                     {item.documentUrl && (
@@ -554,7 +553,8 @@ export const AwardsEducation: React.FC = () => {
                               Internal Peer Nomination
                             </div>
                             <p className="text-[11px] text-[#52525B] font-sans">
-                              Recognized for {award.impactHighlight.toLowerCase()}.
+                              Recognized for{" "}
+                              {award.impactHighlight.toLowerCase()}.
                             </p>
                           </div>
                         }
@@ -612,9 +612,7 @@ export const AwardsEducation: React.FC = () => {
                   className="absolute inset-0 rounded-xl skeuo-btn-cobalt"
                 />
               )}
-              <span className="relative z-10">
-                Academic &amp; Rank
-              </span>
+              <span className="relative z-10">Academic</span>
             </button>
             <button
               type="button"
@@ -632,15 +630,15 @@ export const AwardsEducation: React.FC = () => {
                   className="absolute inset-0 rounded-xl skeuo-btn-violet"
                 />
               )}
-              <span className="relative z-10">
-                Certifications
-              </span>
+              <span className="relative z-10">Certifications</span>
             </button>
           </div>
 
           {/* Mobile Single Active Panel (< lg) */}
           <div className="lg:hidden">
-            {mobileCredTab === "academic" ? academicColumn : certificationsColumn}
+            {mobileCredTab === "academic"
+              ? academicColumn
+              : certificationsColumn}
           </div>
 
           {/* Desktop 7/5 Side-by-Side Layout (lg+) */}

@@ -286,10 +286,25 @@ export const AdminPage: React.FC = () => {
   const [showResumeMinimap, setShowResumeMinimap] = useState(false);
   const [resumeWordWrap, setResumeWordWrap] = useState(true);
   const [showResumePreview, setShowResumePreview] = useState(true);
+  const [mobileResumeDeckTab, setMobileResumeDeckTab] = useState<"editor" | "preview">("editor");
+  const [isMobile, setIsMobile] = useState(false);
   const [resumeCursorPos, setResumeCursorPos] = useState({ line: 1, col: 1 });
   const [showUploadPanel, setShowUploadPanel] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const resumeEditorRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (window.innerWidth < 768) {
+        setDiffViewMode("unified");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Monaco VS Code Editor Controls State
   const [editorTheme, setEditorTheme] = useState<"vs-dark" | "light">("vs-dark");
@@ -750,62 +765,66 @@ export const AdminPage: React.FC = () => {
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 airmail-border" />
       <div className="mx-auto max-w-7xl space-y-6">
         {/* Top Header */}
-        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[#DCD5C9] pb-4">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#DCD5C9] pb-4">
+          <div className="min-w-0">
             <div className="mb-2 flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-[0.22em] text-[#2563EB]">
-              <Layers size={14} /> Unified Intelligence &amp; Version Control Engine
+              <Layers size={14} className="shrink-0" /> Unified Intelligence &amp; Version Control Engine
             </div>
-            <h1 className="text-3xl font-black tracking-tight text-[#18181B] sm:text-4xl">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#18181B] truncate">
               Portfolio Command Center
             </h1>
-            <p className="mt-2 flex items-center gap-2 text-xs text-[#64748B]">
-              <CheckCircle2 size={14} className="text-[#059669]" /> Authenticated as{" "}
-              <span className="font-mono font-bold text-[#475569]">{email}</span>
+            <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#64748B] flex-wrap">
+              <CheckCircle2 size={14} className="text-[#059669] shrink-0" />
+              <span>Authenticated as</span>
+              <span className="font-mono font-bold text-[#475569] truncate max-w-[200px] sm:max-w-none">{email}</span>
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="grid grid-cols-3 sm:flex items-center gap-2 w-full sm:w-auto">
             <button
               type="button"
               onClick={() => {
                 loadAuditLogs();
                 setAuditModalOpen(true);
               }}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-2.5 sm:px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
             >
-              <Shield size={13} className="text-[#2563EB]" /> Audit Trail
+              <Shield size={13} className="text-[#2563EB] shrink-0" />
+              <span className="truncate">Audit</span>
             </button>
             <a
               href="/"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8]"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-2.5 sm:px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8]"
             >
-              <ArrowLeft size={13} /> View Site
+              <ArrowLeft size={13} className="shrink-0" />
+              <span className="truncate">Site</span>
             </a>
             <button
               type="button"
               onClick={logout}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:border-[#EF4444]/40 hover:text-[#B91C1C]"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDC5B7] bg-white px-2.5 sm:px-3.5 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:border-[#EF4444]/40 hover:text-[#B91C1C]"
             >
-              <LogOut size={13} /> Sign out
+              <LogOut size={13} className="shrink-0" />
+              <span className="truncate">Sign out</span>
             </button>
           </div>
         </div>
 
         {/* Tab Switcher: Resume Engine vs Portfolio Datastore */}
-        <div className="flex items-center gap-2 border-b border-[#DCD5C9] pb-2">
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 border-b border-[#DCD5C9] pb-3">
           <button
             type="button"
             onClick={() => setActiveTab("resume")}
-            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl px-3 sm:px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === "resume"
                 ? "bg-[#2563EB] text-white shadow-xs"
                 : "bg-white/75 text-[#52525B] hover:bg-white hover:text-[#18181B] border border-[#DCD5C9]"
             }`}
           >
-            <FileText size={14} />
-            <span>Resume Grounding Engine</span>
+            <FileText size={14} className="shrink-0" />
+            <span className="truncate">Resume Engine</span>
             {activeResumeVersion && (
-              <span className="ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
+              <span className="hidden sm:inline-block ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
                 v{activeResumeVersion} Active
               </span>
             )}
@@ -814,16 +833,16 @@ export const AdminPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab("portfolio")}
-            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl px-3 sm:px-4 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
               activeTab === "portfolio"
                 ? "bg-[#2563EB] text-white shadow-xs"
                 : "bg-white/75 text-[#52525B] hover:bg-white hover:text-[#18181B] border border-[#DCD5C9]"
             }`}
           >
-            <Database size={14} />
-            <span>Portfolio Datastore</span>
+            <Database size={14} className="shrink-0" />
+            <span className="truncate">Portfolio Datastore</span>
             {portfolioVersion && (
-              <span className="ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
+              <span className="hidden sm:inline-block ml-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
                 v{portfolioVersion}
               </span>
             )}
@@ -838,15 +857,15 @@ export const AdminPage: React.FC = () => {
               {/* Top Meta Bar */}
               <div className="flex flex-col gap-3 border-b border-[#DCD5C9] pb-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-md border border-[#BFDBFE] bg-[#F4F8FF] px-2.5 py-1.5 text-[11px] font-mono font-bold text-[#1E3A8A]">
-                    Active Resume Version v{activeResumeVersion ?? "—"}
+                  <span className="rounded-md border border-[#BFDBFE] bg-[#F4F8FF] px-2.5 py-1 text-[11px] font-mono font-bold text-[#1E3A8A]">
+                    Active v{activeResumeVersion ?? "—"}
                   </span>
-                  <span className="hidden sm:inline-block rounded-md border border-[#E2E8F0] bg-white px-2 py-1 text-[11px] font-mono text-[#64748B]">
+                  <span className="rounded-md border border-[#E2E8F0] bg-white px-2 py-1 text-[11px] font-mono text-[#64748B]">
                     {resumeEditorValue.split("\n").length} lines · {resumeEditorValue.trim() ? resumeEditorValue.trim().split(/\s+/).length : 0} words
                   </span>
                   {resumeSaveStatus && (
                     <span
-                      className={`rounded-md px-2.5 py-1 text-[11px] font-mono font-bold ${
+                      className={`rounded-md px-2 py-1 text-[11px] font-mono font-bold ${
                         resumeSaveStatus.includes("Saved") || resumeSaveStatus.includes("Loaded")
                           ? "bg-[#DCFCE7] text-[#047857]"
                           : resumeSaveStatus.includes("Failed") || resumeSaveStatus.includes("error")
@@ -859,35 +878,34 @@ export const AdminPage: React.FC = () => {
                   )}
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="grid grid-cols-3 sm:flex items-center gap-1.5 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={() => setShowUploadPanel(!showUploadPanel)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-3 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#CDC5B7] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
                   >
-                    <Upload size={13} className="text-[#2563EB]" />
-                    <span>{showUploadPanel ? "Hide Uploader" : "Upload File Instead"}</span>
-                    {showUploadPanel ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                    <Upload size={13} className="text-[#2563EB] shrink-0" />
+                    <span className="truncate">{showUploadPanel ? "Hide" : "Upload"}</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={loadResumeVersions}
                     disabled={isLoadingResumeVersions}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-3 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#CDC5B7] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
                   >
-                    <RefreshCw size={13} className={isLoadingResumeVersions ? "animate-spin" : ""} />
-                    <span>Reload</span>
+                    <RefreshCw size={13} className={`shrink-0 ${isLoadingResumeVersions ? "animate-spin" : ""}`} />
+                    <span className="truncate">Reload</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={saveResumeMarkdown}
                     disabled={isSavingResume}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-3.5 py-1.5 text-xs font-mono font-bold text-white shadow-xs transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-2.5 py-1.5 text-xs font-mono font-bold text-white shadow-xs transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                   >
-                    {isSavingResume ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-                    <span>{isSavingResume ? "Saving…" : "Save Version"}</span>
+                    {isSavingResume ? <Loader2 size={13} className="animate-spin shrink-0" /> : <Save size={13} className="shrink-0" />}
+                    <span className="truncate">{isSavingResume ? "Saving…" : "Save"}</span>
                   </button>
                 </div>
               </div>
@@ -976,15 +994,42 @@ export const AdminPage: React.FC = () => {
 
               {/* VS Code Studio Editor & Split Preview Shell */}
               <div className="rounded-xl border border-[#334155] bg-[#1E1E1E] overflow-hidden shadow-2xl">
+                {/* Mobile View Switcher (Visible on < lg) */}
+                <div className="lg:hidden flex items-center border-b border-[#333333] bg-[#252526] p-1.5 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setMobileResumeDeckTab("editor")}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-mono font-bold text-center transition-all cursor-pointer ${
+                      mobileResumeDeckTab === "editor"
+                        ? "bg-[#0E639C] text-white shadow-xs"
+                        : "text-[#A1A1AA] hover:text-white bg-[#1E1E1E]"
+                    }`}
+                  >
+                    📝 Code Editor
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMobileResumeDeckTab("preview")}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-mono font-bold text-center transition-all cursor-pointer ${
+                      mobileResumeDeckTab === "preview"
+                        ? "bg-[#0E639C] text-white shadow-xs"
+                        : "text-[#A1A1AA] hover:text-white bg-[#1E1E1E]"
+                    }`}
+                  >
+                    👁️ Live Preview
+                  </button>
+                </div>
+
                 {/* VS Code Control Toolbar */}
-                <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2 bg-[#252526] border-b border-[#333333] text-xs font-mono text-[#CCCCCC]">
+                <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 bg-[#252526] border-b border-[#333333] text-xs font-mono text-[#CCCCCC]">
                   {/* File & Mode Status */}
-                  <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#1E1E1E] border border-[#383838] text-[#38BDF8] font-bold text-[11px] shadow-xs">
-                      <FileText size={13} className="text-[#38BDF8]" /> altaj-virani-resume.md
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#1E1E1E] border border-[#383838] text-[#38BDF8] font-bold text-[11px] shadow-xs truncate">
+                      <FileText size={13} className="text-[#38BDF8] shrink-0" />
+                      <span className="truncate">altaj-virani-resume.md</span>
                     </span>
                     <span className="hidden sm:inline text-[11px] text-[#858585]">
-                      Markdown (GFM) · UTF-8
+                      Markdown (GFM)
                     </span>
                     <span className="hidden md:inline px-2 py-0.5 rounded bg-[#132A1C] border border-[#14532D] text-[#4ADE80] text-[10px]">
                       Live Grounded
@@ -992,20 +1037,20 @@ export const AdminPage: React.FC = () => {
                   </div>
 
                   {/* VS Code Toolbar Actions */}
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    {/* Toggle Live Preview Split View Button */}
+                  <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
+                    {/* Toggle Live Preview Split View Button (Desktop) */}
                     <button
                       type="button"
                       title="Toggle Side-by-Side Markdown Preview"
                       onClick={() => setShowResumePreview(!showResumePreview)}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-bold ${
+                      className={`hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-bold ${
                         showResumePreview
                           ? "bg-[#0E639C] text-white shadow-xs"
                           : "bg-[#333333] hover:bg-[#3E3E42] text-[#A1A1AA]"
                       }`}
                     >
                       <Columns2 size={12} className={showResumePreview ? "text-[#7DD3FC]" : "text-[#A1A1AA]"} />
-                      <span>{showResumePreview ? "Split Preview: ON" : "Preview: OFF"}</span>
+                      <span>{showResumePreview ? "Split: ON" : "Split: OFF"}</span>
                     </button>
 
                     {/* Format Document */}
@@ -1013,9 +1058,10 @@ export const AdminPage: React.FC = () => {
                       type="button"
                       title="Format Markdown (Shift+Alt+F / Cmd+Option+F)"
                       onClick={handleFormatResume}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
+                      className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      <Sparkles size={12} className="text-[#FBBF24]" /> Format
+                      <Sparkles size={12} className="text-[#FBBF24]" />
+                      <span className="hidden sm:inline">Format</span>
                     </button>
 
                     {/* Find */}
@@ -1023,9 +1069,10 @@ export const AdminPage: React.FC = () => {
                       type="button"
                       title="Find in Document (Cmd+F / Ctrl+F)"
                       onClick={handleFindResume}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
+                      className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      <Search size={12} className="text-[#34D399]" /> Find
+                      <Search size={12} className="text-[#34D399]" />
+                      <span className="hidden sm:inline">Find</span>
                     </button>
 
                     {/* Command Palette */}
@@ -1043,7 +1090,7 @@ export const AdminPage: React.FC = () => {
                       type="button"
                       title="Toggle Minimap"
                       onClick={() => setShowResumeMinimap(!showResumeMinimap)}
-                      className={`px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
+                      className={`hidden sm:inline-block px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
                         showResumeMinimap
                           ? "bg-[#0E639C] text-white"
                           : "bg-[#333333] hover:bg-[#3E3E42] text-[#858585]"
@@ -1057,7 +1104,7 @@ export const AdminPage: React.FC = () => {
                       type="button"
                       title="Toggle Word Wrap"
                       onClick={() => setResumeWordWrap(!resumeWordWrap)}
-                      className={`px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
+                      className={`px-2 sm:px-2.5 py-1 rounded transition cursor-pointer text-[11px] font-semibold ${
                         resumeWordWrap
                           ? "bg-[#0E639C] text-white"
                           : "bg-[#333333] hover:bg-[#3E3E42] text-[#858585]"
@@ -1073,9 +1120,9 @@ export const AdminPage: React.FC = () => {
                       onClick={() =>
                         setResumeEditorTheme(resumeEditorTheme === "vs-dark" ? "light" : "vs-dark")
                       }
-                      className="px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
+                      className="px-2 sm:px-2.5 py-1 rounded bg-[#333333] hover:bg-[#3E3E42] text-[#D4D4D4] hover:text-white transition cursor-pointer text-[11px]"
                     >
-                      {resumeEditorTheme === "vs-dark" ? "🌙 Dark" : "☀️ Light"}
+                      {resumeEditorTheme === "vs-dark" ? "🌙" : "☀️"}
                     </button>
                   </div>
                 </div>
@@ -1089,9 +1136,13 @@ export const AdminPage: React.FC = () => {
                   }`}
                 >
                   {/* Left Column: Monaco Markdown Editor */}
-                  <div className="rounded-lg overflow-hidden border border-[#333333]">
+                  <div
+                    className={`rounded-lg overflow-hidden border border-[#333333] ${
+                      mobileResumeDeckTab === "preview" ? "hidden lg:block" : "block"
+                    }`}
+                  >
                     <Editor
-                      height="700px"
+                      height={isMobile ? "440px" : "700px"}
                       language="markdown"
                       theme={resumeEditorTheme}
                       value={resumeEditorValue}
@@ -1121,8 +1172,12 @@ export const AdminPage: React.FC = () => {
                   </div>
 
                   {/* Right Column: Live Rendered Markdown Preview (GFM) */}
-                  {showResumePreview && (
-                    <div className="flex flex-col h-[700px] rounded-lg border border-[#333333] bg-[#FFFEFA] overflow-hidden shadow-inner">
+                  {(showResumePreview || mobileResumeDeckTab === "preview") && (
+                    <div
+                      className={`flex flex-col h-[440px] sm:h-[550px] lg:h-[700px] rounded-lg border border-[#333333] bg-[#FFFEFA] overflow-hidden shadow-inner ${
+                        mobileResumeDeckTab === "editor" ? "hidden lg:flex" : "flex"
+                      }`}
+                    >
                       {/* Preview Pane Top Rail */}
                       <div className="flex items-center justify-between px-3.5 py-2 bg-[#F4F4F5] border-b border-[#E4E4E7] text-[11px] font-mono font-bold text-[#52525B]">
                         <span className="flex items-center gap-1.5 text-[#2563EB]">
@@ -1134,7 +1189,7 @@ export const AdminPage: React.FC = () => {
                       </div>
 
                       {/* Rendered Document View */}
-                      <div className="flex-1 overflow-y-auto p-6 text-[#18181B] paper-grain">
+                      <div className="flex-1 overflow-y-auto p-4 sm:p-6 text-[#18181B] paper-grain">
                         <ReactMarkdown remarkPlugins={[remarkGfm]} components={resumeMarkdownRenderers}>
                           {resumeEditorValue}
                         </ReactMarkdown>
@@ -1199,7 +1254,7 @@ export const AdminPage: React.FC = () => {
                   {resumeVersions.map((v) => (
                     <div
                       key={v.version}
-                      className={`p-4 rounded-xl border transition-all flex flex-col md:flex-row md:items-center justify-between gap-3 ${
+                      className={`p-3.5 sm:p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 ${
                         v.isActive
                           ? "bg-white border-[#2563EB] shadow-xs ring-2 ring-[#2563EB]/15"
                           : "bg-white/60 hover:bg-white border-[#DCD5C9]"
@@ -1225,30 +1280,30 @@ export const AdminPage: React.FC = () => {
                           </span>
                         </div>
 
-                        <div className="text-xs font-mono text-[#18181B] font-semibold truncate">
+                        <div className="text-xs font-mono text-[#18181B] font-semibold break-words">
                           {v.title}
                         </div>
 
-                        <div className="text-xs font-sans text-[#475569] leading-relaxed">
+                        <div className="text-xs font-sans text-[#475569] leading-relaxed break-words">
                           🤖 <span className="font-medium">{v.aiSummary}</span>
                         </div>
 
-                        <div className="text-[10px] font-mono text-[#94A3B8]">
+                        <div className="text-[10px] font-mono text-[#94A3B8] break-all">
                           SHA-256: {v.checksum.slice(0, 16)}… · Created by {v.createdBy}
                         </div>
                       </div>
 
-                      {/* Version Actions */}
-                      <div className="flex flex-wrap items-center gap-2 shrink-0 pt-2 md:pt-0">
+                      {/* Version Actions: Grid on mobile, flex on desktop */}
+                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 shrink-0 pt-2 lg:pt-0 w-full lg:w-auto">
                         {/* Load in Monaco Editor Button */}
                         <button
                           type="button"
                           onClick={() => loadVersionIntoResumeEditor(v.version)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
+                          className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
                           title="Load this revision into Monaco Editor"
                         >
-                          <FileEdit size={12} className="text-[#059669]" />
-                          <span>Load in Editor</span>
+                          <FileEdit size={12} className="text-[#059669] shrink-0" />
+                          <span className="truncate">Load</span>
                         </button>
 
                         {/* Diff with Active Button */}
@@ -1256,10 +1311,10 @@ export const AdminPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => openDiffModal(v.version, activeResumeVersion, "resume")}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
+                            className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
                           >
-                            <GitCompare size={12} className="text-[#2563EB]" />
-                            <span>Diff vs Active</span>
+                            <GitCompare size={12} className="text-[#2563EB] shrink-0" />
+                            <span className="truncate">Diff vs Active</span>
                           </button>
                         )}
 
@@ -1268,10 +1323,10 @@ export const AdminPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => promptSwitchVersion(v.version, "resume")}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
+                            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
                           >
-                            <ArrowLeftRight size={12} />
-                            <span>
+                            <ArrowLeftRight size={12} className="shrink-0" />
+                            <span className="truncate">
                               {v.version < (activeResumeVersion || 0) ? "Rollback to this" : "Fast-forward to this"}
                             </span>
                           </button>
@@ -1283,11 +1338,11 @@ export const AdminPage: React.FC = () => {
                             href={`/api/admin/versions/resume/download/${v.version}?format=raw`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
+                            className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
                             title="Download Raw File"
                           >
-                            <Download size={12} />
-                            <span>Raw</span>
+                            <Download size={12} className="shrink-0" />
+                            <span className="truncate">Raw</span>
                           </a>
                         )}
 
@@ -1295,11 +1350,11 @@ export const AdminPage: React.FC = () => {
                           href={`/api/admin/versions/resume/download/${v.version}?format=markdown`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
+                          className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
                           title="Download Markdown"
                         >
-                          <FileCode size={12} />
-                          <span>.md</span>
+                          <FileCode size={12} className="shrink-0" />
+                          <span className="truncate">.md</span>
                         </a>
 
                         {/* Delete Button (Allowed only on non-active versions) */}
@@ -1350,21 +1405,23 @@ export const AdminPage: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={loadPortfolioDocument}
-                    className="inline-flex items-center gap-2 rounded-lg border border-[#CDC5B7] bg-white px-3 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8]"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#CDC5B7] bg-white px-3 py-2 text-xs font-mono font-bold text-[#475569] shadow-xs transition hover:text-[#1D4ED8] cursor-pointer"
                   >
-                    <RefreshCw size={14} /> Reload
+                    <RefreshCw size={14} className="shrink-0" />
+                    <span className="truncate">Reload</span>
                   </button>
                   <button
                     type="button"
                     onClick={savePortfolioDocument}
                     disabled={isSaving}
-                    className="inline-flex items-center gap-2 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-3.5 py-2 text-xs font-mono font-bold text-white shadow-xs disabled:cursor-not-allowed disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#1D4ED8] bg-gradient-to-b from-[#4B8DF8] via-[#2563EB] to-[#1E54D6] px-3.5 py-2 text-xs font-mono font-bold text-white shadow-xs disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                   >
-                    <Save size={14} /> {isSaving ? "Saving…" : "Save snapshot"}
+                    <Save size={14} className="shrink-0" />
+                    <span className="truncate">{isSaving ? "Saving…" : "Save snapshot"}</span>
                   </button>
                 </div>
               </div>
@@ -1458,7 +1515,7 @@ export const AdminPage: React.FC = () => {
                 </div>
 
                 {/* Monaco Code Editor Canvas */}
-                <div className="h-[66vh] w-full bg-[#1E1E1E]">
+                <div className="h-[440px] sm:h-[550px] lg:h-[66vh] w-full bg-[#1E1E1E]">
                   <Editor
                     height="100%"
                     language="json"
@@ -1556,7 +1613,7 @@ export const AdminPage: React.FC = () => {
                   {portfolioVersions.map((v) => (
                     <div
                       key={v.version}
-                      className={`p-4 rounded-xl border transition-all flex flex-col md:flex-row md:items-center justify-between gap-3 ${
+                      className={`p-3.5 sm:p-4 rounded-xl border transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 ${
                         v.isActive
                           ? "bg-white border-[#2563EB] shadow-xs ring-2 ring-[#2563EB]/15"
                           : "bg-white/60 hover:bg-white border-[#DCD5C9]"
@@ -1582,30 +1639,30 @@ export const AdminPage: React.FC = () => {
                           </span>
                         </div>
 
-                        <div className="text-xs font-mono text-[#18181B] font-semibold truncate">
+                        <div className="text-xs font-mono text-[#18181B] font-semibold break-words">
                           {v.title}
                         </div>
 
-                        <div className="text-xs font-sans text-[#475569] leading-relaxed">
+                        <div className="text-xs font-sans text-[#475569] leading-relaxed break-words">
                           🤖 <span className="font-medium">{v.aiSummary}</span>
                         </div>
 
-                        <div className="text-[10px] font-mono text-[#94A3B8]">
+                        <div className="text-[10px] font-mono text-[#94A3B8] break-all">
                           SHA-256: {v.checksum.slice(0, 16)}… · Created by {v.createdBy}
                         </div>
                       </div>
 
-                      {/* Version Actions */}
-                      <div className="flex flex-wrap items-center gap-2 shrink-0 pt-2 md:pt-0">
+                      {/* Version Actions: Grid on mobile, flex on desktop */}
+                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 shrink-0 pt-2 lg:pt-0 w-full lg:w-auto">
                         {/* Load in Monaco Editor Button */}
                         <button
                           type="button"
                           onClick={() => loadVersionIntoPortfolioEditor(v.version)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
+                          className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
                           title="Load this revision into Monaco Editor"
                         >
-                          <FileEdit size={12} className="text-[#059669]" />
-                          <span>Load in Editor</span>
+                          <FileEdit size={12} className="text-[#059669] shrink-0" />
+                          <span className="truncate">Load</span>
                         </button>
 
                         {/* Diff with Active Button */}
@@ -1613,10 +1670,10 @@ export const AdminPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => openDiffModal(v.version, portfolioVersion, "portfolio")}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
+                            className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#334155] shadow-xs cursor-pointer"
                           >
-                            <GitCompare size={12} className="text-[#2563EB]" />
-                            <span>Diff vs Active</span>
+                            <GitCompare size={12} className="text-[#2563EB] shrink-0" />
+                            <span className="truncate">Diff vs Active</span>
                           </button>
                         )}
 
@@ -1625,10 +1682,10 @@ export const AdminPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => promptSwitchVersion(v.version, "portfolio")}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
+                            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#2563EB] bg-[#EFF6FF] hover:bg-[#2563EB] hover:text-white text-[11px] font-mono font-bold text-[#1D4ED8] shadow-xs cursor-pointer transition-colors"
                           >
-                            <ArrowLeftRight size={12} />
-                            <span>
+                            <ArrowLeftRight size={12} className="shrink-0" />
+                            <span className="truncate">
                               {v.version < (portfolioVersion || 0) ? "Rollback to this" : "Fast-forward to this"}
                             </span>
                           </button>
@@ -1639,11 +1696,11 @@ export const AdminPage: React.FC = () => {
                           href={`/api/admin/versions/portfolio/download/${v.version}?format=json`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
+                          className="inline-flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F8FAFC] text-[11px] font-mono font-bold text-[#52525B] cursor-pointer"
                           title="Download JSON Snapshot"
                         >
-                          <Download size={12} />
-                          <span>JSON</span>
+                          <Download size={12} className="shrink-0" />
+                          <span className="truncate">JSON</span>
                         </a>
 
                         {/* Delete Button (Allowed only on non-active versions) */}
@@ -1688,18 +1745,18 @@ export const AdminPage: React.FC = () => {
               </div>
 
               {/* View Switcher, Theme & Close */}
-              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap">
                 <div className="p-1 rounded-xl bg-[#F1ECE1] border border-[#DCD5C9] flex items-center gap-1">
                   <button
                     type="button"
                     onClick={() => setDiffViewMode("split")}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all ${
+                    className={`hidden sm:inline-block px-3 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all ${
                       diffViewMode === "split"
                         ? "bg-white text-[#18181B] shadow-xs"
                         : "text-[#52525B] hover:text-[#18181B]"
                     }`}
                   >
-                    Split (Side-by-Side)
+                    Split
                   </button>
                   <button
                     type="button"
@@ -1722,11 +1779,11 @@ export const AdminPage: React.FC = () => {
                   }
                   className="px-2.5 py-1.5 rounded-lg border border-[#DCD5C9] bg-white hover:bg-[#F4F4F5] text-xs font-mono text-[#3F3F46] cursor-pointer"
                 >
-                  {diffTheme === "vs-dark" ? "🌙 Dark" : "☀️ Light"}
+                  {diffTheme === "vs-dark" ? "🌙" : "☀️"}
                 </button>
 
                 {diffData && (
-                  <div className="flex items-center gap-2 text-xs font-mono">
+                  <div className="flex items-center gap-1.5 text-xs font-mono">
                     <span className="text-[#059669] font-bold">
                       +{diffData.diff.stats.additions}
                     </span>
@@ -1748,7 +1805,7 @@ export const AdminPage: React.FC = () => {
 
             {/* 1-Line AI Executive Summary Banner */}
             {diffData?.aiSummary && (
-              <div className="px-5 py-3 bg-[#EFF6FF] border-b border-[#BFDBFE] text-xs font-sans text-[#1E40AF] flex items-center gap-2 shrink-0">
+              <div className="px-4 sm:px-5 py-2.5 sm:py-3 bg-[#EFF6FF] border-b border-[#BFDBFE] text-xs font-sans text-[#1E40AF] flex items-center gap-2 shrink-0">
                 <Sparkles size={15} className="text-[#2563EB] shrink-0" />
                 <span>
                   <strong>AI Executive Summary:</strong> {diffData.aiSummary}
@@ -1757,7 +1814,7 @@ export const AdminPage: React.FC = () => {
             )}
 
             {/* Diff Body Content — VS Code Monaco Diff Engine */}
-            <div className="flex-1 min-h-[58vh] max-h-[72vh] w-full bg-[#1E1E1E] overflow-hidden flex flex-col">
+            <div className="flex-1 min-h-[50vh] sm:min-h-[58vh] max-h-[65vh] sm:max-h-[72vh] w-full bg-[#1E1E1E] overflow-hidden flex flex-col">
               {diffLoading ? (
                 <div className="flex-1 flex flex-col items-center justify-center py-20 gap-3 text-[#94A3B8]">
                   <TactileSpinner
@@ -1778,7 +1835,7 @@ export const AdminPage: React.FC = () => {
                   original={diffData.fromContent || ""}
                   modified={diffData.toContent || ""}
                   options={{
-                    renderSideBySide: diffViewMode === "split",
+                    renderSideBySide: isMobile ? false : diffViewMode === "split",
                     readOnly: true,
                     automaticLayout: true,
                     minimap: { enabled: false },
@@ -1795,7 +1852,7 @@ export const AdminPage: React.FC = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 bg-white flex items-center justify-between gap-3 shrink-0">
+            <div className="p-3.5 sm:p-4 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
               <div className="text-xs font-mono text-[#52525B]">
                 {diffData &&
                 (diffData.docType === "resume"
@@ -1809,7 +1866,7 @@ export const AdminPage: React.FC = () => {
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
                 {diffData &&
                   (diffData.docType === "resume"
                     ? diffData.fromVersion !== activeResumeVersion
@@ -1819,16 +1876,16 @@ export const AdminPage: React.FC = () => {
                       onClick={() => {
                         promptSwitchVersion(diffData.fromVersion, diffData.docType);
                       }}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-mono font-bold shadow-xs cursor-pointer"
                     >
                       <ArrowLeftRight size={13} />
-                      <span>Switch Live Version to v{diffData.fromVersion}</span>
+                      <span>Switch Live to v{diffData.fromVersion}</span>
                     </button>
                   )}
                 <button
                   type="button"
                   onClick={() => setDiffModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-[#DCD5C9] bg-white text-xs font-mono font-bold text-[#52525B] cursor-pointer hover:bg-[#F4F4F5]"
+                  className="px-4 py-2 rounded-xl border border-[#DCD5C9] bg-white text-xs font-mono font-bold text-[#52525B] cursor-pointer hover:bg-[#F4F4F5] text-center"
                 >
                   Close
                 </button>

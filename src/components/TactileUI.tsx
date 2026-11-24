@@ -190,19 +190,19 @@ export const AuditLogModal: React.FC<{
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs">
       <div className="w-full max-w-4xl max-h-[88vh] flex flex-col rounded-2xl bg-[#FAF8F3] border-2 border-white shadow-2xl overflow-hidden paper-grain">
         {/* Header */}
-        <div className="p-4 sm:p-5 bg-white border-b border-[#DCD5C9] flex items-center justify-between gap-3 shrink-0">
-          <div className="space-y-0.5">
+        <div className="p-4 sm:p-5 bg-white border-b border-[#DCD5C9] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+          <div className="space-y-0.5 min-w-0">
             <div className="flex items-center gap-2">
-              <Shield size={18} className="text-[#2563EB]" />
-              <h3 className="text-base font-bold text-[#18181B]">
-                Security Audit Log &amp; User Operations Trail
+              <Shield size={18} className="text-[#2563EB] shrink-0" />
+              <h3 className="text-sm sm:text-base font-bold text-[#18181B] truncate">
+                Security Audit Log &amp; Operations Trail
               </h3>
             </div>
             <p className="text-xs text-[#52525B]">
               Every administrative mutation and MCP tool execution is recorded against the authenticated user email.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <button
               type="button"
               onClick={onRefresh}
